@@ -1,3 +1,4 @@
+import 'package:flutte_design_application/const/responsive.dart';
 import 'package:flutte_design_application/widgets/dashboard_bar_chart.dart';
 import 'package:flutte_design_application/widgets/dashboard_combobar_chart.dart';
 import 'package:flutte_design_application/widgets/dashboard_comparison.dart';
@@ -86,14 +87,16 @@ class _VendorDashboardState extends State<VendorDashboard> {
                     children: [
                       Row(
                         children: [
-                          DashboardCardContainer(
-                            cards: cardsData!,
-                            contentData: contentData,
-                            contentKey: "child_dashboard",
+                          Expanded(
+                            flex: 7,
+                            child: DashboardCardContainer(
+                              cards: cardsData!,
+                              contentData: contentData,
+                              contentKey: "child_dashboard",
+                            ),
                           ),
-
-                          const SizedBox(width: 28),
-                          DashboardRecentData(),
+                          const SizedBox(width: 16),
+                          Expanded(flex: 3, child: DashboardRecentData()),
                         ],
                       ),
                       SizedBox(height: 28),

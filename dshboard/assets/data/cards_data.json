@@ -63,15 +63,6 @@
       "growth": "5.7%",
       "color": "expiringIcon",
       "iconBgColor": "transparent"
-    },
-    
-    {
-      "iconPath": "assets/icons/setting.svg",
-      "value": "$2.4M",
-      "label": "Tuyash  yash Spend",
-      "growth": "5.7%",
-      "color": "expiringIcon",
-      "iconBgColor": "transparent"
     }
   ]
 }

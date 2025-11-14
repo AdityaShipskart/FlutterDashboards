@@ -31,79 +31,98 @@ class DashboardCard extends StatelessWidget {
       ),
       child: Stack(
         children: [
+          // Background Image
           Positioned(
             top: -10,
             left: -10,
             child: Image.asset(
               'assets/backgrounds/card-bg.png',
-              width: 120,
-              height: 120,
+              width: 200,
+              height: 200,
               fit: BoxFit.cover,
               errorBuilder: (context, error, stackTrace) =>
                   const SizedBox.shrink(),
             ),
           ),
 
+          // Growth Chip
+          if (growth != null) ...[
+            Positioned(
+              top: 0,
+              right: 0,
+              child: PercentageChip(
+                percentage:
+                    double.tryParse(
+                      growth!.replaceAll('%', '').replaceAll('+', ''),
+                    ) ??
+                    0.0,
+                isDark: false,
+                horizontalPadding: 6,
+                verticalPadding: 3,
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
+
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Container(
-                width: 48,
-                height: 48,
-                decoration: BoxDecoration(
-                  color: iconBgColor,
-                  borderRadius: BorderRadius.circular(12),
+              // Icon Container
+              Expanded(
+                flex: 3,
+                child: Container(
+                  width: 60,
+                  height: 60,
+                  decoration: BoxDecoration(
+                    color: iconBgColor,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Center(child: _buildIcon(iconPath, color)),
                 ),
-                child: Center(child: _buildIcon(iconPath, color)),
               ),
-              const SizedBox(height: 16),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Flexible(
-                    child: FittedBox(
-                      fit: BoxFit.scaleDown,
-                      child: Text(
-                        value,
-                        style: const TextStyle(
-                          fontSize: 28,
-                          fontWeight: FontWeight.w700,
-                          color: Color(0xFF111827),
-                          height: 1.0,
-                          letterSpacing: -0.5,
+
+              const SizedBox(width: 12),
+
+              // Value and Label
+              Expanded(
+                flex: 5,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Flexible(
+                        child: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Text(
+                            value,
+                            style: const TextStyle(
+                              fontSize: 28,
+                              fontWeight: FontWeight.w700,
+                              color: Color(0xFF111827),
+                              height: 1.0,
+                              letterSpacing: -0.5,
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                  ),
-                  if (growth != null) ...[
-                    const SizedBox(width: 6),
-                    PercentageChip(
-                      percentage:
-                          double.tryParse(
-                            growth!.replaceAll('%', '').replaceAll('+', ''),
-                          ) ??
-                          0.0,
-                      isDark: false,
-                      horizontalPadding: 6,
-                      verticalPadding: 3,
-                      fontSize: 10,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ],
-                ],
-              ),
-              const SizedBox(height: 8),
 
-              Text(
-                label,
-                style: const TextStyle(
-                  fontSize: 12,
-                  color: Color(0xFF6B7280),
-                  fontWeight: FontWeight.w500,
+                      Text(
+                        label,
+                        style: const TextStyle(
+                          fontSize: 14,
+                          color: Color(0xFF6B7280),
+                          fontWeight: FontWeight.w500,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.clip,
+                      ),
+                    ],
+                  ),
                 ),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
               ),
             ],
           ),
@@ -131,8 +150,8 @@ class DashboardCard extends StatelessWidget {
 
     return SvgPicture.asset(
       iconPath,
-      width: 30,
-      height: 30,
+      width: 60,
+      height: 60,
       // Apply color to SVG - easy to change by modifying the color parameter
       colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
       placeholderBuilder: (context) =>

@@ -36,7 +36,7 @@ class _DashboardCardContainerState extends State<DashboardCardContainer> {
   Widget _buildDashboardContent(List<Map<String, dynamic>> cards) {
     return Container(
       width: 1000,
-      height: 380,
+      height: 500,
       decoration: const BoxDecoration(
         color: AppColors.grey100Light,
         borderRadius: BorderRadius.all(Radius.circular(16)),
@@ -47,49 +47,73 @@ class _DashboardCardContainerState extends State<DashboardCardContainer> {
         children: [
           // Content Section
           Expanded(
-            flex: 1,
+            flex: 2,
             child: DashboardContentSection(
               content: widget.contentKey != null && widget.contentData != null
                   ? widget.contentData![widget.contentKey!]
                   : null,
             ),
           ),
+
+          // Divider
           Container(
             height: 1,
+            margin: const EdgeInsets.symmetric(vertical: 14),
             color: const Color(0xFFE5E7EB),
             // margin: const EdgeInsets.symmetric(vertical: 14),
           ),
-          // Cards Section
+
+          // Cards Section (responsive widths)
           Expanded(
-            flex: 1,
-            child: Scrollbar(
-              controller: _scrollController, // Added controller here
-              thickness: 0,
-              radius: const Radius.circular(2),
-              thumbVisibility: false,
-              trackVisibility: false,
-              child: SingleChildScrollView(
-                controller: _scrollController, // Added controller here
-                scrollDirection: Axis.horizontal,
-                child: Row(
+            flex: 7,
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                // Number of vertical columns (each column has up to 2 cards stacked)
+                int columns = (cards.length + 1) ~/ 2;
+                if (columns == 0) columns = 1;
+
+                // spacing between columns
+                const double columnGap = 16.0;
+
+                // compute card width to evenly divide available space across columns
+                final double totalGap = (columns - 1) * columnGap;
+                final double available = constraints.maxWidth - totalGap;
+                final double cardWidth = (available / columns).clamp(
+                  120.0,
+                  constraints.maxWidth,
+                );
+
+                return Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    for (int i = 0; i < cards.length; i++) ...[
-                      SizedBox(
-                        width: 180,
-                        child: DashboardCard(
-                          iconPath: cards[i]['iconPath'],
-                          value: cards[i]['value'],
-                          label: cards[i]['label'],
-                          growth: cards[i]['growth'],
-                          color: cards[i]['color'],
-                          iconBgColor: cards[i]['iconBgColor'],
-                        ),
+                    // Arrange cards into 2 rows stacked vertically across multiple columns
+                    for (int col = 0; col < columns; col++) ...[
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          for (int row = 0; row < 2; row++) ...[
+                            if (col * 2 + row < cards.length)
+                              SizedBox(
+                                width: cardWidth,
+                                child: DashboardCard(
+                                  iconPath: cards[col * 2 + row]['iconPath'],
+                                  value: cards[col * 2 + row]['value'],
+                                  label: cards[col * 2 + row]['label'],
+                                  growth: cards[col * 2 + row]['growth'],
+                                  color: cards[col * 2 + row]['color'],
+                                  iconBgColor:
+                                      cards[col * 2 + row]['iconBgColor'],
+                                ),
+                              ),
+                            if (row == 0) const SizedBox(height: 16),
+                          ],
+                        ],
                       ),
-                      if (i < cards.length - 1) const SizedBox(width: 16),
+                      if (col < columns - 1) const SizedBox(width: columnGap),
                     ],
                   ],
-                ),
-              ),
+                );
+              },
             ),
           ),
         ],
