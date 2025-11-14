@@ -1,0 +1,65 @@
+{
+  "title": "Leading Ports",
+  "columns": [
+    {
+      "key": "portName",
+      "label": "Port Name",
+      "sortable": true
+    },
+    {
+      "key": "purchaseValue",
+      "label": "Purchase Value",
+      "sortable": true
+    }
+  ],
+  "data": [
+    {
+      "portName": "Mumbai",
+      "purchaseValue": "$32k",
+      "percentageChange": 1.9,
+      "trend": "up"
+    },
+    {
+      "portName": "Kochi",
+      "purchaseValue": "$12k",
+      "percentageChange": 2.9,
+      "trend": "up"
+    },
+    {
+      "portName": "Chennai",
+      "purchaseValue": "$72k",
+      "percentageChange": 7.9,
+      "trend": "up"
+    },
+    {
+      "portName": "BMCT Port",
+      "purchaseValue": "$172k",
+      "percentageChange": 8.9,
+      "trend": "up"
+    },
+    {
+      "portName": "JNPT",
+      "purchaseValue": "$172k",
+      "percentageChange": 8.9,
+      "trend": "up"
+    },
+    {
+      "portName": "Vasco Goa",
+      "purchaseValue": "$172k",
+      "percentageChange": 8.9,
+      "trend": "up"
+    },
+    {
+      "portName": "Sikka",
+      "purchaseValue": "$172k",
+      "percentageChange": 8.9,
+      "trend": "up"
+    },
+    {
+      "portName": "Okha",
+      "purchaseValue": "$172k",
+      "percentageChange": 8.9,
+      "trend": "up"
+    }
+  ]
+}

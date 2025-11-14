@@ -3,6 +3,7 @@ import 'package:flutte_design_application/widgets/dashboard_bar_chart.dart';
 import 'package:flutte_design_application/widgets/dashboard_combobar_chart.dart';
 import 'package:flutte_design_application/widgets/dashboard_comparison.dart';
 import 'package:flutte_design_application/widgets/dashboard_financial_card.dart';
+import 'package:flutte_design_application/widgets/dashboard_leading_port.dart';
 import 'package:flutte_design_application/widgets/dashboard_line_chart.dart';
 import 'package:flutte_design_application/widgets/dashboard_pie_chart.dart';
 import 'package:flutte_design_application/widgets/dashboard_recent_data.dart';
@@ -24,6 +25,7 @@ class _VendorDashboardState extends State<VendorDashboard> {
   Map<String, dynamic>? contentData;
   List<Map<String, dynamic>>? cardsData;
   Map<String, dynamic>? areaChartData;
+  Map<String, dynamic>? leadingPortsData;
 
   @override
   void initState() {
@@ -48,10 +50,18 @@ class _VendorDashboardState extends State<VendorDashboard> {
 
     final areaChart = json.decode(areaChartResponse);
 
+    // Load leading ports data
+    final String leadingPortsResponse = await rootBundle.loadString(
+      'assets/data/leading_ports_data.json',
+    );
+
+    final leadingPorts = json.decode(leadingPortsResponse);
+
     setState(() {
       contentData = data;
       cardsData = cards;
       areaChartData = areaChart;
+      leadingPortsData = leadingPorts;
     });
   }
 
@@ -72,7 +82,8 @@ class _VendorDashboardState extends State<VendorDashboard> {
         ),
         centerTitle: false,
       ),
-      body: cardsData != null && areaChartData != null
+      body:
+          cardsData != null && areaChartData != null && leadingPortsData != null
           ? RefreshIndicator(
               onRefresh: loadData,
               child: SingleChildScrollView(
@@ -245,6 +256,7 @@ class _VendorDashboardState extends State<VendorDashboard> {
                             'assets/data/top_performance_table_data.json',
                       ),
                       const SizedBox(height: 24),
+                      DashboardLeadingPort(data: leadingPortsData!),
                     ],
                   ),
                 ),
