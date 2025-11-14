@@ -1,0 +1,68 @@
+{
+  "salesHighlights": {
+    "title": "All time sales",
+    "totalValue": 295700,
+    "currency": "USD",
+    "percentageChange": 2.7,
+    "isPositive": true,
+    "products": [
+      {
+        "name": "Total sales",
+        "percentage": 54,
+        "color": 4278239141
+      },
+      {
+        "name": "Quotes Submitted",
+        "percentage": 19,
+        "color": 4294198070
+      },
+      {
+        "name": "Orders",
+        "percentage": 27,
+        "color": 4288586312
+      }
+    ],
+    "channels": [
+      {
+        "id": "products_sold",
+        "name": "Products sold",
+        "icon": "shopping_cart_outlined",
+        "value": 172000,
+        "percentageChange": 3.9,
+        "isPositive": true
+      },
+      {
+        "id": "active_products",
+        "name": "Active Products",
+        "icon": "inventory_2_outlined",
+        "value": 85000,
+        "percentageChange": 0.7,
+        "isPositive": false
+      },
+      {
+        "id": "quotations_submitted",
+        "name": "Quotations Submitted",
+        "icon": "description_outlined",
+        "value": 36000,
+        "percentageChange": 8.2,
+        "isPositive": true
+      },
+      {
+        "id": "order_received",
+        "name": "Order Received",
+        "icon": "local_shipping_outlined",
+        "value": 26000,
+        "percentageChange": 8.2,
+        "isPositive": true
+      },
+      {
+        "id": "order_delays",
+        "name": "Order Delays",
+        "icon": "schedule_outlined",
+        "value": 7000,
+        "percentageChange": 0.7,
+        "isPositive": false
+      }
+    ]
+  }
+}

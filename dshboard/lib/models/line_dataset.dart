@@ -1,6 +1,7 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fl_chart/fl_chart.dart';
-import '../data/dummy_revenue_data.dart';
 import '../const/constant.dart';
 
 /// Model class to represent a line dataset in the chart
@@ -24,11 +25,35 @@ class LineDataset {
   factory LineDataset.fromJson(Map<String, dynamic> json) {
     return LineDataset(
       label: json['label'] ?? '',
-      data: DummyRevenueData.convertToFlSpots(json['data'] ?? []),
+      data: convertToFlSpots(json['data'] ?? []),
       color: _parseColor(json['color']),
       strokeWidth: (json['strokeWidth'] ?? 2.5).toDouble(),
       showDots: json['showDots'] ?? true,
     );
+  }
+
+  /// Load line chart data from JSON file
+  static Future<Map<String, dynamic>> loadFromJsonFile() async {
+    try {
+      final String jsonString = await rootBundle.loadString(
+        'assets/data/line_chart.json',
+      );
+      return json.decode(jsonString);
+    } catch (e) {
+      throw Exception('Failed to load line chart data: $e');
+    }
+  }
+
+  /// Convert list of data points to FlSpots
+  static List<FlSpot> convertToFlSpots(List<dynamic> dataPoints) {
+    return dataPoints
+        .map(
+          (point) => FlSpot(
+            (point['x'] as num).toDouble(),
+            (point['y'] as num).toDouble(),
+          ),
+        )
+        .toList();
   }
 
   /// Parse color from various formats
@@ -55,8 +80,7 @@ class LineDataset {
     return {
       'label': label,
       'data': data.map((spot) => {'x': spot.x, 'y': spot.y}).toList(),
-      'color':
-          '#${color.toARGB32().toRadixString(16).substring(2).toUpperCase()}',
+      'color': '#${color.value.toRadixString(16).substring(2).toUpperCase()}',
       'strokeWidth': strokeWidth,
       'showDots': showDots,
     };

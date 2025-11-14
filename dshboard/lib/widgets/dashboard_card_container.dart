@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../const/constant.dart' show AppColors;
+import '../const/constant.dart';
 import 'dashboard_card.dart';
 import 'dashboard_content_section.dart';
 
@@ -38,7 +38,7 @@ class _DashboardCardContainerState extends State<DashboardCardContainer> {
       width: 1000,
       height: 500,
       decoration: const BoxDecoration(
-        // color: AppColors.grey100Light,
+        color: AppColors.grey25Light,
         borderRadius: BorderRadius.all(Radius.circular(16)),
       ),
       padding: const EdgeInsets.all(24),

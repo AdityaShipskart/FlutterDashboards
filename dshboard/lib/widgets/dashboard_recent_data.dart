@@ -1,6 +1,7 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../const/constant.dart';
-import '../models/dummy_highlights_data.dart';
 
 /// Highlights Section Widget
 /// Displays highlights with total value, percentage change,
@@ -38,25 +39,38 @@ class _DashboardRecentDataState extends State<DashboardRecentData> {
   Future<void> _loadData() async {
     setState(() => _isLoading = true);
 
-    // TODO: Replace with actual API call
-    // Example: final data = await ApiService.fetchHighlights(widget.type);
-    Map<String, dynamic> data;
-    switch (widget.type) {
-      case 'revenue':
-        data = await DummyHighlightsData.getRevenueHighlights();
-        break;
-      case 'customers':
-        data = await DummyHighlightsData.getCustomerHighlights();
-        break;
-      case 'sales':
-      default:
-        data = await DummyHighlightsData.getSalesHighlights();
-    }
+    try {
+      // Load JSON file
+      final String jsonString = await rootBundle.loadString(
+        'assets/data/recent_acitivity_data.json',
+      );
+      final Map<String, dynamic> jsonData = json.decode(jsonString);
 
-    setState(() {
-      _data = data;
-      _isLoading = false;
-    });
+      // Get the appropriate data based on type
+      Map<String, dynamic> data;
+      switch (widget.type) {
+        case 'revenue':
+          data = jsonData['revenueHighlights'] ?? jsonData['salesHighlights'];
+          break;
+        case 'customers':
+          data = jsonData['customerHighlights'] ?? jsonData['salesHighlights'];
+          break;
+        case 'sales':
+        default:
+          data = jsonData['salesHighlights'];
+      }
+
+      setState(() {
+        _data = data;
+        _isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        _data = null;
+        _isLoading = false;
+      });
+      debugPrint('Error loading data: $e');
+    }
   }
 
   @override
@@ -168,10 +182,7 @@ class _DashboardRecentDataState extends State<DashboardRecentData> {
     final percentageChange = _data!['percentageChange'] as double;
     final isPositive = _data!['isPositive'] as bool;
 
-    final displayValue = DummyHighlightsData.formatCurrency(
-      totalValue,
-      currency,
-    );
+    final displayValue = _formatCurrency(totalValue, currency);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -307,7 +318,7 @@ class _DashboardRecentDataState extends State<DashboardRecentData> {
         final channel = ChannelData(
           icon: _getIconData(channelData['icon'] as String),
           label: channelData['name'] as String,
-          value: DummyHighlightsData.formatCurrency(
+          value: _formatCurrency(
             channelData['value'] as int,
             _data!['currency'] as String?,
           ),
@@ -338,8 +349,32 @@ class _DashboardRecentDataState extends State<DashboardRecentData> {
       'replay_outlined': Icons.replay_outlined,
       'stars_outlined': Icons.stars_outlined,
       'timer_outlined': Icons.timer_outlined,
+      'inventory_2_outlined': Icons.inventory_2_outlined,
+      'description_outlined': Icons.description_outlined,
+      'local_shipping_outlined': Icons.local_shipping_outlined,
+      'schedule_outlined': Icons.schedule_outlined,
     };
     return iconMap[iconName] ?? Icons.help_outline;
+  }
+
+  String _formatCurrency(int value, String? currency) {
+    if (currency == null) {
+      return _formatNumber(value);
+    }
+
+    if (value >= 1000) {
+      final thousands = value / 1000;
+      return '\$${thousands.toStringAsFixed(1)}k';
+    }
+
+    return '\$${_formatNumber(value)}';
+  }
+
+  String _formatNumber(int number) {
+    return number.toString().replaceAllMapped(
+      RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
+      (Match m) => '${m[1]},',
+    );
   }
 
   Widget _buildChannelRow(ChannelData channel, bool isDark) {
