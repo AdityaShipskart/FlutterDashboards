@@ -78,6 +78,18 @@ class _VendorDashboardState extends State<VendorDashboard> {
   Widget build(BuildContext context) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
+    var dashboard_section_1 = [
+      Expanded(
+        flex: 7,
+        child: DashboardCardContainer(
+          cards: cardsData!,
+          contentData: contentData,
+          contentKey: "child_dashboard",
+        ),
+      ),
+      const SizedBox(width: 16),
+      Expanded(flex: 3, child: DashboardRecentData()),
+    ];
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -105,20 +117,9 @@ class _VendorDashboardState extends State<VendorDashboard> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
-                        children: [
-                          Expanded(
-                            flex: 7,
-                            child: DashboardCardContainer(
-                              cards: cardsData!,
-                              contentData: contentData,
-                              contentKey: "child_dashboard",
-                            ),
-                          ),
-                          const SizedBox(width: 16),
-                          Expanded(flex: 3, child: DashboardRecentData()),
-                        ],
-                      ),
+                      // First Row - Dashboard Cards and Recent Data
+                      Row(children: dashboard_section_1),
+
                       SizedBox(height: 28),
                       LayoutBuilder(
                         builder: (context, constraints) {
@@ -157,7 +158,7 @@ class _VendorDashboardState extends State<VendorDashboard> {
                                 ),
                                 const SizedBox(width: 20),
                                 Expanded(
-                                  flex: 20,
+                                  flex: 25,
                                   child: DashboardFinancialCard(
                                     jsonFilePath:
                                         "assets/data/financial_data.json",

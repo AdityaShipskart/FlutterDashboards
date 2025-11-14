@@ -211,7 +211,7 @@ class _DashboardFinancialCardState extends State<DashboardFinancialCard> {
           // Bar Chart with custom tooltip
           SizedBox(
             height:
-                300, // Increased from 120 to better utilize the taller container
+                290, // Increased from 120 to better utilize the taller container
             child: isLoading
                 ? Center(
                     child: CircularProgressIndicator(color: AppColors.primary),

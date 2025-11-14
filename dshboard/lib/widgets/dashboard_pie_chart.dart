@@ -152,7 +152,7 @@ class _DashboardPieChartState extends State<DashboardPieChart> {
             ),
             AuroraTheme.cardHeaderSpacing(),
             const SizedBox(
-              height: 48,
+              height: 40,
             ), // Additional space between title and chart
             // Donut Chart with center text (wrapped in outer Stack for external tooltip)
             Center(
