@@ -4,6 +4,7 @@ import 'package:flutte_design_application/widgets/dashboard_comparison.dart';
 import 'package:flutte_design_application/widgets/dashboard_financial_card.dart';
 import 'package:flutte_design_application/widgets/dashboard_line_chart.dart';
 import 'package:flutte_design_application/widgets/dashboard_pie_chart.dart';
+import 'package:flutte_design_application/widgets/dashboard_recent_data.dart';
 import 'package:flutte_design_application/widgets/dashboard_table.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
@@ -83,12 +84,19 @@ class _VendorDashboardState extends State<VendorDashboard> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      DashboardCardContainer(
-                        cards: cardsData!,
-                        contentData: contentData,
-                        contentKey: "child_dashboard",
+                      Row(
+                        children: [
+                          DashboardCardContainer(
+                            cards: cardsData!,
+                            contentData: contentData,
+                            contentKey: "child_dashboard",
+                          ),
+
+                          const SizedBox(width: 28),
+                          DashboardRecentData(),
+                        ],
                       ),
-                      const SizedBox(height: 28),
+                      SizedBox(height: 28),
                       LayoutBuilder(
                         builder: (context, constraints) {
                           final isMobile = constraints.maxWidth < 768;

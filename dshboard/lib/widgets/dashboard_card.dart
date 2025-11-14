@@ -58,7 +58,6 @@ class DashboardCard extends StatelessWidget {
                 child: Center(child: _buildIcon(iconPath, color)),
               ),
               const SizedBox(height: 16),
-
               Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [

@@ -35,7 +35,8 @@ class _DashboardCardContainerState extends State<DashboardCardContainer> {
 
   Widget _buildDashboardContent(List<Map<String, dynamic>> cards) {
     return Container(
-      height: 400,
+      width: 1000,
+      height: 380,
       decoration: const BoxDecoration(
         color: AppColors.grey100Light,
         borderRadius: BorderRadius.all(Radius.circular(16)),
@@ -53,7 +54,6 @@ class _DashboardCardContainerState extends State<DashboardCardContainer> {
                   : null,
             ),
           ),
-          SizedBox(height: 14),
           Container(
             height: 1,
             color: const Color(0xFFE5E7EB),
