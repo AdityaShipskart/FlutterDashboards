@@ -1,0 +1,45 @@
+{
+  "cardTitle": "Revenue Trends",
+  "cardSubtitle": "Monitor financial growth over time",
+  "thisYearLabel": "2025",
+  "lastYearLabel": "2024",
+  "percentageChange": "+12.5%",
+  "isPositiveChange": true,
+  "availablePeriods": ["Jan-Jun", "Jul-Dec", "Full Year"],
+  "selectedPeriod": "Full Year",
+  "chartConfig": {
+    "minX": 0,
+    "maxX": 11,
+    "minY": 0,
+    "maxY": 8
+  },
+  "thisYearData": [
+    {"x": 0, "y": 2.5},
+    {"x": 1, "y": 3.2},
+    {"x": 2, "y": 2.8},
+    {"x": 3, "y": 4.1},
+    {"x": 4, "y": 5.5},
+    {"x": 5, "y": 4.8},
+    {"x": 6, "y": 6.2},
+    {"x": 7, "y": 7.1},
+    {"x": 8, "y": 6.8},
+    {"x": 9, "y": 7.5},
+    {"x": 10, "y": 7.2},
+    {"x": 11, "y": 8.0}
+  ],
+  "lastYearData": [
+    {"x": 0, "y": 2.0},
+    {"x": 1, "y": 2.8},
+    {"x": 2, "y": 2.5},
+    {"x": 3, "y": 3.5},
+    {"x": 4, "y": 4.2},
+    {"x": 5, "y": 3.8},
+    {"x": 6, "y": 4.5},
+    {"x": 7, "y": 5.2},
+    {"x": 8, "y": 4.8},
+    {"x": 9, "y": 5.5},
+    {"x": 10, "y": 5.8},
+    {"x": 11, "y": 6.2}
+  ],
+  "labels": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+}

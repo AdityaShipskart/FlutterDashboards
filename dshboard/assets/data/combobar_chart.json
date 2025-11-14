@@ -1,0 +1,107 @@
+{
+  "cardTitle": "RFQ Win Rate Trend",
+  "cardSubtitle": "Track win performance over time",
+  "yAxisLabels": [
+    {
+      "value": 0,
+      "label": "0%"
+    },
+    {
+      "value": 20,
+      "label": "20%"
+    },
+    {
+      "value": 40,
+      "label": "40%"
+    },
+    {
+      "value": 60,
+      "label": "60%"
+    },
+    {
+      "value": 80,
+      "label": "80%"
+    },
+    {
+      "value": 100,
+      "label": "100%"
+    }
+  ],
+  "minY": 0,
+  "maxY": 100,
+  "gridInterval": 20,
+  "chartData": [
+    {
+      "month": "Jan",
+      "wins": 45,
+      "losses": 35,
+      "winRate": 56.25
+    },
+    {
+      "month": "Feb",
+      "wins": 52,
+      "losses": 28,
+      "winRate": 65.0
+    },
+    {
+      "month": "Mar",
+      "wins": 38,
+      "losses": 42,
+      "winRate": 47.5
+    },
+    {
+      "month": "Apr",
+      "wins": 48,
+      "losses": 32,
+      "winRate": 60.0
+    },
+    {
+      "month": "May",
+      "wins": 41,
+      "losses": 39,
+      "winRate": 51.25
+    },
+    {
+      "month": "Jun",
+      "wins": 58,
+      "losses": 22,
+      "winRate": 72.5
+    },
+    {
+      "month": "Jul",
+      "wins": 62,
+      "losses": 18,
+      "winRate": 77.5
+    },
+    {
+      "month": "Aug",
+      "wins": 55,
+      "losses": 25,
+      "winRate": 68.75
+    },
+    {
+      "month": "Sep",
+      "wins": 35,
+      "losses": 45,
+      "winRate": 43.75
+    },
+    {
+      "month": "Oct",
+      "wins": 50,
+      "losses": 30,
+      "winRate": 62.5
+    },
+    {
+      "month": "Nov",
+      "wins": 46,
+      "losses": 34,
+      "winRate": 57.5
+    },
+    {
+      "month": "Dec",
+      "wins": 60,
+      "losses": 20,
+      "winRate": 75.0
+    }
+  ]
+}
