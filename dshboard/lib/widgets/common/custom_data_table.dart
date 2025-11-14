@@ -1,20 +1,25 @@
+import 'package:flutte_design_application/const/responsive.dart';
 import 'package:flutter/material.dart';
 import '../../const/constant.dart';
 
 class CustomDataTable extends StatelessWidget {
-  final String title;
-  final String subtitle;
+  final String? title;
+  final String? subtitle;
   final List<TableColumn> columns;
   final List<Map<String, dynamic>> dataRows;
   final Function(Map<String, dynamic>)? onRowAction;
+  final double minWidth;
+  final bool expandToAvailableWidth;
 
   const CustomDataTable({
     super.key,
-    required this.title,
-    required this.subtitle,
+    this.title,
+    this.subtitle,
     required this.columns,
     required this.dataRows,
     this.onRowAction,
+    this.minWidth = 900,
+    this.expandToAvailableWidth = true,
   });
 
   @override
@@ -22,6 +27,7 @@ class CustomDataTable extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Container(
+      padding: const EdgeInsets.all(AppSpacing.lg),
       decoration: BoxDecoration(
         color: isDark ? AppColors.darkSurface : Colors.white,
         borderRadius: BorderRadius.circular(AppConstants.radiusLarge),
@@ -56,75 +62,51 @@ class CustomDataTable extends StatelessWidget {
 
   Widget _buildHeader(bool isDark) {
     return Padding(
-      padding: const EdgeInsets.all(AppSpacing.lg),
+      padding: const EdgeInsets.only(bottom: AppSpacing.lg),
       child: LayoutBuilder(
         builder: (context, constraints) {
-          final isSmallScreen = constraints.maxWidth < 600;
-
-          if (isSmallScreen) {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      title,
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                        color: isDark
-                            ? AppColors.textPrimaryDark
-                            : AppColors.textPrimaryLight,
-                      ),
-                    ),
-                    const SizedBox(height: AppSpacing.xs),
-                    Text(
-                      subtitle,
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                        color: isDark
-                            ? AppColors.textSecondaryDark
-                            : AppColors.textSecondaryLight,
-                      ),
-                    ),
-                  ],
+          var commonWidget = Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (title != null && title!.isNotEmpty) ...[
+                Text(
+                  title!,
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                    color: isDark
+                        ? AppColors.textPrimaryDark
+                        : AppColors.textPrimaryLight,
+                  ),
                 ),
               ],
+
+              if (subtitle != null && subtitle!.isNotEmpty) ...[
+                const SizedBox(height: AppSpacing.xs),
+                Text(
+                  subtitle!,
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400,
+                    color: isDark
+                        ? AppColors.textSecondaryDark
+                        : AppColors.textSecondaryLight,
+                  ),
+                ),
+              ],
+            ],
+          );
+
+          if (Responsive.isMobile(context)) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [commonWidget],
             );
           }
 
           return Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.w600,
-                      color: isDark
-                          ? AppColors.textPrimaryDark
-                          : AppColors.textPrimaryLight,
-                    ),
-                  ),
-                  const SizedBox(height: AppSpacing.xs),
-                  Text(
-                    subtitle,
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400,
-                      color: isDark
-                          ? AppColors.textSecondaryDark
-                          : AppColors.textSecondaryLight,
-                    ),
-                  ),
-                ],
-              ),
-            ],
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [commonWidget],
           );
         },
       ),
@@ -134,9 +116,8 @@ class CustomDataTable extends StatelessWidget {
   Widget _buildTable(bool isDark) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        final isDesktop = constraints.maxWidth > 1024;
-        final isTablet =
-            constraints.maxWidth > 768 && constraints.maxWidth <= 1024;
+        final isDesktop = Responsive.isDesktop(context);
+        final isTablet = Responsive.isTablet(context);
 
         final columnSpacing = isDesktop
             ? AppSpacing.xxl
@@ -144,17 +125,26 @@ class CustomDataTable extends StatelessWidget {
             ? AppSpacing.xl
             : AppSpacing.lg;
 
-        final minTableWidth = 900.0;
+        final double configuredMinWidth = minWidth;
+
+        // `constraints.maxWidth` can be infinite when nested in scrollables, so cap it.
+        final double availableWidth =
+            constraints.hasBoundedWidth && constraints.maxWidth.isFinite
+            ? constraints.maxWidth
+            : MediaQuery.of(context).size.width;
+
+        double targetWidth = configuredMinWidth;
+        if (expandToAvailableWidth) {
+          targetWidth = availableWidth > configuredMinWidth
+              ? availableWidth
+              : configuredMinWidth;
+        }
 
         return Center(
           child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: ConstrainedBox(
-              constraints: BoxConstraints(
-                minWidth: constraints.maxWidth > minTableWidth
-                    ? constraints.maxWidth
-                    : minTableWidth,
-              ),
+              constraints: BoxConstraints(minWidth: targetWidth),
               child: DataTable(
                 horizontalMargin: AppSpacing.lg,
                 columnSpacing: columnSpacing,

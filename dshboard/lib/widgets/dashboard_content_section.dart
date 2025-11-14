@@ -7,33 +7,30 @@ class DashboardContentSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 24),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            content?["greeting"] ?? '',
-            style: const TextStyle(
-              fontSize: 28,
-              fontWeight: FontWeight.w700,
-              color: Color(0xFF111827),
-            ),
-            textAlign: TextAlign.left,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          content?["greeting"] ?? '',
+          style: const TextStyle(
+            fontSize: 28,
+            fontWeight: FontWeight.w700,
+            color: Color(0xFF111827),
           ),
-          const SizedBox(height: 8),
-          Text(
-            content?["subtitle"] ?? '',
-            style: const TextStyle(
-              fontSize: 14,
-              color: Color(0xFF6B7280),
-              fontWeight: FontWeight.w400,
-            ),
-            textAlign: TextAlign.left,
+          textAlign: TextAlign.left,
+        ),
+        const SizedBox(height: 8),
+        Text(
+          content?["subtitle"] ?? '',
+          style: const TextStyle(
+            fontSize: 14,
+            color: Color(0xFF6B7280),
+            fontWeight: FontWeight.w400,
           ),
-        ],
-      ),
+          textAlign: TextAlign.left,
+        ),
+      ],
     );
   }
 }

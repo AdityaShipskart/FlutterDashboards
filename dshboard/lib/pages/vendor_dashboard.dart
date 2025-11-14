@@ -1,4 +1,3 @@
-import 'package:flutte_design_application/const/responsive.dart';
 import 'package:flutte_design_application/widgets/dashboard_bar_chart.dart';
 import 'package:flutte_design_application/widgets/dashboard_combobar_chart.dart';
 import 'package:flutte_design_application/widgets/dashboard_comparison.dart';
@@ -26,6 +25,8 @@ class _VendorDashboardState extends State<VendorDashboard> {
   List<Map<String, dynamic>>? cardsData;
   Map<String, dynamic>? areaChartData;
   Map<String, dynamic>? leadingPortsData;
+  Map<String, dynamic>? leadingPortsData2;
+  Map<String, dynamic>? leadingPortsData3;
 
   @override
   void initState() {
@@ -61,7 +62,15 @@ class _VendorDashboardState extends State<VendorDashboard> {
       contentData = data;
       cardsData = cards;
       areaChartData = areaChart;
-      leadingPortsData = leadingPorts;
+      leadingPortsData = Map<String, dynamic>.from(leadingPorts);
+      leadingPortsData2 = Map<String, dynamic>.from(leadingPorts);
+      leadingPortsData3 = Map<String, dynamic>.from(leadingPorts);
+
+      leadingPortsData2!['title'] = 'Top Exporting Ports';
+      leadingPortsData2!['subtitle'] = 'Summary of your top exporting ports';
+
+      leadingPortsData3!['title'] = 'Top Importing Ports';
+      leadingPortsData3!['subtitle'] = 'Summary of your top importing ports';
     });
   }
 
@@ -133,7 +142,7 @@ class _VendorDashboardState extends State<VendorDashboard> {
                               children: [
                                 // Revenue chart - 65% width
                                 Expanded(
-                                  flex: 65,
+                                  flex: 35,
                                   child: RevenueGeneratedCard(
                                     chartData: areaChartData!,
                                   ),
@@ -141,9 +150,17 @@ class _VendorDashboardState extends State<VendorDashboard> {
                                 const SizedBox(width: 20),
                                 // Pie chart - 35% width
                                 Expanded(
-                                  flex: 35,
+                                  flex: 25,
                                   child: DashboardPieChart(
                                     jsonFilePath: 'assets/data/pie_chart.json',
+                                  ),
+                                ),
+                                const SizedBox(width: 20),
+                                Expanded(
+                                  flex: 20,
+                                  child: DashboardFinancialCard(
+                                    jsonFilePath:
+                                        "assets/data/financial_data.json",
                                   ),
                                 ),
                               ],
@@ -255,8 +272,64 @@ class _VendorDashboardState extends State<VendorDashboard> {
                         jsonFilePath:
                             'assets/data/top_performance_table_data.json',
                       ),
+
+                      // Multi Table Section
                       const SizedBox(height: 24),
-                      DashboardLeadingPort(data: leadingPortsData!),
+
+                      LayoutBuilder(
+                        builder: (context, constraints) {
+                          const double gap = 16;
+                          final double availableWidth =
+                              constraints.hasBoundedWidth &&
+                                  constraints.maxWidth.isFinite
+                              ? constraints.maxWidth
+                              : MediaQuery.of(context).size.width;
+
+                          // Responsive column count
+                          final int columns = availableWidth < 768
+                              ? 1
+                              : availableWidth < 1200
+                              ? 2
+                              : 3;
+
+                          final double totalGap = columns > 1
+                              ? gap * (columns - 1)
+                              : 0;
+                          final double itemWidth =
+                              (availableWidth - totalGap) / columns;
+
+                          return Wrap(
+                            spacing: gap,
+                            runSpacing: gap,
+                            children: [
+                              SizedBox(
+                                width: itemWidth,
+                                child: DashboardLeadingPort(
+                                  data: leadingPortsData!,
+                                  minWidth: itemWidth,
+                                  expandToAvailableWidth: false,
+                                ),
+                              ),
+                              SizedBox(
+                                width: itemWidth,
+                                child: DashboardLeadingPort(
+                                  data: leadingPortsData2!,
+                                  minWidth: itemWidth,
+                                  expandToAvailableWidth: false,
+                                ),
+                              ),
+                              SizedBox(
+                                width: itemWidth,
+                                child: DashboardLeadingPort(
+                                  data: leadingPortsData3!,
+                                  minWidth: itemWidth,
+                                  expandToAvailableWidth: false,
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                      ),
                     ],
                   ),
                 ),

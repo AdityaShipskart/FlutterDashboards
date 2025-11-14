@@ -4,8 +4,15 @@ import 'common/custom_data_table.dart';
 
 class DashboardLeadingPort extends StatelessWidget {
   final Map<String, dynamic> data;
+  final double minWidth;
+  final bool expandToAvailableWidth;
 
-  const DashboardLeadingPort({super.key, required this.data});
+  const DashboardLeadingPort({
+    super.key,
+    required this.data,
+    this.minWidth = 900,
+    this.expandToAvailableWidth = true,
+  });
 
   Widget _buildPercentageChange(dynamic value, bool isDark, bool isSummary) {
     if (value == null) return const SizedBox.shrink();
@@ -49,6 +56,7 @@ class DashboardLeadingPort extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final title = data['title'] ?? 'Leading Ports';
+    final subTitle = data['subtitle'] ?? 'Summary of all your leading ports';
     final dataRows = (data['data'] as List<dynamic>)
         .map(
           (item) => {
@@ -92,9 +100,11 @@ class DashboardLeadingPort extends StatelessWidget {
 
     return CustomDataTable(
       title: title,
-      subtitle: '',
+      subtitle: subTitle,
       columns: columns,
       dataRows: dataRows,
+      minWidth: minWidth,
+      expandToAvailableWidth: expandToAvailableWidth,
     );
   }
 }

@@ -36,14 +36,14 @@ class _DashboardCardContainerState extends State<DashboardCardContainer> {
   Widget _buildDashboardContent(List<Map<String, dynamic>> cards) {
     return Container(
       width: 1000,
-      height: 380,
+      height: 500,
       decoration: const BoxDecoration(
-        color: AppColors.grey100Light,
+        // color: AppColors.grey100Light,
         borderRadius: BorderRadius.all(Radius.circular(16)),
       ),
       padding: const EdgeInsets.all(24),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Content Section
           Expanded(
