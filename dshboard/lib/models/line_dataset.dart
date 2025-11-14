@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fl_chart/fl_chart.dart';
 import '../const/constant.dart';
@@ -80,7 +79,7 @@ class LineDataset {
     return {
       'label': label,
       'data': data.map((spot) => {'x': spot.x, 'y': spot.y}).toList(),
-      'color': '#${color.value.toRadixString(16).substring(2).toUpperCase()}',
+      'color': color.toARGB32(),
       'strokeWidth': strokeWidth,
       'showDots': showDots,
     };

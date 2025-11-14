@@ -18,9 +18,10 @@ import '../const/constant.dart';
 /// );
 /// ```
 class DashboardRecentData extends StatefulWidget {
+  final Map<String, dynamic>? data;
   final String type; // 'sales', 'revenue', or 'customers'
 
-  const DashboardRecentData({super.key, this.type = 'sales'});
+  const DashboardRecentData({super.key, this.data, this.type = 'sales'});
 
   @override
   State<DashboardRecentData> createState() => _DashboardRecentDataState();
@@ -40,14 +41,21 @@ class _DashboardRecentDataState extends State<DashboardRecentData> {
     setState(() => _isLoading = true);
 
     try {
-      // Load JSON file
-      final String jsonString = await rootBundle.loadString(
-        'assets/data/recent_acitivity_data.json',
-      );
-      final Map<String, dynamic> jsonData = json.decode(jsonString);
+      Map<String, dynamic> jsonData;
+
+      if (widget.data != null) {
+        jsonData = widget.data!;
+        debugPrint('DashboardRecentData: Received data keys: ${jsonData.keys}');
+      } else {
+        // Load JSON file
+        final String jsonString = await rootBundle.loadString(
+          'assets/data/recent_acitivity_data.json',
+        );
+        jsonData = json.decode(jsonString);
+      }
 
       // Get the appropriate data based on type
-      Map<String, dynamic> data;
+      Map<String, dynamic>? data;
       switch (widget.type) {
         case 'revenue':
           data = jsonData['revenueHighlights'] ?? jsonData['salesHighlights'];
@@ -58,6 +66,34 @@ class _DashboardRecentDataState extends State<DashboardRecentData> {
         case 'sales':
         default:
           data = jsonData['salesHighlights'];
+      }
+
+      // If data is still null, it might mean the passed data IS the salesHighlights itself
+      if (data == null && widget.data != null) {
+        debugPrint(
+          'DashboardRecentData: salesHighlights not found, checking if data is the highlights itself',
+        );
+        // Check if widget.data has the expected structure of salesHighlights
+        if (jsonData.containsKey('title') && jsonData.containsKey('products')) {
+          debugPrint(
+            'DashboardRecentData: Using passed data as salesHighlights',
+          );
+          data = jsonData;
+        } else {
+          debugPrint(
+            'DashboardRecentData: Data structure not recognized. Keys: ${jsonData.keys}',
+          );
+        }
+      }
+
+      if (data != null) {
+        debugPrint(
+          'DashboardRecentData: Successfully loaded data with title: ${data['title']}',
+        );
+      } else {
+        debugPrint(
+          'DashboardRecentData: Failed to extract salesHighlights data',
+        );
       }
 
       setState(() {

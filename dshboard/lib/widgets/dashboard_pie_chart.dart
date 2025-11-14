@@ -6,9 +6,10 @@ import '../const/constant.dart';
 import 'common/custom_tooltip.dart';
 
 class DashboardPieChart extends StatefulWidget {
-  final String jsonFilePath;
+  final String? jsonFilePath;
+  final Map<String, dynamic>? data;
 
-  const DashboardPieChart({super.key, required this.jsonFilePath});
+  const DashboardPieChart({super.key, this.jsonFilePath, this.data});
 
   @override
   State<DashboardPieChart> createState() => _DashboardPieChartState();
@@ -47,7 +48,7 @@ class _DashboardPieChartState extends State<DashboardPieChart> {
     _loadLeadSourcesData();
   }
 
-  // Method to load lead sources data from JSON file
+  // Method to load lead sources data from JSON file or use provided data
   // TODO: In future, replace JSON file loading with actual .NET API call using http package
   Future<void> _loadLeadSourcesData() async {
     setState(() {
@@ -56,20 +57,14 @@ class _DashboardPieChartState extends State<DashboardPieChart> {
     });
 
     try {
-      // Load data from JSON file
-      // TO INTEGRATE WITH .NET API:
-      // 1. Add http package to pubspec.yaml: http: ^1.1.0
-      // 2. Import: import 'package:http/http.dart' as http;
-      // 3. Replace next lines with:
-      //    final response = await http.get(
-      //      Uri.parse('https://your-dotnet-api.com/api/lead-sources/dashboard'),
-      //      headers: {'Authorization': 'Bearer YOUR_TOKEN'},
-      //    );
-      //    final data = json.decode(response.body);
-      final String jsonString = await rootBundle.loadString(
-        widget.jsonFilePath,
-      );
-      final data = json.decode(jsonString);
+      // Use provided data if available, otherwise load from JSON file
+      final data =
+          widget.data ??
+          (widget.jsonFilePath != null
+              ? json.decode(await rootBundle.loadString(widget.jsonFilePath!))
+              : throw Exception(
+                  'Either data or jsonFilePath must be provided',
+                ));
 
       if (!mounted) return;
 

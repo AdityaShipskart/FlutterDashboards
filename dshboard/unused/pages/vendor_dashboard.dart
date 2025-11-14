@@ -21,9 +21,16 @@ class VendorDashboard extends StatefulWidget {
 }
 
 class _VendorDashboardState extends State<VendorDashboard> {
+  Map<String, dynamic>? consolidatedData;
+
   Map<String, dynamic>? contentData;
   List<Map<String, dynamic>>? cardsData;
   Map<String, dynamic>? areaChartData;
+
+  Map<String, dynamic>? smallTableData;
+  Map<String, dynamic>? smallTableData2;
+  Map<String, dynamic>? smallTableData3;
+
   Map<String, dynamic>? leadingPortsData;
   Map<String, dynamic>? leadingPortsData2;
   Map<String, dynamic>? leadingPortsData3;
@@ -35,6 +42,11 @@ class _VendorDashboardState extends State<VendorDashboard> {
   }
 
   Future<void> loadData() async {
+    final String consolidatedDataResponse = await rootBundle.loadString(
+      'assets/data/consolidated_data.json',
+    );
+    consolidatedData = json.decode(consolidatedDataResponse);
+
     // Load dashboard content
     final String response = await rootBundle.loadString(
       'assets/data/dashboard_content.json',
@@ -59,6 +71,7 @@ class _VendorDashboardState extends State<VendorDashboard> {
     final leadingPorts = json.decode(leadingPortsResponse);
 
     setState(() {
+      consolidatedData = consolidatedData;
       contentData = data;
       cardsData = cards;
       areaChartData = areaChart;
@@ -78,7 +91,7 @@ class _VendorDashboardState extends State<VendorDashboard> {
   Widget build(BuildContext context) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
-    var dashboard_section_1 = [
+    final dashboardSection1 = [
       Expanded(
         flex: 7,
         child: DashboardCardContainer(
@@ -118,7 +131,7 @@ class _VendorDashboardState extends State<VendorDashboard> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       // First Row - Dashboard Cards and Recent Data
-                      Row(children: dashboard_section_1),
+                      Row(children: dashboardSection1),
 
                       SizedBox(height: 28),
                       LayoutBuilder(

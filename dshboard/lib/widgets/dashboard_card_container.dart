@@ -34,12 +34,14 @@ class _DashboardCardContainerState extends State<DashboardCardContainer> {
   }
 
   Widget _buildDashboardContent(List<Map<String, dynamic>> cards) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Container(
       width: 1000,
       height: 500,
-      decoration: const BoxDecoration(
-        color: AppColors.grey25Light,
-        borderRadius: BorderRadius.all(Radius.circular(16)),
+      decoration: BoxDecoration(
+        color: isDark ? AppColors.grey100Dark : AppColors.grey25Light,
+        borderRadius: const BorderRadius.all(Radius.circular(16)),
       ),
       padding: const EdgeInsets.all(24),
       child: Column(
@@ -51,7 +53,7 @@ class _DashboardCardContainerState extends State<DashboardCardContainer> {
             child: DashboardContentSection(
               content: widget.contentKey != null && widget.contentData != null
                   ? widget.contentData![widget.contentKey!]
-                  : null,
+                  : 'Hello Child',
             ),
           ),
 
@@ -59,8 +61,7 @@ class _DashboardCardContainerState extends State<DashboardCardContainer> {
           Container(
             height: 1,
             margin: const EdgeInsets.symmetric(vertical: 14),
-            color: const Color(0xFFE5E7EB),
-            // margin: const EdgeInsets.symmetric(vertical: 14),
+            color: AppColors.getBorder(isDark),
           ),
 
           // Cards Section (responsive widths)

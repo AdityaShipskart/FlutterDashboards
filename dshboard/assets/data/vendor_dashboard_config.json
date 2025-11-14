@@ -1,0 +1,452 @@
+{
+  "cards": [
+    {
+      "iconPath": "assets/icons/award.svg",
+      "value": "125",
+      "label": "Total Vessels",
+      "growth": "4.3%",
+      "color": "freeIcon",
+      "iconBgColor": "transparent"
+    },
+    {
+      "iconPath": "assets/icons/setting.svg",
+      "value": "2,340",
+      "label": "Active Users",
+      "growth": null,
+      "color": "goldIcon",
+      "iconBgColor": "transparent"
+    },
+    {
+      "iconPath": "assets/icons/ghost.svg",
+      "value": "87",
+      "label": "Active Vendors",
+      "growth": null,
+      "color": "freeIcon",
+      "iconBgColor": "transparent"
+    },
+    {
+      "iconPath": "assets/icons/information.svg",
+      "value": "43",
+      "label": "Pending Requisitions",
+      "growth": null,
+      "color": "expiringIcon",
+      "iconBgColor": "transparent"
+    },
+    {
+      "iconPath": "assets/icons/ghost.svg",
+      "value": "156",
+      "label": "Active Orders",
+      "growth": "2.1%",
+      "color": "platinumIcon",
+      "iconBgColor": "transparent"
+    },
+    {
+      "iconPath": "assets/icons/award.svg",
+      "value": "78%",
+      "label": "Budget Utilization",
+      "growth": null,
+      "color": "goldIcon",
+      "iconBgColor": "transparent"
+    },
+    {
+      "iconPath": "assets/icons/award.svg",
+      "value": "29",
+      "label": "Pending Deliveries",
+      "growth": null,
+      "color": "goldIcon",
+      "iconBgColor": "transparent"
+    },
+    {
+      "iconPath": "assets/icons/setting.svg",
+      "value": "$2.4M",
+      "label": "Total Spend",
+      "growth": "5.7%",
+      "color": "expiringIcon",
+      "iconBgColor": "transparent"
+    }
+  ],
+  "contentData": {
+    "child_dashboard": {
+      "title": "Dashboard Overview",
+      "description": "Quick stats and metrics"
+    }
+  },
+  "recentActivity": {
+    "salesHighlights": {
+      "title": "All time sales",
+      "totalValue": 295700,
+      "currency": "USD",
+      "percentageChange": 2.7,
+      "isPositive": true,
+      "products": [
+        {
+          "name": "Total sales",
+          "percentage": 54,
+          "color": 4278239141
+        },
+        {
+          "name": "Quotes Submitted",
+          "percentage": 19,
+          "color": 4294198070
+        },
+        {
+          "name": "Orders",
+          "percentage": 27,
+          "color": 4288586312
+        }
+      ],
+      "channels": [
+        {
+          "id": "products_sold",
+          "name": "Products sold",
+          "icon": "shopping_cart_outlined",
+          "value": 172000,
+          "percentageChange": 3.9,
+          "isPositive": true
+        },
+        {
+          "id": "active_products",
+          "name": "Active Products",
+          "icon": "inventory_2_outlined",
+          "value": 85000,
+          "percentageChange": 0.7,
+          "isPositive": false
+        },
+        {
+          "id": "quotations_submitted",
+          "name": "Quotations Submitted",
+          "icon": "description_outlined",
+          "value": 36000,
+          "percentageChange": 8.2,
+          "isPositive": true
+        },
+        {
+          "id": "order_received",
+          "name": "Order Received",
+          "icon": "local_shipping_outlined",
+          "value": 26000,
+          "percentageChange": 8.2,
+          "isPositive": true
+        },
+        {
+          "id": "order_delays",
+          "name": "Order Delays",
+          "icon": "schedule_outlined",
+          "value": 7000,
+          "percentageChange": 0.7,
+          "isPositive": false
+        }
+      ]
+    }
+  },
+  "lineChart": {
+    "cardTitle": "Revenue Generated",
+    "cardSubtitle": "Amount of revenue in this month",
+    "thisYearLabel": "2024",
+    "lastYearLabel": "2023",
+    "percentageChange": "+6.19%",
+    "isPositiveChange": true,
+    "availablePeriods": ["Jan-Jun", "Jul-Dec", "Full Year"],
+    "selectedPeriod": "Full Year",
+    "chartConfig": {
+      "minX": 0,
+      "maxX": 11,
+      "minY": 2,
+      "maxY": 7
+    },
+    "thisYearData": [
+      {"x": 0, "y": 3.2},
+      {"x": 1, "y": 3.0},
+      {"x": 2, "y": 3.4},
+      {"x": 3, "y": 3.7},
+      {"x": 4, "y": 4.0},
+      {"x": 5, "y": 4.3},
+      {"x": 6, "y": 4.1},
+      {"x": 7, "y": 4.5},
+      {"x": 8, "y": 4.8},
+      {"x": 9, "y": 4.6},
+      {"x": 10, "y": 4.9},
+      {"x": 11, "y": 5.3}
+    ],
+    "lastYearData": [
+      {"x": 0, "y": 3.0},
+      {"x": 1, "y": 2.8},
+      {"x": 2, "y": 3.2},
+      {"x": 3, "y": 3.5},
+      {"x": 4, "y": 3.8},
+      {"x": 5, "y": 4.0},
+      {"x": 6, "y": 3.9},
+      {"x": 7, "y": 4.2},
+      {"x": 8, "y": 4.5},
+      {"x": 9, "y": 4.3},
+      {"x": 10, "y": 4.6},
+      {"x": 11, "y": 5.0}
+    ],
+    "labels": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+  },
+  "pieChart": {
+    "cardTitle": "Lead Sources",
+    "cardSubtitle": "Ratio of generated leads",
+    "totalLeads": "2847",
+    "pieChartData": [
+      {
+        "label": "Website",
+        "value": 997.0,
+        "percentage": 35.0,
+        "color": "0xFF2196F3"
+      },
+      {
+        "label": "Email",
+        "value": 712.0,
+        "percentage": 25.0,
+        "color": "0xFFFFA644"
+      },
+      {
+        "label": "Referral",
+        "value": 569.0,
+        "percentage": 20.0,
+        "color": "0xFF3DD9BC"
+      },
+      {
+        "label": "Social Media",
+        "value": 569.0,
+        "percentage": 20.0,
+        "color": "0xFF4DB88E"
+      }
+    ],
+    "legendData": [
+      {
+        "label": "Website",
+        "color": "0xFF2196F3"
+      },
+      {
+        "label": "Email",
+        "color": "0xFFFFA644"
+      },
+      {
+        "label": "Referral",
+        "color": "0xFF3DD9BC"
+      },
+      {
+        "label": "Social Media",
+        "color": "0xFF4DB88E"
+      }
+    ]
+  },
+  "financialCard": {
+    "cardTitle": "Visitor Value",
+    "cardSubtitle": "Avg. income per site visit",
+    "mainValue": "$63.02",
+    "percentageChange": "-1.03%",
+    "isPositiveChange": false,
+    "changeLabel": "vs last month",
+    "barData": [
+      {"y": 80},
+      {"y": 60},
+      {"y": 90},
+      {"y": 70},
+      {"y": 85},
+      {"y": 75},
+      {"y": 95}
+    ],
+    "labels": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"],
+    "chartConfig": {
+      "minX": 0,
+      "maxX": 6,
+      "minY": 0,
+      "maxY": 100
+    }
+  },
+  "barChart": {
+    "cardTitle": "Orders by Customer",
+    "cardSubtitle": "Identify key clients by order count",
+    "chartData": [
+      {
+        "label": "2023 Q1",
+        "percentile25": 250000,
+        "percentile50": 350000,
+        "percentile75": 450000,
+        "values": [
+          {"value": 250000, "color": 4290822336},
+          {"value": 350000, "color": 4283215696},
+          {"value": 450000, "color": 4280391411}
+        ]
+      },
+      {
+        "label": "2023 Q2",
+        "percentile25": 180000,
+        "percentile50": 280000,
+        "percentile75": 380000,
+        "values": [
+          {"value": 180000, "color": 4290822336},
+          {"value": 280000, "color": 4283215696},
+          {"value": 380000, "color": 4280391411}
+        ]
+      },
+      {
+        "label": "2023 Q3",
+        "percentile25": 270000,
+        "percentile50": 380000,
+        "percentile75": 500000,
+        "values": [
+          {"value": 270000, "color": 4290822336},
+          {"value": 380000, "color": 4283215696},
+          {"value": 500000, "color": 4280391411}
+        ]
+      },
+      {
+        "label": "2023 Q4",
+        "percentile25": 220000,
+        "percentile50": 320000,
+        "percentile75": 440000,
+        "values": [
+          {"value": 220000, "color": 4290822336},
+          {"value": 320000, "color": 4283215696},
+          {"value": 440000, "color": 4280391411}
+        ]
+      },
+      {
+        "label": "2024 Q1",
+        "percentile25": 130000,
+        "percentile50": 210000,
+        "percentile75": 310000,
+        "values": [
+          {"value": 130000, "color": 4290822336},
+          {"value": 210000, "color": 4283215696},
+          {"value": 310000, "color": 4280391411}
+        ]
+      },
+      {
+        "label": "2024 Q2",
+        "percentile25": 170000,
+        "percentile50": 260000,
+        "percentile75": 360000,
+        "values": [
+          {"value": 170000, "color": 4290822336},
+          {"value": 260000, "color": 4283215696},
+          {"value": 360000, "color": 4280391411}
+        ]
+      },
+      {
+        "label": "2024 Q3",
+        "percentile25": 250000,
+        "percentile50": 330000,
+        "percentile75": 410000,
+        "values": [
+          {"value": 250000, "color": 4290822336},
+          {"value": 330000, "color": 4283215696},
+          {"value": 410000, "color": 4280391411}
+        ]
+      }
+    ],
+    "legendData": [
+      {"label": "25th", "color": "0xFFBDBDBD"},
+      {"label": "50th", "color": "0xFF4CAF50"},
+      {"label": "75th", "color": "0xFF2196F3"}
+    ],
+    "maxY": 500000,
+    "minY": 0,
+    "yAxisInterval": 100000,
+    "barWidth": 8,
+    "barsSpace": 3
+  },
+  "comboBarChart": {
+    "cardTitle": "Customer Feedback",
+    "cardSubtitle": "Number of clients with response",
+    "yAxisLabels": [
+      {"value": 0, "label": "0%"},
+      {"value": 20, "label": "20%"},
+      {"value": 40, "label": "40%"},
+      {"value": 60, "label": "60%"},
+      {"value": 80, "label": "80%"},
+      {"value": 100, "label": "100%"}
+    ],
+    "minY": 0,
+    "maxY": 100,
+    "gridInterval": 20,
+    "chartData": [
+      {"month": "Jan", "wins": 45, "losses": 35, "winRate": 56.25},
+      {"month": "Feb", "wins": 52, "losses": 28, "winRate": 65.0},
+      {"month": "Mar", "wins": 38, "losses": 42, "winRate": 47.5},
+      {"month": "Apr", "wins": 48, "losses": 32, "winRate": 60.0},
+      {"month": "May", "wins": 41, "losses": 39, "winRate": 51.25},
+      {"month": "Jun", "wins": 58, "losses": 22, "winRate": 72.5},
+      {"month": "Jul", "wins": 62, "losses": 18, "winRate": 77.5},
+      {"month": "Aug", "wins": 55, "losses": 25, "winRate": 68.75},
+      {"month": "Sep", "wins": 35, "losses": 45, "winRate": 43.75},
+      {"month": "Oct", "wins": 50, "losses": 30, "winRate": 62.5},
+      {"month": "Nov", "wins": 46, "losses": 34, "winRate": 57.5},
+      {"month": "Dec", "wins": 60, "losses": 20, "winRate": 75.0}
+    ]
+  },
+  "comparison": {
+    "tabs": [
+      {
+        "label": "Multi Analytics Overview",
+        "subtitle": "Comparison of key metrics",
+        "onTimeOrder": [45000, 52000, 48000, 55000, 62000, 58000, 65000, 70000, 68000, 72000, 75000, 78000],
+        "delayedOrder": [42000, 48000, 45000, 50000, 58000, 55000, 60000, 65000, 63000, 68000, 70000, 72000],
+        "maxY": 80000
+      }
+    ]
+  },
+  "table": {
+    "title": "Top Performance Table",
+    "subtitle": "Best performing items",
+    "columns": ["Rank", "Name", "Sales", "Growth", "Status"],
+    "rows": [
+      ["1", "Product A", "$125,000", "+12.5%", "Active"],
+      ["2", "Product B", "$98,000", "+8.3%", "Active"],
+      ["3", "Product C", "$87,500", "-2.1%", "Review"]
+    ]
+  },
+  "leadingPorts": [
+    {
+      "title": "Top Shipping Ports",
+      "subtitle": "Summary of your top shipping ports",
+      "ports": [
+        {
+          "name": "Shanghai Port",
+          "country": "China",
+          "value": "45,234",
+          "percentage": 28.5,
+          "trend": "up"
+        },
+        {
+          "name": "Singapore Port",
+          "country": "Singapore",
+          "value": "38,912",
+          "percentage": 24.5,
+          "trend": "up"
+        },
+        {
+          "name": "Rotterdam Port",
+          "country": "Netherlands",
+          "value": "32,456",
+          "percentage": 20.4,
+          "trend": "down"
+        }
+      ]
+    },
+    {
+      "title": "Top Exporting Ports",
+      "subtitle": "Summary of your top exporting ports",
+      "ports": [
+        {
+          "name": "Los Angeles Port",
+          "country": "USA",
+          "value": "52,341",
+          "percentage": 32.1,
+          "trend": "up"
+        },
+        {
+          "name": "Hamburg Port",
+          "country": "Germany",
+          "value": "41,234",
+          "percentage": 25.3,
+          "trend": "stable"
+        }
+      ]
+    }
+  ]
+}

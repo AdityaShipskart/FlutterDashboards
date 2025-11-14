@@ -6,9 +6,10 @@ import 'common/custom_data_table.dart';
 import 'common/percentage_chip.dart';
 
 class DashboardTable extends StatefulWidget {
-  final String jsonFilePath;
+  final String? jsonFilePath;
+  final Map<String, dynamic>? data;
 
-  const DashboardTable({super.key, required this.jsonFilePath});
+  const DashboardTable({super.key, this.jsonFilePath, this.data});
 
   @override
   State<DashboardTable> createState() => _DashboardTableState();
@@ -33,10 +34,17 @@ class _DashboardTableState extends State<DashboardTable> {
     });
 
     try {
-      final String jsonString = await rootBundle.loadString(
-        widget.jsonFilePath,
-      );
-      final data = json.decode(jsonString) as Map<String, dynamic>;
+      // Use provided data if available, otherwise load from JSON file
+      final data =
+          widget.data ??
+          (widget.jsonFilePath != null
+                  ? json.decode(
+                      await rootBundle.loadString(widget.jsonFilePath!),
+                    )
+                  : throw Exception(
+                      'Either data or jsonFilePath must be provided',
+                    ))
+              as Map<String, dynamic>;
 
       if (mounted) {
         setState(() {

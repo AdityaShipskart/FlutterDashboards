@@ -6,9 +6,10 @@ import '../const/constant.dart';
 import 'common/custom_tooltip.dart';
 
 class DashboardBarChart extends StatefulWidget {
-  final String jsonFilePath;
+  final String? jsonFilePath;
+  final Map<String, dynamic>? data;
 
-  const DashboardBarChart({super.key, required this.jsonFilePath});
+  const DashboardBarChart({super.key, this.jsonFilePath, this.data});
 
   @override
   State<DashboardBarChart> createState() => _DashboardBarChartState();
@@ -57,20 +58,17 @@ class _DashboardBarChartState extends State<DashboardBarChart> {
     });
 
     try {
-      // Load data from JSON asset file
-      // TO INTEGRATE WITH .NET API:
-      // 1. Add http package to pubspec.yaml: http: ^1.1.0
-      // 2. Import: import 'package:http/http.dart' as http;
-      // 3. Replace next lines with:
-      //    final response = await http.get(
-      //      Uri.parse('https://your-dotnet-api.com/api/dashboard/revenue-bar-chart'),
-      //      headers: {'Authorization': 'Bearer YOUR_TOKEN'},
-      //    );
-      //    final data = json.decode(response.body);
-      final String jsonString = await rootBundle.loadString(
-        widget.jsonFilePath,
-      );
-      final data = json.decode(jsonString) as Map<String, dynamic>;
+      // Use provided data if available, otherwise load from JSON file
+      final data =
+          widget.data ??
+          (widget.jsonFilePath != null
+                  ? json.decode(
+                      await rootBundle.loadString(widget.jsonFilePath!),
+                    )
+                  : throw Exception(
+                      'Either data or jsonFilePath must be provided',
+                    ))
+              as Map<String, dynamic>;
 
       if (!mounted) return;
 
@@ -83,16 +81,16 @@ class _DashboardBarChartState extends State<DashboardBarChart> {
         chartData = List<Map<String, dynamic>>.from(data['chartData'] ?? []);
 
         // Legend data
-        legendData = List<Map<String, dynamic>>.from(data['legend'] ?? []);
+        legendData = List<Map<String, dynamic>>.from(
+          data['legendData'] ?? data['legend'] ?? [],
+        );
 
-        // Chart configuration
-        final chartConfig = data['chartConfig'] as Map<String, dynamic>? ?? {};
-        maxY = (chartConfig['maxY'] as num?)?.toDouble() ?? 500000;
-        minY = (chartConfig['minY'] as num?)?.toDouble() ?? 0;
-        yAxisInterval =
-            (chartConfig['yAxisInterval'] as num?)?.toDouble() ?? 100000;
-        barWidth = (chartConfig['barWidth'] as num?)?.toDouble() ?? 16;
-        barsSpace = (chartConfig['barsSpace'] as num?)?.toDouble() ?? 4;
+        // Chart configuration - read from top level
+        maxY = (data['maxY'] as num?)?.toDouble() ?? 500000;
+        minY = (data['minY'] as num?)?.toDouble() ?? 0;
+        yAxisInterval = (data['yAxisInterval'] as num?)?.toDouble() ?? 100000;
+        barWidth = (data['barWidth'] as num?)?.toDouble() ?? 16;
+        barsSpace = (data['barsSpace'] as num?)?.toDouble() ?? 4;
 
         isLoading = false;
       });
@@ -164,7 +162,10 @@ class _DashboardBarChartState extends State<DashboardBarChart> {
                     _buildLegendItem('75th', AppColors.primary, isDark),
                   ]
                 : legendData.map((legend) {
-                    final color = Color(int.parse(legend['color'] as String));
+                    final colorValue = legend['color'];
+                    final color = colorValue is int
+                        ? Color(colorValue)
+                        : Color(int.parse(colorValue as String));
                     return Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -389,51 +390,33 @@ class _DashboardBarChartState extends State<DashboardBarChart> {
       final index = entry.key;
       final data = entry.value;
 
-      // Get colors from legend data or use defaults
-      final color25 = legendData.isNotEmpty && legendData.isNotEmpty
-          ? Color(int.parse(legendData[0]['color'] as String))
-          : AppColors.getGreyScale(300, isDark);
-
-      final color50 = legendData.isNotEmpty && legendData.length > 1
-          ? Color(int.parse(legendData[1]['color'] as String))
-          : const Color(0xFF4CAF50);
-
-      final color75 = legendData.isNotEmpty && legendData.length > 2
-          ? Color(int.parse(legendData[2]['color'] as String))
-          : AppColors.primary;
+      // Get values array from data
+      final values = data['values'] as List? ?? [];
 
       // Add opacity when not hovered
       final isHovered = touchedGroupIndex == index;
       final isSomeoneHovered = touchedGroupIndex >= 0;
       final opacity = !isSomeoneHovered || isHovered ? 1.0 : 0.3;
 
+      // Build bar rods from values array
+      final barRods = values.asMap().entries.map((valueEntry) {
+        final valueData = valueEntry.value as Map<String, dynamic>;
+        final value = (valueData['value'] as num?)?.toDouble() ?? 0;
+        final colorInt = valueData['color'] as int? ?? 4278239141;
+        final color = Color(colorInt);
+
+        return BarChartRodData(
+          toY: value,
+          color: color.withValues(alpha: opacity),
+          width: barWidth,
+          borderRadius: AuroraTheme.chartBarBorderRadius(),
+        );
+      }).toList();
+
       return BarChartGroupData(
         x: index,
-        barRods: [
-          // 25th percentile
-          BarChartRodData(
-            toY: (data['percentile25'] as num).toDouble(),
-            color: color25.withValues(alpha: opacity),
-            width: barWidth, // Dynamic from API
-            borderRadius: AuroraTheme.chartBarBorderRadius(),
-          ),
-          // 50th percentile
-          BarChartRodData(
-            toY: (data['percentile50'] as num).toDouble(),
-            color: color50.withValues(alpha: opacity),
-            width: barWidth, // Dynamic from API
-            borderRadius: AuroraTheme.chartBarBorderRadius(),
-          ),
-          // 75th percentile
-          BarChartRodData(
-            toY: (data['percentile75'] as num).toDouble(),
-            color: color75.withValues(alpha: opacity),
-            width: barWidth, // Dynamic from API
-            borderRadius: AuroraTheme.chartBarBorderRadius(),
-          ),
-        ],
-        barsSpace:
-            barsSpace, // Dynamic from API - Space between bars in the same group
+        barRods: barRods,
+        barsSpace: barsSpace,
       );
     }).toList();
   }

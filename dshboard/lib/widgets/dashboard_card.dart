@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import '../const/constant.dart';
 import 'common/percentage_chip.dart';
 
 class DashboardCard extends StatelessWidget {
@@ -22,11 +23,13 @@ class DashboardCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Container(
       constraints: const BoxConstraints(minHeight: 120, maxHeight: 150),
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.getCard(isDark),
         borderRadius: BorderRadius.circular(16),
       ),
       child: Stack(
@@ -56,7 +59,7 @@ class DashboardCard extends StatelessWidget {
                       growth!.replaceAll('%', '').replaceAll('+', ''),
                     ) ??
                     0.0,
-                isDark: false,
+                isDark: isDark,
                 horizontalPadding: 6,
                 verticalPadding: 3,
                 fontSize: 12,
@@ -99,10 +102,12 @@ class DashboardCard extends StatelessWidget {
                           fit: BoxFit.scaleDown,
                           child: Text(
                             value,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 28,
                               fontWeight: FontWeight.w700,
-                              color: Color(0xFF111827),
+                              color: isDark
+                                  ? const Color(0xFFF9FAFB)
+                                  : const Color(0xFF111827),
                               height: 1.0,
                               letterSpacing: -0.5,
                             ),
@@ -112,9 +117,11 @@ class DashboardCard extends StatelessWidget {
 
                       Text(
                         label,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 14,
-                          color: Color(0xFF6B7280),
+                          color: isDark
+                              ? const Color(0xFF9CA3AF)
+                              : const Color(0xFF6B7280),
                           fontWeight: FontWeight.w500,
                         ),
                         maxLines: 2,

@@ -114,6 +114,24 @@ class CustomDataTable extends StatelessWidget {
   }
 
   Widget _buildTable(bool isDark) {
+    // Return empty container if no columns
+    if (columns.isEmpty) {
+      return Center(
+        child: Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: Text(
+            'No data available',
+            style: TextStyle(
+              color: isDark
+                  ? AppColors.textSecondaryDark
+                  : AppColors.textSecondaryLight,
+              fontSize: 14,
+            ),
+          ),
+        ),
+      );
+    }
+
     return LayoutBuilder(
       builder: (context, constraints) {
         final isDesktop = Responsive.isDesktop(context);

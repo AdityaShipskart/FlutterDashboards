@@ -6,9 +6,10 @@ import '../const/constant.dart';
 import 'common/custom_tooltip.dart';
 
 class DashboardFinancialCard extends StatefulWidget {
-  final String jsonFilePath;
+  final String? jsonFilePath;
+  final Map<String, dynamic>? data;
 
-  const DashboardFinancialCard({super.key, required this.jsonFilePath});
+  const DashboardFinancialCard({super.key, this.jsonFilePath, this.data});
 
   @override
   State<DashboardFinancialCard> createState() => _DashboardFinancialCardState();
@@ -70,10 +71,14 @@ class _DashboardFinancialCardState extends State<DashboardFinancialCard> {
       //      headers: {'Authorization': 'Bearer YOUR_TOKEN'},
       //    );
       //    final data = json.decode(response.body);
-      final String jsonString = await rootBundle.loadString(
-        widget.jsonFilePath,
-      );
-      final data = json.decode(jsonString);
+      // Use provided data if available, otherwise load from JSON file
+      final data =
+          widget.data ??
+          (widget.jsonFilePath != null
+              ? json.decode(await rootBundle.loadString(widget.jsonFilePath!))
+              : throw Exception(
+                  'Either data or jsonFilePath must be provided',
+                ));
 
       if (!mounted) return;
 

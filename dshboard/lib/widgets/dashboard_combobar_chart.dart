@@ -6,9 +6,10 @@ import '../const/constant.dart';
 import 'common/custom_tooltip.dart';
 
 class DashboardcombobarChart extends StatefulWidget {
-  final String jsonFilePath;
+  final String? jsonFilePath;
+  final Map<String, dynamic>? data;
 
-  const DashboardcombobarChart({super.key, required this.jsonFilePath});
+  const DashboardcombobarChart({super.key, this.jsonFilePath, this.data});
 
   @override
   State<DashboardcombobarChart> createState() => _DashboardcombobarChartState();
@@ -80,10 +81,14 @@ class _DashboardcombobarChartState extends State<DashboardcombobarChart> {
       //      headers: {'Authorization': 'Bearer YOUR_TOKEN'},
       //    );
       //    final data = json.decode(response.body);
-      final String jsonString = await rootBundle.loadString(
-        widget.jsonFilePath,
-      );
-      final data = json.decode(jsonString);
+      // Use provided data if available, otherwise load from JSON file
+      final data =
+          widget.data ??
+          (widget.jsonFilePath != null
+              ? json.decode(await rootBundle.loadString(widget.jsonFilePath!))
+              : throw Exception(
+                  'Either data or jsonFilePath must be provided',
+                ));
 
       if (!mounted) return;
 
@@ -440,15 +445,31 @@ class _DashboardcombobarChartState extends State<DashboardcombobarChart> {
     return chartData.asMap().entries.map((entry) {
       final index = entry.key;
       final data = entry.value;
-      final wins = (data['wins'] as num).toDouble();
-      final losses = (data['losses'] as num).toDouble();
 
       // Responsive bar width (8px for narrow, 12px for normal)
       final barWidth = MediaQuery.of(context).size.width < 600 ? 8.0 : 12.0;
 
-      return BarChartGroupData(
-        x: index,
-        barRods: [
+      // Support both old format (wins/losses) and new format (bars array)
+      List<BarChartRodData> barRods;
+      if (data.containsKey('bars')) {
+        // New format with bars array
+        final bars = data['bars'] as List;
+        barRods = bars.map((bar) {
+          final barMap = bar as Map<String, dynamic>;
+          final value = (barMap['value'] as num?)?.toDouble() ?? 0;
+          final colorInt = barMap['color'] as int? ?? 4278239141;
+          return BarChartRodData(
+            toY: value,
+            color: Color(colorInt),
+            width: barWidth,
+            borderRadius: BorderRadius.circular(4),
+          );
+        }).toList();
+      } else {
+        // Old format with wins/losses
+        final wins = (data['wins'] as num?)?.toDouble() ?? 0;
+        final losses = (data['losses'] as num?)?.toDouble() ?? 0;
+        barRods = [
           BarChartRodData(
             toY: wins,
             color: const Color(0xFF8AB4F8),
@@ -461,9 +482,10 @@ class _DashboardcombobarChartState extends State<DashboardcombobarChart> {
             width: barWidth,
             borderRadius: AuroraTheme.chartBarBorderRadius(topRadius: 4),
           ),
-        ],
-        barsSpace: 4,
-      );
+        ];
+      }
+
+      return BarChartGroupData(x: index, barRods: barRods, barsSpace: 4);
     }).toList();
   }
 
@@ -471,13 +493,15 @@ class _DashboardcombobarChartState extends State<DashboardcombobarChart> {
   List<FlSpot> _buildLineSpots() {
     if (chartData.isEmpty) return [];
 
-    // Use the win rate directly from the data
+    // Use the line value from data (new format) or winRate (old format)
     return chartData.asMap().entries.map((entry) {
       final index = entry.key;
       final data = entry.value;
-      final winRate = (data['winRate'] as num).toDouble();
+      final lineValue = data.containsKey('line')
+          ? (data['line'] as num?)?.toDouble() ?? 0
+          : (data['winRate'] as num?)?.toDouble() ?? 0;
 
-      return FlSpot(index.toDouble(), winRate);
+      return FlSpot(index.toDouble(), lineValue);
     }).toList();
   }
 

@@ -57,13 +57,17 @@ class DashboardLeadingPort extends StatelessWidget {
   Widget build(BuildContext context) {
     final title = data['title'] ?? 'Leading Ports';
     final subTitle = data['subtitle'] ?? 'Summary of all your leading ports';
-    final dataRows = (data['data'] as List<dynamic>)
+    // Support both 'data' and 'ports' array keys
+    final rawData = (data['data'] ?? data['ports'] ?? []) as List<dynamic>;
+
+    final dataRows = rawData
         .map(
           (item) => {
-            'portName': item['portName'],
+            'portName': item['portName'] ?? item['name'],
             'purchaseValue': {
-              'purchaseValue': item['purchaseValue'],
-              'percentageChange': item['percentageChange'],
+              'purchaseValue': item['purchaseValue'] ?? item['value'],
+              'percentageChange':
+                  item['percentageChange'] ?? item['percentage'],
               'trend': item['trend'],
             },
           },
