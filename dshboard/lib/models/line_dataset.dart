@@ -1,7 +1,7 @@
 import 'dart:convert';
+import 'package:flutte_design_application/widgets/dashboard_table.dart';
 import 'package:flutter/services.dart';
 import 'package:fl_chart/fl_chart.dart';
-import '../const/constant.dart';
 
 /// Model class to represent a line dataset in the chart
 /// Supports dynamic number of lines - can have 2, 3, 4, or more lines
@@ -71,7 +71,7 @@ class LineDataset {
     }
 
     // Fallback to primary color
-    return AppColors.primary;
+    return AppColors.darkBorder;
   }
 
   /// Convert to JSON for API communication

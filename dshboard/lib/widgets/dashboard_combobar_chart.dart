@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fl_chart/fl_chart.dart';
-import '../const/constant.dart';
 import 'common/custom_tooltip.dart';
 
 class DashboardcombobarChart extends StatefulWidget {
@@ -10,6 +9,31 @@ class DashboardcombobarChart extends StatefulWidget {
   final Map<String, dynamic>? data;
 
   const DashboardcombobarChart({super.key, this.jsonFilePath, this.data});
+
+  // Example data
+  static const Map<String, dynamic> exampleData = {
+    'cardTitle': 'Customer Feedback',
+    'cardSubtitle': 'Number of clients with response',
+    'minY': 0.0,
+    'maxY': 100.0,
+    'gridInterval': 20.0,
+    'yAxisLabels': [
+      {'value': 0, 'label': '0%'},
+      {'value': 20, 'label': '20%'},
+      {'value': 40, 'label': '40%'},
+      {'value': 60, 'label': '60%'},
+      {'value': 80, 'label': '80%'},
+      {'value': 100, 'label': '100%'},
+    ],
+    'chartData': [
+      {'month': 'Jan', 'wins': 45.0, 'losses': 15.0, 'winRate': 75.0},
+      {'month': 'Feb', 'wins': 52.0, 'losses': 18.0, 'winRate': 74.3},
+      {'month': 'Mar', 'wins': 61.0, 'losses': 12.0, 'winRate': 83.6},
+      {'month': 'Apr', 'wins': 58.0, 'losses': 14.0, 'winRate': 80.6},
+      {'month': 'May', 'wins': 65.0, 'losses': 10.0, 'winRate': 86.7},
+      {'month': 'Jun', 'wins': 72.0, 'losses': 8.0, 'winRate': 90.0},
+    ],
+  };
 
   @override
   State<DashboardcombobarChart> createState() => _DashboardcombobarChartState();
@@ -81,14 +105,12 @@ class _DashboardcombobarChartState extends State<DashboardcombobarChart> {
       //      headers: {'Authorization': 'Bearer YOUR_TOKEN'},
       //    );
       //    final data = json.decode(response.body);
-      // Use provided data if available, otherwise load from JSON file
+      // Use provided data, JSON file, or fallback to example data
       final data =
           widget.data ??
           (widget.jsonFilePath != null
               ? json.decode(await rootBundle.loadString(widget.jsonFilePath!))
-              : throw Exception(
-                  'Either data or jsonFilePath must be provided',
-                ));
+              : DashboardcombobarChart.exampleData);
 
       if (!mounted) return;
 
@@ -129,10 +151,31 @@ class _DashboardcombobarChartState extends State<DashboardcombobarChart> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Error: $errorMessage'),
-          backgroundColor: AppColors.error,
+          backgroundColor: const Color(0xFFEF4444),
         ),
       );
     }
+  }
+
+  // Inline constants
+  static const double _spacingLg = 24.0;
+  static const double _spacingXl = 32.0;
+  static const double _spacingXs = 4.0;
+  static const double _radiusLarge = 12.0;
+  static const Color _primary = Color(0xFF1379F0);
+  static const Color _shadowLight = Color(0x0F000000);
+
+  static Color _getCard(bool isDark) =>
+      isDark ? const Color(0xFF1A1A1A) : Colors.white;
+  static Color _getTextPrimary(bool isDark) =>
+      isDark ? Colors.white : const Color(0xFF212121);
+  static Color _getTextSecondary(bool isDark) =>
+      isDark ? const Color(0xFFB5B7C8) : const Color(0xFF757575);
+  static Color _getGreyScale(int level, bool isDark) {
+    if (isDark) {
+      return level >= 600 ? const Color(0xFF808290) : const Color(0xFF363843);
+    }
+    return level >= 600 ? const Color(0xFF8E9198) : const Color(0xFFEEEEEE);
   }
 
   @override
@@ -141,8 +184,14 @@ class _DashboardcombobarChartState extends State<DashboardcombobarChart> {
 
     return Container(
       width: double.infinity,
-      padding: AuroraTheme.chartPadding(),
-      decoration: AuroraTheme.cardDecoration(isDark),
+      padding: const EdgeInsets.all(_spacingLg),
+      decoration: BoxDecoration(
+        color: _getCard(isDark),
+        borderRadius: BorderRadius.circular(_radiusLarge),
+        boxShadow: const [
+          BoxShadow(color: _shadowLight, blurRadius: 10, offset: Offset(0, 2)),
+        ],
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -155,22 +204,35 @@ class _DashboardcombobarChartState extends State<DashboardcombobarChart> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      cardTitle, // Dynamic from API
-                      style: AuroraTheme.cardTitleStyle(isDark),
+                      cardTitle,
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                        color: _getTextPrimary(isDark),
+                        letterSpacing: 0.5,
+                      ),
                     ),
-                    AuroraTheme.smallVerticalSpacing(),
+                    const SizedBox(height: _spacingXs),
                     Text(
-                      cardSubtitle, // Dynamic from API
-                      style: AuroraTheme.cardSubtitleStyle(isDark),
+                      cardSubtitle,
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        color: _getTextSecondary(isDark),
+                      ),
                     ),
                   ],
                 ),
               ),
               // Three dots menu icon
-              AuroraTheme.cardMenuIcon(isDark),
+              Icon(
+                Icons.more_horiz,
+                color: _getTextSecondary(isDark),
+                size: 24,
+              ),
             ],
           ),
-          AuroraTheme.cardHeaderSpacing(),
+          const SizedBox(height: _spacingLg),
 
           // Bar Chart with Line (responsive height)
           LayoutBuilder(
@@ -181,10 +243,8 @@ class _DashboardcombobarChartState extends State<DashboardcombobarChart> {
               return SizedBox(
                 height: chartHeight,
                 child: isLoading
-                    ? Center(
-                        child: CircularProgressIndicator(
-                          color: AppColors.primary,
-                        ),
+                    ? const Center(
+                        child: CircularProgressIndicator(color: _primary),
                       )
                     : Stack(
                         clipBehavior: Clip.none, // Allow tooltip to overflow
@@ -221,10 +281,7 @@ class _DashboardcombobarChartState extends State<DashboardcombobarChart> {
                                         fontSize: constraints.maxWidth < 300
                                             ? 10
                                             : 11,
-                                        color: AppColors.getGreyScale(
-                                          600,
-                                          isDark,
-                                        ),
+                                        color: _getGreyScale(600, isDark),
                                       );
 
                                       // Find matching label for this value from backend data
@@ -254,7 +311,7 @@ class _DashboardcombobarChartState extends State<DashboardcombobarChart> {
                                 horizontalInterval: gridInterval,
                                 getDrawingHorizontalLine: (value) {
                                   return FlLine(
-                                    color: AppColors.getGreyScale(200, isDark),
+                                    color: _getGreyScale(200, isDark),
                                     strokeWidth: 1,
                                   );
                                 },
@@ -391,7 +448,7 @@ class _DashboardcombobarChartState extends State<DashboardcombobarChart> {
               );
             },
           ),
-          SizedBox(height: AppSpacing.xl),
+          const SizedBox(height: _spacingXl),
 
           // Legend (responsive layout)
           LayoutBuilder(
@@ -474,13 +531,19 @@ class _DashboardcombobarChartState extends State<DashboardcombobarChart> {
             toY: wins,
             color: const Color(0xFF8AB4F8),
             width: barWidth,
-            borderRadius: AuroraTheme.chartBarBorderRadius(topRadius: 4),
+            borderRadius: const BorderRadius.vertical(
+              top: Radius.circular(4),
+              bottom: Radius.circular(0),
+            ),
           ),
           BarChartRodData(
             toY: losses,
             color: const Color(0xFFDBE6EB),
             width: barWidth,
-            borderRadius: AuroraTheme.chartBarBorderRadius(topRadius: 4),
+            borderRadius: const BorderRadius.vertical(
+              top: Radius.circular(4),
+              bottom: Radius.circular(0),
+            ),
           ),
         ];
       }
@@ -527,7 +590,11 @@ class _DashboardcombobarChartState extends State<DashboardcombobarChart> {
         Flexible(
           child: Text(
             label,
-            style: AuroraTheme.legendTextStyle(isDark).copyWith(fontSize: 12),
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w500,
+              color: _getTextSecondary(isDark),
+            ),
             overflow: TextOverflow.ellipsis,
           ),
         ),

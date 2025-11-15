@@ -2,12 +2,46 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fl_chart/fl_chart.dart';
-import '../const/constant.dart';
 import 'common/custom_tooltip.dart';
 
 class DashboardFinancialCard extends StatefulWidget {
   final String? jsonFilePath;
   final Map<String, dynamic>? data;
+
+  /// Example data for demo purposes
+  static const Map<String, dynamic> exampleData = {
+    'cardTitle': 'Visitor Value',
+    'cardSubtitle': 'Avg. income per site visit',
+    'mainValue': '\$63.02',
+    'percentageChange': '-1.03%',
+    'isPositiveChange': false,
+    'changeLabel': 'vs last month',
+    'barData': [
+      {'x': 0, 'y': 45},
+      {'x': 1, 'y': 78},
+      {'x': 2, 'y': 52},
+      {'x': 3, 'y': 90},
+      {'x': 4, 'y': 65},
+      {'x': 5, 'y': 82},
+      {'x': 6, 'y': 58},
+      {'x': 7, 'y': 95},
+      {'x': 8, 'y': 72},
+      {'x': 9, 'y': 88},
+    ],
+    'labels': [
+      'Mon',
+      'Tue',
+      'Wed',
+      'Thu',
+      'Fri',
+      'Sat',
+      'Sun',
+      'Mon',
+      'Tue',
+      'Wed',
+    ],
+    'chartConfig': {'minX': 0, 'maxX': 9, 'minY': 0, 'maxY': 100},
+  };
 
   const DashboardFinancialCard({super.key, this.jsonFilePath, this.data});
 
@@ -71,14 +105,12 @@ class _DashboardFinancialCardState extends State<DashboardFinancialCard> {
       //      headers: {'Authorization': 'Bearer YOUR_TOKEN'},
       //    );
       //    final data = json.decode(response.body);
-      // Use provided data if available, otherwise load from JSON file
+      // Use provided data if available, otherwise load from JSON file, or use example data
       final data =
           widget.data ??
           (widget.jsonFilePath != null
               ? json.decode(await rootBundle.loadString(widget.jsonFilePath!))
-              : throw Exception(
-                  'Either data or jsonFilePath must be provided',
-                ));
+              : DashboardFinancialCard.exampleData);
 
       if (!mounted) return;
 
@@ -117,7 +149,7 @@ class _DashboardFinancialCardState extends State<DashboardFinancialCard> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Error: $errorMessage'),
-          backgroundColor: AppColors.error,
+          backgroundColor: const Color(0xFFEF4444),
         ),
       );
     }
@@ -129,8 +161,18 @@ class _DashboardFinancialCardState extends State<DashboardFinancialCard> {
 
     return Container(
       width: double.infinity,
-      padding: AuroraTheme.chartPadding(),
-      decoration: AuroraTheme.cardDecoration(isDark),
+      padding: const EdgeInsets.all(24.0),
+      decoration: BoxDecoration(
+        color: isDark ? const Color(0xFF1A1A1A) : Colors.white,
+        borderRadius: BorderRadius.circular(12.0),
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0x0F000000),
+            blurRadius: 10,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
@@ -145,21 +187,45 @@ class _DashboardFinancialCardState extends State<DashboardFinancialCard> {
                   children: [
                     Text(
                       cardTitle, // Dynamic from API
-                      style: AuroraTheme.cardTitleStyle(isDark),
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.w600,
+                        fontFamily: 'Inter',
+                        height: 22 / 22,
+                        letterSpacing: 1.4,
+                        color: isDark
+                            ? const Color(0xFFFFFFFF)
+                            : const Color(0xFF212121),
+                      ),
                     ),
-                    AuroraTheme.smallVerticalSpacing(),
+                    const SizedBox(height: 4.0),
                     Text(
                       cardSubtitle, // Dynamic from API
-                      style: AuroraTheme.cardSubtitleStyle(isDark),
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        fontFamily: 'Inter',
+                        height: 22 / 14,
+                        letterSpacing: 0.25,
+                        color: isDark
+                            ? const Color(0xFFB5B7C8)
+                            : const Color(0xFF757575),
+                      ),
                     ),
                   ],
                 ),
               ),
               // Three dots menu icon
-              AuroraTheme.cardMenuIcon(isDark),
+              Icon(
+                Icons.more_horiz,
+                color: isDark
+                    ? const Color(0xFFB5B7C8)
+                    : const Color(0xFF757575),
+                size: 24,
+              ),
             ],
           ),
-          AuroraTheme.cardHeaderSpacing(),
+          const SizedBox(height: 32.0),
 
           // Main value and percentage change
           Row(
@@ -171,12 +237,14 @@ class _DashboardFinancialCardState extends State<DashboardFinancialCard> {
                 style: TextStyle(
                   fontSize: 40,
                   fontWeight: FontWeight.w600,
-                  color: AppColors.getTextPrimary(isDark),
+                  color: isDark
+                      ? const Color(0xFFFFFFFF)
+                      : const Color(0xFF212121),
                   height: 1.0,
                   letterSpacing: -0.5,
                 ),
               ),
-              SizedBox(width: AppSpacing.md),
+              const SizedBox(width: 16.0),
               // Percentage change badge and label in one line
               Padding(
                 padding: const EdgeInsets.only(bottom: 8),
@@ -188,15 +256,31 @@ class _DashboardFinancialCardState extends State<DashboardFinancialCard> {
                         horizontal: 8,
                         vertical: 4,
                       ),
-                      decoration: AuroraTheme.percentageContainerDecoration(
-                        isPositive: isPositiveChange,
-                        isDark: isDark,
+                      decoration: BoxDecoration(
+                        color: isPositiveChange
+                            ? (isDark
+                                  ? const Color(0xFF064E3B)
+                                  : const Color(0xFFD1FAE5))
+                            : (isDark
+                                  ? const Color(0xFF7F1D1D)
+                                  : const Color(0xFFFEE2E2)),
+                        borderRadius: BorderRadius.circular(4),
                       ),
                       child: Text(
                         percentageChange, // Dynamic from API
-                        style: AuroraTheme.percentageTextStyle(
-                          isPositive: isPositiveChange,
-                          isDark: isDark,
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: 'Inter',
+                          height: 19 / 12,
+                          letterSpacing: 0.4,
+                          color: isPositiveChange
+                              ? (isDark
+                                    ? const Color(0xFF34D399)
+                                    : const Color(0xFF10B981))
+                              : (isDark
+                                    ? const Color(0xFFF87171)
+                                    : const Color(0xFFEF4444)),
                         ),
                       ),
                     ),
@@ -204,14 +288,23 @@ class _DashboardFinancialCardState extends State<DashboardFinancialCard> {
                     // Change label - grey text
                     Text(
                       changeLabel, // Dynamic from API
-                      style: AuroraTheme.changeLabelStyle(isDark),
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w400,
+                        fontFamily: 'Inter',
+                        height: 19 / 12,
+                        letterSpacing: 0.4,
+                        color: isDark
+                            ? const Color(0xFFB5B7C8)
+                            : const Color(0xFF757575),
+                      ),
                     ),
                   ],
                 ),
               ),
             ],
           ),
-          AuroraTheme.cardHeaderSpacing(),
+          const SizedBox(height: 32.0),
 
           // Bar Chart with custom tooltip
           SizedBox(
@@ -219,7 +312,9 @@ class _DashboardFinancialCardState extends State<DashboardFinancialCard> {
                 290, // Increased from 120 to better utilize the taller container
             child: isLoading
                 ? Center(
-                    child: CircularProgressIndicator(color: AppColors.primary),
+                    child: CircularProgressIndicator(
+                      color: const Color(0xFF1379F0),
+                    ),
                   )
                 : Stack(
                     clipBehavior: Clip.none, // Allow tooltip to overflow
@@ -271,9 +366,11 @@ class _DashboardFinancialCardState extends State<DashboardFinancialCard> {
                                 return BarChartRodData(
                                   toY: rod.toY,
                                   width: 8,
-                                  color: AppColors.primary,
-                                  borderRadius:
-                                      AuroraTheme.chartHorizontalBarBorderRadius(),
+                                  color: const Color(0xFF1379F0),
+                                  borderRadius: BorderRadius.horizontal(
+                                    left: const Radius.circular(4),
+                                    right: const Radius.circular(4),
+                                  ),
                                 );
                               }).toList(),
                             );
@@ -314,7 +411,7 @@ class _DashboardFinancialCardState extends State<DashboardFinancialCard> {
 
     return [
       TooltipDataItem(
-        color: AppColors.primary,
+        color: const Color(0xFF1379F0),
         label: label,
         value: '\$${value.toStringAsFixed(2)}',
       ),

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../const/constant.dart';
 import 'dashboard_card.dart';
 import 'dashboard_content_section.dart';
 
@@ -10,10 +9,55 @@ class DashboardCardContainer extends StatefulWidget {
 
   const DashboardCardContainer({
     super.key,
-    required this.cards,
+    this.cards = const [], // Will use example data if empty
     this.contentData,
     this.contentKey,
   });
+
+  // Example data for when no cards are provided
+  static final List<Map<String, dynamic>> _exampleCards = [
+    {
+      'iconKey': 'revenue',
+      'value': '\$45,231',
+      'label': 'Total Revenue',
+      'growth': '+12.5%',
+      'color': const Color(0xFF3B82F6),
+      'iconBgColor': const Color(0xFFEBF5FF),
+    },
+    {
+      'iconKey': 'users',
+      'value': '1,234',
+      'label': 'Active Users',
+      'growth': '+5.3%',
+      'color': const Color(0xFF10B981),
+      'iconBgColor': const Color(0xFFD1FAE5),
+    },
+    {
+      'iconKey': 'orders',
+      'value': '567',
+      'label': 'Total Orders',
+      'growth': '-2.1%',
+      'color': const Color(0xFFF59E0B),
+      'iconBgColor': const Color(0xFFFEF3C7),
+    },
+    {
+      'iconKey': 'profit',
+      'value': '\$12,345',
+      'label': 'Net Profit',
+      'growth': '+8.7%',
+      'color': const Color(0xFF8B5CF6),
+      'iconBgColor': const Color(0xFFEDE9FE),
+    },
+  ];
+
+  // Inline color getter - no external dependencies
+  static Color _getBackgroundColor(bool isDark) {
+    return isDark ? const Color(0xFF374151) : const Color(0xFFFCFCFD);
+  }
+
+  static Color _getBorderColor(bool isDark) {
+    return isDark ? const Color(0xFF4B5563) : const Color(0xFFE5E7EB);
+  }
 
   @override
   State<DashboardCardContainer> createState() => _DashboardCardContainerState();
@@ -30,7 +74,11 @@ class _DashboardCardContainerState extends State<DashboardCardContainer> {
 
   @override
   Widget build(BuildContext context) {
-    return _buildDashboardContent(widget.cards);
+    // Use example data if none provided
+    final effectiveCards = widget.cards.isEmpty
+        ? DashboardCardContainer._exampleCards
+        : widget.cards;
+    return _buildDashboardContent(effectiveCards);
   }
 
   Widget _buildDashboardContent(List<Map<String, dynamic>> cards) {
@@ -40,7 +88,7 @@ class _DashboardCardContainerState extends State<DashboardCardContainer> {
       width: 1000,
       height: 500,
       decoration: BoxDecoration(
-        color: isDark ? AppColors.grey100Dark : AppColors.grey25Light,
+        // color: DashboardCardContainer._getBackgroundColor(isDark),
         borderRadius: const BorderRadius.all(Radius.circular(16)),
       ),
       padding: const EdgeInsets.all(24),
@@ -53,7 +101,7 @@ class _DashboardCardContainerState extends State<DashboardCardContainer> {
             child: DashboardContentSection(
               content: widget.contentKey != null && widget.contentData != null
                   ? widget.contentData![widget.contentKey!]
-                  : 'Hello Child',
+                  : null, // Will use default example data in DashboardContentSection
             ),
           ),
 
@@ -61,7 +109,7 @@ class _DashboardCardContainerState extends State<DashboardCardContainer> {
           Container(
             height: 1,
             margin: const EdgeInsets.symmetric(vertical: 14),
-            color: AppColors.getBorder(isDark),
+            color: DashboardCardContainer._getBorderColor(isDark),
           ),
 
           // Cards Section (responsive widths)
@@ -97,7 +145,9 @@ class _DashboardCardContainerState extends State<DashboardCardContainer> {
                               SizedBox(
                                 width: cardWidth,
                                 child: DashboardCard(
-                                  iconPath: cards[col * 2 + row]['iconPath'],
+                                  iconKey:
+                                      cards[col * 2 + row]['iconKey'] ??
+                                      'revenue',
                                   value: cards[col * 2 + row]['value'],
                                   label: cards[col * 2 + row]['label'],
                                   growth: cards[col * 2 + row]['growth'],

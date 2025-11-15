@@ -2,12 +2,30 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fl_chart/fl_chart.dart';
-import '../const/constant.dart';
 import 'common/custom_tooltip.dart';
 
 class DashboardPieChart extends StatefulWidget {
   final String? jsonFilePath;
   final Map<String, dynamic>? data;
+
+  /// Example data for demo purposes
+  static const Map<String, dynamic> exampleData = {
+    'cardTitle': 'Lead Sources',
+    'cardSubtitle': 'Ratio of generated leads',
+    'totalLeads': '2847',
+    'pieChartData': [
+      {'label': 'Direct', 'value': 45.0, 'color': '0xFF1379F0'},
+      {'label': 'Referral', 'value': 30.0, 'color': '0xFF10B981'},
+      {'label': 'Social Media', 'value': 15.0, 'color': '0xFFFEC524'},
+      {'label': 'Email', 'value': 10.0, 'color': '0xFFEF4444'},
+    ],
+    'legendData': [
+      {'label': 'Direct', 'color': '0xFF1379F0'},
+      {'label': 'Referral', 'color': '0xFF10B981'},
+      {'label': 'Social Media', 'color': '0xFFFEC524'},
+      {'label': 'Email', 'color': '0xFFEF4444'},
+    ],
+  };
 
   const DashboardPieChart({super.key, this.jsonFilePath, this.data});
 
@@ -57,14 +75,12 @@ class _DashboardPieChartState extends State<DashboardPieChart> {
     });
 
     try {
-      // Use provided data if available, otherwise load from JSON file
+      // Use provided data if available, otherwise load from JSON file, or use example data
       final data =
           widget.data ??
           (widget.jsonFilePath != null
               ? json.decode(await rootBundle.loadString(widget.jsonFilePath!))
-              : throw Exception(
-                  'Either data or jsonFilePath must be provided',
-                ));
+              : DashboardPieChart.exampleData);
 
       if (!mounted) return;
 
@@ -103,7 +119,7 @@ class _DashboardPieChartState extends State<DashboardPieChart> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Error: $errorMessage'),
-          backgroundColor: AppColors.error,
+          backgroundColor: const Color(0xFFEF4444),
         ),
       );
     }
@@ -115,8 +131,18 @@ class _DashboardPieChartState extends State<DashboardPieChart> {
 
     return Container(
       width: double.infinity,
-      padding: AuroraTheme.chartPadding(),
-      decoration: AuroraTheme.cardDecoration(isDark),
+      padding: const EdgeInsets.all(24.0),
+      decoration: BoxDecoration(
+        color: isDark ? const Color(0xFF1A1A1A) : Colors.white,
+        borderRadius: BorderRadius.circular(12.0),
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0x0F000000),
+            blurRadius: 10,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
       child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -131,21 +157,45 @@ class _DashboardPieChartState extends State<DashboardPieChart> {
                     children: [
                       Text(
                         cardTitle, // Dynamic from API
-                        style: AuroraTheme.cardTitleStyle(isDark),
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.w600,
+                          fontFamily: 'Inter',
+                          height: 22 / 22,
+                          letterSpacing: 1.4,
+                          color: isDark
+                              ? const Color(0xFFFFFFFF)
+                              : const Color(0xFF212121),
+                        ),
                       ),
-                      AuroraTheme.smallVerticalSpacing(),
+                      const SizedBox(height: 4.0),
                       Text(
                         cardSubtitle, // Dynamic from API
-                        style: AuroraTheme.cardSubtitleStyle(isDark),
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                          fontFamily: 'Inter',
+                          height: 22 / 14,
+                          letterSpacing: 0.25,
+                          color: isDark
+                              ? const Color(0xFFB5B7C8)
+                              : const Color(0xFF757575),
+                        ),
                       ),
                     ],
                   ),
                 ),
                 // Three dots menu icon
-                AuroraTheme.cardMenuIcon(isDark),
+                Icon(
+                  Icons.more_horiz,
+                  color: isDark
+                      ? const Color(0xFFB5B7C8)
+                      : const Color(0xFF757575),
+                  size: 24,
+                ),
               ],
             ),
-            AuroraTheme.cardHeaderSpacing(),
+            const SizedBox(height: 32.0),
             const SizedBox(
               height: 40,
             ), // Additional space between title and chart
@@ -162,7 +212,7 @@ class _DashboardPieChartState extends State<DashboardPieChart> {
                     child: isLoading
                         ? Center(
                             child: CircularProgressIndicator(
-                              color: AppColors.primary,
+                              color: const Color(0xFF1379F0),
                             ),
                           )
                         : Stack(
@@ -232,7 +282,9 @@ class _DashboardPieChartState extends State<DashboardPieChart> {
                                   style: TextStyle(
                                     fontSize: 28, // Reduced from 36
                                     fontWeight: FontWeight.w700,
-                                    color: AppColors.getTextPrimary(isDark),
+                                    color: isDark
+                                        ? const Color(0xFFFFFFFF)
+                                        : const Color(0xFF212121),
                                     height: 1.0,
                                   ),
                                 ),
@@ -258,7 +310,7 @@ class _DashboardPieChartState extends State<DashboardPieChart> {
                 ],
               ),
             ),
-            AuroraTheme.legendChartSpacing(),
+            const SizedBox(height: 32.0),
 
             const SizedBox(height: 58),
             // Legend with flex layout (horizontal items, each with column structure)
@@ -276,9 +328,15 @@ class _DashboardPieChartState extends State<DashboardPieChart> {
                         // Label on top
                         Text(
                           item.label, // Dynamic from API
-                          style: AppTextStyles.b12(isDark: isDark).copyWith(
-                            color: AppColors.getGreyScale(600, isDark),
+                          style: TextStyle(
+                            fontSize: 12,
                             fontWeight: FontWeight.w400,
+                            fontFamily: 'Inter',
+                            height: 19 / 12,
+                            letterSpacing: 0.4,
+                            color: isDark
+                                ? const Color(0xFF808290)
+                                : const Color(0xFF8E9198),
                           ),
                         ),
                         const SizedBox(height: 6),

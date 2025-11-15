@@ -1,12 +1,66 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
-import '../const/constant.dart';
-import '../models/line_dataset.dart';
+import '../../models/line_dataset.dart';
 
 class RevenueGeneratedCard extends StatefulWidget {
-  final Map<String, dynamic> chartData;
+  final Map<String, dynamic>? chartData;
 
-  const RevenueGeneratedCard({super.key, required this.chartData});
+  /// Example data for demo purposes
+  static final Map<String, dynamic> exampleData = {
+    'cardTitle': 'Revenue Generated',
+    'cardSubtitle': 'Amount of revenue in this month compared to last year',
+    'thisYearLabel': '2025',
+    'lastYearLabel': '2024',
+    'percentageChange': '+6.19%',
+    'isPositiveChange': true,
+    'availablePeriods': ['Jan-Jun', 'Jul-Dec', 'Full Year'],
+    'selectedPeriod': 'Full Year',
+    'chartConfig': {'minX': 0, 'maxX': 11, 'minY': 2, 'maxY': 7},
+    'thisYearData': [
+      {'x': 0, 'y': 3.5},
+      {'x': 1, 'y': 3.8},
+      {'x': 2, 'y': 4.2},
+      {'x': 3, 'y': 4.5},
+      {'x': 4, 'y': 5.0},
+      {'x': 5, 'y': 5.5},
+      {'x': 6, 'y': 5.2},
+      {'x': 7, 'y': 5.8},
+      {'x': 8, 'y': 6.0},
+      {'x': 9, 'y': 6.3},
+      {'x': 10, 'y': 6.5},
+      {'x': 11, 'y': 6.8},
+    ],
+    'lastYearData': [
+      {'x': 0, 'y': 3.0},
+      {'x': 1, 'y': 3.2},
+      {'x': 2, 'y': 3.5},
+      {'x': 3, 'y': 3.8},
+      {'x': 4, 'y': 4.2},
+      {'x': 5, 'y': 4.5},
+      {'x': 6, 'y': 4.3},
+      {'x': 7, 'y': 4.8},
+      {'x': 8, 'y': 5.0},
+      {'x': 9, 'y': 5.3},
+      {'x': 10, 'y': 5.5},
+      {'x': 11, 'y': 5.8},
+    ],
+    'labels': [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ],
+  };
+
+  const RevenueGeneratedCard({super.key, this.chartData});
 
   @override
   State<RevenueGeneratedCard> createState() => _RevenueGeneratedCardState();
@@ -57,7 +111,8 @@ class _RevenueGeneratedCardState extends State<RevenueGeneratedCard> {
 
   // Method to filter data based on selected period
   Map<String, dynamic> _getFilteredData(String period) {
-    if (originalData == null) return widget.chartData;
+    if (originalData == null)
+      return widget.chartData ?? RevenueGeneratedCard.exampleData;
 
     final filteredData = Map<String, dynamic>.from(originalData!);
 
@@ -143,7 +198,7 @@ class _RevenueGeneratedCardState extends State<RevenueGeneratedCard> {
 
     try {
       // Store original data on first load
-      originalData ??= widget.chartData;
+      originalData ??= widget.chartData ?? RevenueGeneratedCard.exampleData;
 
       // Get filtered data based on selected period
       final Map<String, dynamic> data = _getFilteredData(selectedPeriod);
@@ -222,7 +277,7 @@ class _RevenueGeneratedCardState extends State<RevenueGeneratedCard> {
                     ),
                   )
                   .toList(),
-              color: AppColors.primary,
+              color: const Color(0xFF1379F0),
               strokeWidth: 3.0,
               showDots: true,
             ),
@@ -242,7 +297,7 @@ class _RevenueGeneratedCardState extends State<RevenueGeneratedCard> {
                     ),
                   )
                   .toList(),
-              color: AppColors.grey600Light,
+              color: const Color(0xFF8E9198),
               strokeWidth: 3.0,
               showDots: true,
             ),
@@ -272,7 +327,7 @@ class _RevenueGeneratedCardState extends State<RevenueGeneratedCard> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Error: $errorMessage'),
-          backgroundColor: AppColors.error,
+          backgroundColor: const Color(0xFFEF4444),
         ),
       );
     }
@@ -286,8 +341,18 @@ class _RevenueGeneratedCardState extends State<RevenueGeneratedCard> {
       color: Colors.transparent,
       child: Container(
         width: double.infinity,
-        padding: AuroraTheme.chartPadding(),
-        decoration: AuroraTheme.cardDecoration(isDark),
+        padding: const EdgeInsets.all(24.0),
+        decoration: BoxDecoration(
+          color: isDark ? const Color(0xFF1A1A1A) : Colors.white,
+          borderRadius: BorderRadius.circular(12.0),
+          boxShadow: [
+            BoxShadow(
+              color: const Color(0x0F000000),
+              blurRadius: 10,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -301,23 +366,46 @@ class _RevenueGeneratedCardState extends State<RevenueGeneratedCard> {
                     children: [
                       Text(
                         cardTitle, // Dynamic from API
-                        style: AuroraTheme.cardTitleStyle(isDark),
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.w600,
+                          fontFamily: 'Inter',
+                          height: 22 / 22,
+                          letterSpacing: 1.4,
+                          color: isDark
+                              ? const Color(0xFFFFFFFF)
+                              : const Color(0xFF212121),
+                        ),
                       ),
-                      AuroraTheme.smallVerticalSpacing(),
+                      const SizedBox(height: 4.0),
                       Text(
                         cardSubtitle, // Dynamic from API
-                        style: AuroraTheme.cardSubtitleStyle(isDark),
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                          fontFamily: 'Inter',
+                          height: 22 / 14,
+                          letterSpacing: 0.25,
+                          color: isDark
+                              ? const Color(0xFFB5B7C8)
+                              : const Color(0xFF757575),
+                        ),
                       ),
                     ],
                   ),
                 ),
-                SizedBox(width: AppSpacing.md),
+                const SizedBox(width: 16.0),
                 Container(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 12,
                     vertical: 6,
                   ),
-                  decoration: AuroraTheme.dropdownDecoration(isDark),
+                  decoration: BoxDecoration(
+                    color: isDark
+                        ? const Color(0xFF141419)
+                        : const Color(0xFFF4F4F4),
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
                   child: DropdownButton<String>(
                     value: selectedPeriod,
                     underline: const SizedBox(),
@@ -325,11 +413,20 @@ class _RevenueGeneratedCardState extends State<RevenueGeneratedCard> {
                     icon: Icon(
                       Icons.keyboard_arrow_down,
                       size: 18,
-                      color: AppColors.getTextPrimary(isDark),
+                      color: isDark
+                          ? const Color(0xFFFFFFFF)
+                          : const Color(0xFF212121),
                     ),
-                    style: AppTextStyles.b13(
-                      isDark: isDark,
-                    ).copyWith(letterSpacing: 0),
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w400,
+                      fontFamily: 'Inter',
+                      height: 20 / 13,
+                      letterSpacing: 0,
+                      color: isDark
+                          ? const Color(0xFFFFFFFF)
+                          : const Color(0xFF212121),
+                    ),
                     items: availablePeriods.map((String value) {
                       return DropdownMenuItem<String>(
                         value: value,
@@ -349,7 +446,7 @@ class _RevenueGeneratedCardState extends State<RevenueGeneratedCard> {
                 ),
               ],
             ),
-            AuroraTheme.legendChartSpacing(),
+            const SizedBox(height: 32.0),
 
             // ============================================
             // DYNAMIC LEGEND - All items in horizontal Row with 4px gap (display: flex)
@@ -369,27 +466,43 @@ class _RevenueGeneratedCardState extends State<RevenueGeneratedCard> {
                 ),
                 // Percentage change with 4px gap
                 Container(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: AppSpacing.sm,
-                    vertical: AppSpacing.xs,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8.0,
+                    vertical: 4.0,
                   ),
-                  decoration: AuroraTheme.percentageContainerDecoration(
-                    isPositive: isPositiveChange,
-                    isDark: isDark,
+                  decoration: BoxDecoration(
+                    color: isPositiveChange
+                        ? (isDark
+                              ? const Color(0xFF064E3B)
+                              : const Color(0xFFD1FAE5))
+                        : (isDark
+                              ? const Color(0xFF7F1D1D)
+                              : const Color(0xFFFEE2E2)),
+                    borderRadius: BorderRadius.circular(4),
                   ),
                   child: Text(
                     percentageChange.isEmpty
                         ? '+0.00%'
                         : percentageChange, // Dynamic from API
-                    style: AuroraTheme.percentageTextStyle(
-                      isPositive: isPositiveChange,
-                      isDark: isDark,
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                      fontFamily: 'Inter',
+                      height: 19 / 12,
+                      letterSpacing: 0.4,
+                      color: isPositiveChange
+                          ? (isDark
+                                ? const Color(0xFF34D399)
+                                : const Color(0xFF10B981))
+                          : (isDark
+                                ? const Color(0xFFF87171)
+                                : const Color(0xFFEF4444)),
                     ),
                   ),
                 ),
               ],
             ),
-            AuroraTheme.cardHeaderSpacing(),
+            const SizedBox(height: 32.0),
 
             // Chart with elevated tooltip
             SizedBox(
@@ -397,16 +510,23 @@ class _RevenueGeneratedCardState extends State<RevenueGeneratedCard> {
               child: isLoading
                   ? Center(
                       child: CircularProgressIndicator(
-                        color: AppColors.primary,
+                        color: const Color(0xFF1379F0),
                       ),
                     )
                   : datasets.isEmpty
                   ? Center(
                       child: Text(
                         'No data available',
-                        style: AppTextStyles.b14(
-                          isDark: isDark,
-                        ).copyWith(color: AppColors.getTextSecondary(isDark)),
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                          fontFamily: 'Inter',
+                          height: 22 / 14,
+                          letterSpacing: 0.25,
+                          color: isDark
+                              ? const Color(0xFFB5B7C8)
+                              : const Color(0xFF757575),
+                        ),
                       ),
                     )
                   : Stack(
@@ -421,13 +541,17 @@ class _RevenueGeneratedCardState extends State<RevenueGeneratedCard> {
                               verticalInterval: 1,
                               getDrawingHorizontalLine: (value) {
                                 return FlLine(
-                                  color: AppColors.getGreyScale(100, isDark),
+                                  color: isDark
+                                      ? const Color(0xFF141419)
+                                      : const Color(0xFFF4F4F4),
                                   strokeWidth: 1,
                                 );
                               },
                               getDrawingVerticalLine: (value) {
                                 return FlLine(
-                                  color: AppColors.getGreyScale(100, isDark),
+                                  color: isDark
+                                      ? const Color(0xFF141419)
+                                      : const Color(0xFFF4F4F4),
                                   strokeWidth: 1,
                                 );
                               },
@@ -445,30 +569,32 @@ class _RevenueGeneratedCardState extends State<RevenueGeneratedCard> {
                                   showTitles: true,
                                   reservedSize: 30,
                                   interval: 1,
-                                  getTitlesWidget: (double value, TitleMeta meta) {
-                                    // Show all month labels (Jan-Dec)
-                                    if (value.toInt() >= 0 &&
-                                        value.toInt() < labels.length) {
-                                      return Padding(
-                                        padding: EdgeInsets.only(
-                                          top: AppSpacing.sm,
-                                        ),
-                                        child: Text(
-                                          labels[value.toInt()],
-                                          style:
-                                              AppTextStyles.b11(
-                                                isDark: isDark,
-                                              ).copyWith(
-                                                color:
-                                                    AppColors.getTextSecondary(
-                                                      isDark,
-                                                    ),
+                                  getTitlesWidget:
+                                      (double value, TitleMeta meta) {
+                                        // Show all month labels (Jan-Dec)
+                                        if (value.toInt() >= 0 &&
+                                            value.toInt() < labels.length) {
+                                          return Padding(
+                                            padding: const EdgeInsets.only(
+                                              top: 8.0,
+                                            ),
+                                            child: Text(
+                                              labels[value.toInt()],
+                                              style: TextStyle(
+                                                fontSize: 11,
+                                                fontWeight: FontWeight.w400,
+                                                fontFamily: 'Inter',
+                                                height: 12 / 11,
+                                                letterSpacing: 0.5,
+                                                color: isDark
+                                                    ? const Color(0xFFB5B7C8)
+                                                    : const Color(0xFF757575),
                                               ),
-                                        ),
-                                      );
-                                    }
-                                    return const Text('');
-                                  },
+                                            ),
+                                          );
+                                        }
+                                        return const Text('');
+                                      },
                                 ),
                               ),
                               leftTitles: const AxisTitles(
@@ -507,17 +633,17 @@ class _RevenueGeneratedCardState extends State<RevenueGeneratedCard> {
                             }).toList(),
                             lineTouchData: LineTouchData(
                               touchTooltipData: LineTouchTooltipData(
-                                tooltipBgColor: AppColors.grey900Light,
-                                tooltipRoundedRadius: AppConstants.radiusSmall,
+                                tooltipBgColor: const Color(0xFF2C2D30),
+                                tooltipRoundedRadius: 4.0,
                                 tooltipPadding: const EdgeInsets.symmetric(
                                   horizontal: 10,
                                   vertical: 7,
                                 ),
                                 tooltipMargin: 8,
                                 tooltipBorder: BorderSide(
-                                  color: AppColors.grey800Light.withValues(
-                                    alpha: 0.3,
-                                  ),
+                                  color: const Color(
+                                    0xFF393B40,
+                                  ).withValues(alpha: 0.3),
                                   width: 1,
                                 ),
                                 maxContentWidth: 200,
@@ -548,8 +674,8 @@ class _RevenueGeneratedCardState extends State<RevenueGeneratedCard> {
 
                                     return LineTooltipItem(
                                       '',
-                                      TextStyle(
-                                        color: AppColors.white,
+                                      const TextStyle(
+                                        color: Colors.white,
                                         height: 1.4,
                                       ),
                                       textAlign: TextAlign.left,
@@ -559,15 +685,14 @@ class _RevenueGeneratedCardState extends State<RevenueGeneratedCard> {
                                             datasets.length - 1) ...[
                                           TextSpan(
                                             text: '$date\n',
-                                            style:
-                                                AppTextStyles.b12(
-                                                  isDark: false,
-                                                ).copyWith(
-                                                  color: AppColors.grey200Light,
-                                                  fontWeight:
-                                                      AppTextStyles.light,
-                                                  height: 2,
-                                                ),
+                                            style: const TextStyle(
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w400,
+                                              fontFamily: 'Inter',
+                                              height: 2,
+                                              letterSpacing: 0.4,
+                                              color: Color(0xFFEEEEEE),
+                                            ),
                                           ),
                                         ],
                                         TextSpan(
@@ -579,23 +704,25 @@ class _RevenueGeneratedCardState extends State<RevenueGeneratedCard> {
                                         ),
                                         TextSpan(
                                           text: '${dataset.label}    ',
-                                          style:
-                                              AppTextStyles.b11(
-                                                isDark: false,
-                                              ).copyWith(
-                                                color: AppColors.grey300Light,
-                                                fontWeight: AppTextStyles.light,
-                                              ),
+                                          style: const TextStyle(
+                                            fontSize: 11,
+                                            fontWeight: FontWeight.w300,
+                                            fontFamily: 'Inter',
+                                            height: 12 / 11,
+                                            letterSpacing: 0.5,
+                                            color: Color(0xFFDCDDDE),
+                                          ),
                                         ),
                                         TextSpan(
                                           text: value,
-                                          style:
-                                              AppTextStyles.b11(
-                                                isDark: false,
-                                              ).copyWith(
-                                                color: AppColors.grey300Light,
-                                                fontWeight: AppTextStyles.light,
-                                              ),
+                                          style: const TextStyle(
+                                            fontSize: 11,
+                                            fontWeight: FontWeight.w300,
+                                            fontFamily: 'Inter',
+                                            height: 12 / 11,
+                                            letterSpacing: 0.5,
+                                            color: Color(0xFFDCDDDE),
+                                          ),
                                         ),
                                       ],
                                     );
@@ -617,12 +744,26 @@ class _RevenueGeneratedCardState extends State<RevenueGeneratedCard> {
   Widget _buildLegendItem(String label, Color color, bool isDark) {
     return Row(
       children: [
-        AuroraTheme.legendIndicator(
-          color: color,
-          size: AuroraTheme.legendIconSize,
+        Container(
+          width: 12,
+          height: 12,
+          decoration: BoxDecoration(
+            color: color,
+            borderRadius: BorderRadius.circular(2),
+          ),
         ),
-        SizedBox(width: AppSpacing.sm),
-        Text(label, style: AuroraTheme.legendTextStyle(isDark)),
+        const SizedBox(width: 8.0),
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w400,
+            fontFamily: 'Inter',
+            height: 22 / 14,
+            letterSpacing: 0.25,
+            color: isDark ? const Color(0xFFB5B7C8) : const Color(0xFF757575),
+          ),
+        ),
       ],
     );
   }

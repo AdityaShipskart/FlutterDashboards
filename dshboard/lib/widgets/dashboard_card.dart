@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import '../const/constant.dart';
-import 'common/percentage_chip.dart';
 
 class DashboardCard extends StatelessWidget {
-  final String iconPath;
+  final String iconKey;
   final String value;
   final String label;
   final String? growth;
@@ -13,13 +10,18 @@ class DashboardCard extends StatelessWidget {
 
   const DashboardCard({
     super.key,
-    required this.iconPath,
-    required this.value,
-    required this.label,
-    this.growth,
-    required this.color,
-    required this.iconBgColor,
+    this.iconKey = 'revenue', // Default icon key
+    this.value = '\$1,234', // Default example value
+    this.label = 'Metric Label', // Default example label
+    this.growth = '+5.3%', // Default example growth
+    this.color = Colors.blue, // Default example color
+    this.iconBgColor = const Color(0xFFEBF5FF), // Default example bg color
   });
+
+  // Inline color getter - no external dependencies
+  static Color _getCardColor(bool isDark) {
+    return isDark ? const Color(0xFF1F2937) : Colors.white;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +31,7 @@ class DashboardCard extends StatelessWidget {
       constraints: const BoxConstraints(minHeight: 120, maxHeight: 150),
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: AppColors.getCard(isDark),
+        color: _getCardColor(isDark),
         borderRadius: BorderRadius.circular(16),
       ),
       child: Stack(
@@ -48,22 +50,17 @@ class DashboardCard extends StatelessWidget {
             ),
           ),
 
-          // Growth Chip
+          // Growth Chip (inline version - no external dependency)
           if (growth != null) ...[
             Positioned(
               top: 0,
               right: 0,
-              child: PercentageChip(
-                percentage:
-                    double.tryParse(
+              child: _buildPercentageChip(
+                double.tryParse(
                       growth!.replaceAll('%', '').replaceAll('+', ''),
                     ) ??
                     0.0,
-                isDark: isDark,
-                horizontalPadding: 6,
-                verticalPadding: 3,
-                fontSize: 12,
-                fontWeight: FontWeight.w600,
+                isDark,
               ),
             ),
           ],
@@ -82,7 +79,7 @@ class DashboardCard extends StatelessWidget {
                     color: iconBgColor,
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: Center(child: _buildIcon(iconPath, color)),
+                  child: Center(child: _buildIcon(iconKey, color)),
                 ),
               ),
 
@@ -138,31 +135,69 @@ class DashboardCard extends StatelessWidget {
     );
   }
 
-  Widget _buildIcon(String iconPath, Color color) {
-    // Map icon paths to Material Icons as fallbacks
-    IconData getIconData(String path) {
-      switch (path) {
-        case "award":
-          return Icons.emoji_events;
-        case "setting":
-          return Icons.settings;
-        case "information":
-          return Icons.info;
-        case "ghost":
-          return Icons.warning;
-        default:
-          return Icons.circle;
-      }
-    }
+  Widget _buildIcon(String key, Color color) {
+    const iconMap = {
+      'revenue': Icons.trending_up,
+      'users': Icons.group_outlined,
+      'orders': Icons.shopping_cart_outlined,
+      'profit': Icons.payments_outlined,
+      'messages': Icons.chat_bubble_outline,
+      'notifications': Icons.notifications_outlined,
+      'settings': Icons.settings,
+    };
 
-    return SvgPicture.asset(
-      iconPath,
-      width: 60,
-      height: 60,
-      // Apply color to SVG - easy to change by modifying the color parameter
-      colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
-      placeholderBuilder: (context) =>
-          Icon(getIconData(iconPath), size: 24, color: color),
+    final icon = iconMap[key] ?? Icons.circle;
+    return Icon(icon, size: 28, color: color);
+  }
+
+  // Inline percentage chip builder - no external dependencies
+  Widget _buildPercentageChip(double percentage, bool isDark) {
+    final isPositive = percentage >= 0;
+
+    // Inline colors
+    const successLight = Color(0xFF10B981);
+    const successDark = Color(0xFF34D399);
+    const successSoftLight = Color(0xFFD1FAE5);
+    const successSoftDark = Color(0xFF064E3B);
+    const errorLight = Color(0xFFEF4444);
+    const errorDark = Color(0xFFF87171);
+    const errorSoftLight = Color(0xFFFEE2E2);
+    const errorSoftDark = Color(0xFF7F1D1D);
+
+    final color = isPositive
+        ? (isDark ? successDark : successLight)
+        : (isDark ? errorDark : errorLight);
+
+    final bgColor = isPositive
+        ? (isDark ? successSoftDark : successSoftLight)
+        : (isDark ? errorSoftDark : errorSoftLight);
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: bgColor,
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            isPositive ? Icons.arrow_upward : Icons.arrow_downward,
+            size: 12,
+            color: color,
+          ),
+          const SizedBox(width: 4),
+          Text(
+            '${percentage.abs().toStringAsFixed(1)}%',
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
+              color: color,
+              letterSpacing: 0,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

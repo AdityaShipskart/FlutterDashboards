@@ -1,13 +1,96 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../const/constant.dart';
 import 'common/custom_data_table.dart';
 import 'common/percentage_chip.dart';
+
+// Local standalone constants to avoid external dependencies
+class AppColors {
+  static const Color textPrimaryDark = Color(0xFFFFFFFF);
+  static const Color textPrimaryLight = Color(0xFF212121);
+  static const Color textSecondaryDark = Color(0xFFB5B7C8);
+  static const Color textSecondaryLight = Color(0xFF757575);
+  static const Color darkSurface = Color(0xFF1A1A1A);
+  static const Color lightBorder = Color(0xFFE0E0E0);
+  static const Color darkBorder = Color(0xFF363843);
+  static const Color grey600Dark = Color(0xFF808290);
+  static const Color grey600Light = Color(0xFF8E9198);
+}
+
+class AppConstants {
+  static const double radiusLarge = 12.0;
+}
+
+class AppSpacing {
+  static const double xxl = 32.0;
+  static const double md = 16.0;
+}
 
 class DashboardTable extends StatefulWidget {
   final String? jsonFilePath;
   final Map<String, dynamic>? data;
+
+  /// Example data for demo purposes
+  static const Map<String, dynamic> exampleData = {
+    'header': {
+      'title': 'Active RFQs',
+      'subtitle': 'Current request for quotations awaiting responses',
+    },
+    'rfqs': [
+      {
+        'rank': 1,
+        'rfqId': 'RFQ001',
+        'title': 'Steel Pipes',
+        'supplier': 'ABC Corp',
+        'estimatedValue': 50000,
+        'percentageChange': 5.5,
+        'responsesReceived': 3,
+        'daysRemaining': 5,
+      },
+      {
+        'rank': 2,
+        'rfqId': 'RFQ002',
+        'title': 'Industrial Valves',
+        'supplier': 'XYZ Ltd',
+        'estimatedValue': 35000,
+        'percentageChange': -2.3,
+        'responsesReceived': 2,
+        'daysRemaining': 7,
+      },
+    ],
+    'pendingQuotes': {
+      'header': {
+        'title': 'Pending Quotes',
+        'subtitle': 'Quotes awaiting review',
+      },
+      'quotes': [],
+    },
+    'activeOrders': {
+      'header': {'title': 'Active Orders', 'subtitle': 'Orders in progress'},
+      'orders': [],
+    },
+    'completedDeliveries': {
+      'header': {
+        'title': 'Completed Deliveries',
+        'subtitle': 'Recently completed',
+      },
+      'deliveries': [],
+    },
+    'customerMetrics': {
+      'header': {
+        'title': 'Customer Metrics',
+        'subtitle': 'Customer performance',
+      },
+      'customers': [],
+    },
+    'productPerformance': {
+      'header': {
+        'title': 'Product Performance',
+        'subtitle': 'Product sales data',
+      },
+      'products': [],
+    },
+  };
 
   const DashboardTable({super.key, this.jsonFilePath, this.data});
 
@@ -34,16 +117,14 @@ class _DashboardTableState extends State<DashboardTable> {
     });
 
     try {
-      // Use provided data if available, otherwise load from JSON file
+      // Use provided data if available, otherwise load from JSON file, or use example data
       final data =
           widget.data ??
           (widget.jsonFilePath != null
                   ? json.decode(
                       await rootBundle.loadString(widget.jsonFilePath!),
                     )
-                  : throw Exception(
-                      'Either data or jsonFilePath must be provided',
-                    ))
+                  : DashboardTable.exampleData)
               as Map<String, dynamic>;
 
       if (mounted) {
@@ -84,10 +165,10 @@ class _DashboardTableState extends State<DashboardTable> {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: isDark ? AppColors.darkSurface : Colors.white,
-        borderRadius: BorderRadius.circular(AppConstants.radiusLarge),
+        color: isDark ? const Color(0xFF1A1A1A) : Colors.white,
+        borderRadius: BorderRadius.circular(12.0),
         border: Border.all(
-          color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
+          color: isDark ? const Color(0xFF363843) : const Color(0xFFE0E0E0),
         ),
       ),
       child: Column(
@@ -95,12 +176,7 @@ class _DashboardTableState extends State<DashboardTable> {
         children: [
           // Header with title and subtitle
           Padding(
-            padding: const EdgeInsets.fromLTRB(
-              AppSpacing.xl,
-              AppSpacing.xl,
-              AppSpacing.xl,
-              AppSpacing.md,
-            ),
+            padding: const EdgeInsets.fromLTRB(32.0, 32.0, 32.0, 16.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -110,8 +186,8 @@ class _DashboardTableState extends State<DashboardTable> {
                     fontSize: 18,
                     fontWeight: FontWeight.w600,
                     color: isDark
-                        ? AppColors.textPrimaryDark
-                        : AppColors.textPrimaryLight,
+                        ? const Color(0xFFFFFFFF)
+                        : const Color(0xFF212121),
                     letterSpacing: 0,
                   ),
                 ),
@@ -122,8 +198,8 @@ class _DashboardTableState extends State<DashboardTable> {
                     fontSize: 14,
                     fontWeight: FontWeight.w400,
                     color: isDark
-                        ? AppColors.textSecondaryDark
-                        : AppColors.textSecondaryLight,
+                        ? const Color(0xFFB5B7C8)
+                        : const Color(0xFF757575),
                     letterSpacing: 0,
                   ),
                 ),
@@ -136,7 +212,7 @@ class _DashboardTableState extends State<DashboardTable> {
 
           // Table
           Padding(
-            padding: const EdgeInsets.all(AppSpacing.xl),
+            padding: const EdgeInsets.all(32.0),
             child: CustomDataTable(
               title: '',
               subtitle: '',
@@ -161,41 +237,39 @@ class _DashboardTableState extends State<DashboardTable> {
     ];
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
+      padding: const EdgeInsets.symmetric(horizontal: 32.0),
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Row(
           children: tabs.map((tab) {
             final isSelected = tab == _selectedTableType;
             return Padding(
-              padding: const EdgeInsets.only(right: AppSpacing.sm),
+              padding: const EdgeInsets.only(right: 8.0),
               child: InkWell(
                 onTap: () {
                   setState(() {
                     _selectedTableType = tab;
                   });
                 },
-                borderRadius: BorderRadius.circular(AppConstants.radiusMedium),
+                borderRadius: BorderRadius.circular(8.0),
                 child: Container(
                   padding: const EdgeInsets.symmetric(
-                    horizontal: AppSpacing.md,
-                    vertical: AppSpacing.sm,
+                    horizontal: 16.0,
+                    vertical: 8.0,
                   ),
                   decoration: BoxDecoration(
                     color: isSelected
-                        ? (isDark ? AppColors.primary : AppColors.primary)
+                        ? const Color(0xFF1379F0)
                         : (isDark
-                              ? AppColors.grey800Dark
-                              : AppColors.grey100Light),
-                    borderRadius: BorderRadius.circular(
-                      AppConstants.radiusMedium,
-                    ),
+                              ? const Color(0xFFB5B7C8)
+                              : const Color(0xFFF4F4F4)),
+                    borderRadius: BorderRadius.circular(8.0),
                     border: Border.all(
                       color: isSelected
-                          ? AppColors.primary
+                          ? const Color(0xFF1379F0)
                           : (isDark
-                                ? AppColors.darkBorder
-                                : AppColors.lightBorder),
+                                ? const Color(0xFF363843)
+                                : const Color(0xFFE0E0E0)),
                       width: 1,
                     ),
                   ),
@@ -209,8 +283,8 @@ class _DashboardTableState extends State<DashboardTable> {
                       color: isSelected
                           ? Colors.white
                           : (isDark
-                                ? AppColors.textSecondaryDark
-                                : AppColors.textSecondaryLight),
+                                ? const Color(0xFFB5B7C8)
+                                : const Color(0xFF757575)),
                       letterSpacing: 0,
                     ),
                   ),

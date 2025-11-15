@@ -1,9 +1,23 @@
-// Reusable Custom Chart Tooltip Widget
+// Standalone Reusable Custom Chart Tooltip Widget
 // This widget provides a consistent tooltip design across all dashboard cards
 // Used in: customer_feedback_card, revenue_bar_chart_card, and other chart cards
+//
+// Example usage:
+// ```dart
+// CustomChartTooltip(
+//   cursorPosition: Offset(100, 150),
+//   items: [
+//     TooltipDataItem(color: Colors.blue, label: 'Revenue', value: '\$5.2K'),
+//     TooltipDataItem(color: Colors.green, label: 'Profit', value: '\$2.1K'),
+//   ],
+//   headerText: 'January',
+//   availableWidth: 400,
+//   availableHeight: 300,
+//   isVisible: true,
+// )
+// ```
 
 import 'package:flutter/material.dart';
-import '../../const/constant.dart';
 
 /// Custom tooltip widget for chart hover interactions
 /// Displays data in a consistent, visually appealing format
@@ -12,7 +26,7 @@ import '../../const/constant.dart';
 /// - Automatic positioning based on cursor location
 /// - Boundary detection to keep tooltip in view
 /// - Dynamic content via list of tooltip items
-/// - Uses AuroraTheme for consistent styling
+/// - All styling is self-contained (no external dependencies)
 class CustomChartTooltip extends StatelessWidget {
   /// Current cursor position (required for tooltip placement)
   final Offset? cursorPosition;
@@ -41,13 +55,76 @@ class CustomChartTooltip extends StatelessWidget {
   const CustomChartTooltip({
     super.key,
     required this.cursorPosition,
-    required this.items,
+    this.items = const [], // Default empty list
     this.headerText,
-    required this.availableWidth,
-    required this.availableHeight,
+    this.availableWidth = 400,
+    this.availableHeight = 300,
     this.isVisible = true,
     this.rightPadding = 0,
   });
+
+  // Inline constants - no external dependencies
+  static const double _tooltipIconSize = 8.0;
+
+  // Inline tooltip decoration method
+  static BoxDecoration _tooltipDecoration({
+    Color? backgroundColor,
+    double borderRadius = 6,
+    Color? shadowColor,
+    double shadowBlur = 10,
+    double shadowOffsetY = 3,
+  }) {
+    return BoxDecoration(
+      color: backgroundColor ?? const Color(0xFF2D3748),
+      borderRadius: BorderRadius.circular(borderRadius),
+      boxShadow: [
+        BoxShadow(
+          color: shadowColor ?? Colors.black.withValues(alpha: 0.3),
+          blurRadius: shadowBlur,
+          offset: Offset(0, shadowOffsetY),
+        ),
+      ],
+    );
+  }
+
+  // Inline tooltip text style method
+  static TextStyle _tooltipTextStyle({
+    Color? color,
+    double fontSize = 12,
+    FontWeight fontWeight = FontWeight.w600,
+  }) {
+    return TextStyle(
+      color: color ?? Colors.white,
+      fontSize: fontSize,
+      fontWeight: fontWeight,
+    );
+  }
+
+  // Inline tooltip secondary text style method
+  static TextStyle _tooltipSecondaryTextStyle({
+    Color? color,
+    double fontSize = 12,
+    FontWeight fontWeight = FontWeight.w400,
+  }) {
+    return TextStyle(
+      color: color ?? Colors.white70,
+      fontSize: fontSize,
+      fontWeight: fontWeight,
+    );
+  }
+
+  // Inline tooltip indicator method
+  static Widget _tooltipIndicator({
+    required Color color,
+    double size = 8,
+    BoxShape shape = BoxShape.circle,
+  }) {
+    return Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(color: color, shape: shape),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -91,7 +168,7 @@ class CustomChartTooltip extends StatelessWidget {
       top: tooltipTop,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-        decoration: AuroraTheme.tooltipDecoration(),
+        decoration: _tooltipDecoration(),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -140,16 +217,13 @@ class CustomChartTooltip extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         // Colored dot indicator
-        AuroraTheme.tooltipIndicator(
-          color: color,
-          size: AuroraTheme.tooltipIconSize,
-        ),
+        _tooltipIndicator(color: color, size: _tooltipIconSize),
         const SizedBox(width: 8),
         // Label text
-        Text(label, style: AuroraTheme.tooltipSecondaryTextStyle()),
+        Text(label, style: _tooltipSecondaryTextStyle()),
         const SizedBox(width: 12),
         // Value text
-        Text(value, style: AuroraTheme.tooltipTextStyle()),
+        Text(value, style: _tooltipTextStyle()),
       ],
     );
   }

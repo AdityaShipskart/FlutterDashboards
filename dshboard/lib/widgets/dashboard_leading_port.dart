@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../const/constant.dart';
 import 'common/custom_data_table.dart';
 
 class DashboardLeadingPort extends StatelessWidget {
@@ -9,10 +8,46 @@ class DashboardLeadingPort extends StatelessWidget {
 
   const DashboardLeadingPort({
     super.key,
-    required this.data,
+    Map<String, dynamic>? data,
     this.minWidth = 900,
     this.expandToAvailableWidth = true,
-  });
+  }) : data = data ?? _exampleData;
+
+  // Example data for when no data is provided
+  static const Map<String, dynamic> _exampleData = {
+    'title': 'Leading Ports',
+    'subtitle': 'Summary of all your leading ports',
+    'ports': [
+      {
+        'portName': 'Shanghai',
+        'purchaseValue': '\$50,234,000',
+        'percentageChange': 12.5,
+        'trend': 'up',
+      },
+      {
+        'portName': 'Singapore',
+        'purchaseValue': '\$45,123,000',
+        'percentageChange': 8.3,
+        'trend': 'up',
+      },
+      {
+        'portName': 'Rotterdam',
+        'purchaseValue': '\$38,456,000',
+        'percentageChange': -2.1,
+        'trend': 'down',
+      },
+      {
+        'portName': 'Los Angeles',
+        'purchaseValue': '\$35,789,000',
+        'percentageChange': 5.7,
+        'trend': 'up',
+      },
+    ],
+  };
+
+  // Inline color constants - no external dependencies
+  static const Color _textPrimaryDark = Color(0xFFF9FAFB);
+  static const Color _textPrimaryLight = Color(0xFF111827);
 
   Widget _buildPercentageChange(dynamic value, bool isDark, bool isSummary) {
     if (value == null) return const SizedBox.shrink();
@@ -29,9 +64,7 @@ class DashboardLeadingPort extends StatelessWidget {
           style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w500,
-            color: isDark
-                ? AppColors.textPrimaryDark
-                : AppColors.textPrimaryLight,
+            color: isDark ? _textPrimaryDark : _textPrimaryLight,
           ),
         ),
         const SizedBox(width: 12),
@@ -86,9 +119,7 @@ class DashboardLeadingPort extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
-                  color: isDark
-                      ? AppColors.textPrimaryDark
-                      : AppColors.textPrimaryLight,
+                  color: isDark ? _textPrimaryDark : _textPrimaryLight,
                 ),
               ),
             ],

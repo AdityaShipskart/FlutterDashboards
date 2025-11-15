@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutte_design_application/pages/vendor_dashboard_v2.dart';
 import '../main.dart';
+import 'catalogue_dashboard.dart';
+import 'smc_dashboard.dart';
+import 'vendor_dashboard.dart';
 
 /// Minimal top navigation to showcase different dashboard configurations
 class DashboardHub extends StatefulWidget {
@@ -16,18 +18,18 @@ class _DashboardHubState extends State<DashboardHub> {
   final List<DashboardConfig> _dashboards = [
     DashboardConfig(
       title: 'Vendor Dashboard',
-      configPath: 'assets/data/vendor_dashboard_config.json',
       icon: Icons.store,
+      builder: () => VendorDashboard(),
     ),
     DashboardConfig(
       title: 'Ship Management',
-      configPath: 'assets/data/ship_management_config.json',
       icon: Icons.directions_boat,
+      builder: () => SMCDashboard(),
     ),
     DashboardConfig(
       title: 'Catalogue',
-      configPath: 'assets/data/catalogue_dashboard_config.json',
       icon: Icons.category,
+      builder: () => CatalogueDashboard(),
     ),
   ];
 
@@ -131,10 +133,9 @@ class _DashboardHubState extends State<DashboardHub> {
           ),
         ],
       ),
-      body: VendorDashboardV2(
-        key: ValueKey(selectedDashboard.configPath),
-        dashboardConfigPath: selectedDashboard.configPath,
-        title: selectedDashboard.title,
+      body: KeyedSubtree(
+        key: ValueKey(selectedDashboard.title),
+        child: selectedDashboard.builder(),
       ),
     );
   }
@@ -187,12 +188,12 @@ class _DashboardHubState extends State<DashboardHub> {
 
 class DashboardConfig {
   final String title;
-  final String configPath;
   final IconData icon;
+  final Widget Function() builder;
 
   DashboardConfig({
     required this.title,
-    required this.configPath,
     required this.icon,
+    required this.builder,
   });
 }
