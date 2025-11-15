@@ -18,10 +18,11 @@ class DashboardGridCol extends ResponsiveGridCol {
     double? spacing,
     EdgeInsets? padding,
   }) : super(
-          child: Padding(
-            padding: padding ??
-                EdgeInsets.all((spacing ?? kDashboardGridSpacing) / 2),
-            child: child,
-          ),
-        );
+         child: Padding(
+           padding:
+               padding ??
+               EdgeInsets.all((spacing ?? kDashboardGridSpacing) / 2),
+           child: child,
+         ),
+       );
 }
