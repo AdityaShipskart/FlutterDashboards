@@ -6,9 +6,10 @@ import '../const/constant.dart';
 import 'common/custom_tooltip.dart';
 
 class DashboardBarChart extends StatefulWidget {
-  final String jsonFilePath;
+  final String? jsonFilePath;
+  final Map<String, dynamic>? chartData;
 
-  const DashboardBarChart({super.key, required this.jsonFilePath});
+  const DashboardBarChart({super.key, this.jsonFilePath, this.chartData});
 
   @override
   State<DashboardBarChart> createState() => _DashboardBarChartState();
@@ -57,20 +58,30 @@ class _DashboardBarChartState extends State<DashboardBarChart> {
     });
 
     try {
-      // Load data from JSON asset file
-      // TO INTEGRATE WITH .NET API:
-      // 1. Add http package to pubspec.yaml: http: ^1.1.0
-      // 2. Import: import 'package:http/http.dart' as http;
-      // 3. Replace next lines with:
-      //    final response = await http.get(
-      //      Uri.parse('https://your-dotnet-api.com/api/dashboard/revenue-bar-chart'),
-      //      headers: {'Authorization': 'Bearer YOUR_TOKEN'},
-      //    );
-      //    final data = json.decode(response.body);
-      final String jsonString = await rootBundle.loadString(
-        widget.jsonFilePath,
-      );
-      final data = json.decode(jsonString) as Map<String, dynamic>;
+      // Check if chartData is directly provided
+      Map<String, dynamic> data;
+
+      if (widget.chartData != null) {
+        // Use the provided chartData
+        data = widget.chartData!;
+      } else if (widget.jsonFilePath != null) {
+        // Load data from JSON asset file
+        // TO INTEGRATE WITH .NET API:
+        // 1. Add http package to pubspec.yaml: http: ^1.1.0
+        // 2. Import: import 'package:http/http.dart' as http;
+        // 3. Replace next lines with:
+        //    final response = await http.get(
+        //      Uri.parse('https://your-dotnet-api.com/api/dashboard/revenue-bar-chart'),
+        //      headers: {'Authorization': 'Bearer YOUR_TOKEN'},
+        //    );
+        //    final data = json.decode(response.body);
+        final String jsonString = await rootBundle.loadString(
+          widget.jsonFilePath!,
+        );
+        data = json.decode(jsonString) as Map<String, dynamic>;
+      } else {
+        throw Exception('Either jsonFilePath or chartData must be provided');
+      }
 
       if (!mounted) return;
 

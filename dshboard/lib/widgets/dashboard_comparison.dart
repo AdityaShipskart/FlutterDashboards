@@ -5,9 +5,10 @@ import 'package:fl_chart/fl_chart.dart';
 import '../const/constant.dart';
 
 class MultiAnalyticsOveriview extends StatefulWidget {
-  final String jsonFilePath;
+  final String? jsonFilePath;
+  final Map<String, dynamic>? chartData;
 
-  const MultiAnalyticsOveriview({super.key, required this.jsonFilePath});
+  const MultiAnalyticsOveriview({super.key, this.jsonFilePath, this.chartData});
 
   @override
   State<MultiAnalyticsOveriview> createState() =>
@@ -38,20 +39,30 @@ class _MultiAnalyticsOveriviewState extends State<MultiAnalyticsOveriview> {
     });
 
     try {
-      // Load data from JSON file
-      // TO INTEGRATE WITH .NET API:
-      // 1. Add http package to pubspec.yaml: http: ^1.1.0
-      // 2. Import: import 'package:http/http.dart' as http;
-      // 3. Replace next lines with:
-      //    final response = await http.get(
-      //      Uri.parse('https://your-dotnet-api.com/api/analytics/dashboard'),
-      //      headers: {'Authorization': 'Bearer YOUR_TOKEN'},
-      //    );
-      //    final data = json.decode(response.body);
-      final String jsonString = await rootBundle.loadString(
-        widget.jsonFilePath,
-      );
-      final data = json.decode(jsonString);
+      // Check if chartData is directly provided
+      Map<String, dynamic> data;
+
+      if (widget.chartData != null) {
+        // Use the provided chartData
+        data = widget.chartData!;
+      } else if (widget.jsonFilePath != null) {
+        // Load data from JSON file
+        // TO INTEGRATE WITH .NET API:
+        // 1. Add http package to pubspec.yaml: http: ^1.1.0
+        // 2. Import: import 'package:http/http.dart' as http;
+        // 3. Replace next lines with:
+        //    final response = await http.get(
+        //      Uri.parse('https://your-dotnet-api.com/api/analytics/dashboard'),
+        //      headers: {'Authorization': 'Bearer YOUR_TOKEN'},
+        //    );
+        //    final data = json.decode(response.body);
+        final String jsonString = await rootBundle.loadString(
+          widget.jsonFilePath!,
+        );
+        data = json.decode(jsonString);
+      } else {
+        throw Exception('Either jsonFilePath or chartData must be provided');
+      }
 
       setState(() {
         tabsData = List<Map<String, dynamic>>.from(data['tabs']);

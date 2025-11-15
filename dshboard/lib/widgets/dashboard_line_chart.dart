@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import '../const/constant.dart';
-import '../models/line_dataset.dart';
 
 class RevenueGeneratedCard extends StatefulWidget {
   final Map<String, dynamic> chartData;
@@ -27,7 +26,7 @@ class _RevenueGeneratedCardState extends State<RevenueGeneratedCard> {
   // ============================================
   // This list can contain 2, 3, 4, or more datasets
   // Each dataset represents one line on the chart
-  List<LineDataset> datasets = [];
+  List<Map<String, dynamic>> datasets = [];
   List<String> labels = [];
 
   // Card content - all dynamic from backend
@@ -211,42 +210,38 @@ class _RevenueGeneratedCardState extends State<RevenueGeneratedCard> {
 
         // Add this year dataset
         if (thisYearDataRaw.isNotEmpty) {
-          datasets.add(
-            LineDataset(
-              label: data['thisYearLabel'] ?? '2025',
-              data: thisYearDataRaw
-                  .map(
-                    (point) => FlSpot(
-                      (point['x'] as num).toDouble(),
-                      (point['y'] as num).toDouble(),
-                    ),
-                  )
-                  .toList(),
-              color: AppColors.primary,
-              strokeWidth: 3.0,
-              showDots: true,
-            ),
-          );
+          datasets.add({
+            'label': data['thisYearLabel'] ?? '2025',
+            'data': thisYearDataRaw
+                .map(
+                  (point) => FlSpot(
+                    (point['x'] as num).toDouble(),
+                    (point['y'] as num).toDouble(),
+                  ),
+                )
+                .toList(),
+            'color': AppColors.primary,
+            'strokeWidth': 3.0,
+            'showDots': true,
+          });
         }
 
         // Add last year dataset
         if (lastYearDataRaw.isNotEmpty) {
-          datasets.add(
-            LineDataset(
-              label: data['lastYearLabel'] ?? '2024',
-              data: lastYearDataRaw
-                  .map(
-                    (point) => FlSpot(
-                      (point['x'] as num).toDouble(),
-                      (point['y'] as num).toDouble(),
-                    ),
-                  )
-                  .toList(),
-              color: AppColors.grey600Light,
-              strokeWidth: 3.0,
-              showDots: true,
-            ),
-          );
+          datasets.add({
+            'label': data['lastYearLabel'] ?? '2024',
+            'data': lastYearDataRaw
+                .map(
+                  (point) => FlSpot(
+                    (point['x'] as num).toDouble(),
+                    (point['y'] as num).toDouble(),
+                  ),
+                )
+                .toList(),
+            'color': AppColors.grey600Light,
+            'strokeWidth': 3.0,
+            'showDots': true,
+          });
         }
 
         labels = List<String>.from(data['labels'] ?? []);
@@ -360,8 +355,8 @@ class _RevenueGeneratedCardState extends State<RevenueGeneratedCard> {
                 ...datasets.asMap().entries.expand(
                   (entry) => [
                     _buildLegendItem(
-                      entry.value.label,
-                      entry.value.color,
+                      entry.value['label'] as String,
+                      entry.value['color'] as Color,
                       isDark,
                     ),
                     SizedBox(width: 14), // 4px gap
@@ -485,18 +480,19 @@ class _RevenueGeneratedCardState extends State<RevenueGeneratedCard> {
                             // ============================================
                             lineBarsData: datasets.map((dataset) {
                               return LineChartBarData(
-                                spots: dataset.data,
+                                spots: dataset['data'] as List<FlSpot>,
                                 isCurved: true,
-                                color: dataset.color,
-                                barWidth: dataset.strokeWidth,
+                                color: dataset['color'] as Color,
+                                barWidth: (dataset['strokeWidth'] as num)
+                                    .toDouble(),
                                 isStrokeCapRound: true,
                                 dotData: FlDotData(
-                                  show: dataset.showDots,
+                                  show: dataset['showDots'] as bool,
                                   getDotPainter:
                                       (spot, percent, barData, index) {
                                         return FlDotCirclePainter(
                                           radius: 4,
-                                          color: dataset.color,
+                                          color: dataset['color'] as Color,
                                           strokeWidth: 2,
                                           strokeColor: Colors.white,
                                         );
@@ -573,12 +569,12 @@ class _RevenueGeneratedCardState extends State<RevenueGeneratedCard> {
                                         TextSpan(
                                           text: '●  ',
                                           style: TextStyle(
-                                            color: dataset.color,
+                                            color: dataset['color'] as Color,
                                             fontSize: 10,
                                           ),
                                         ),
                                         TextSpan(
-                                          text: '${dataset.label}    ',
+                                          text: '${dataset['label']}    ',
                                           style:
                                               AppTextStyles.b11(
                                                 isDark: false,

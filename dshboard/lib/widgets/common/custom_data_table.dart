@@ -1,4 +1,3 @@
-import 'package:flutte_design_application/const/responsive.dart';
 import 'package:flutter/material.dart';
 import '../../const/constant.dart';
 
@@ -97,7 +96,8 @@ class CustomDataTable extends StatelessWidget {
             ],
           );
 
-          if (Responsive.isMobile(context)) {
+          final isMobile = MediaQuery.of(context).size.width < 850;
+          if (isMobile) {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [commonWidget],
@@ -116,8 +116,9 @@ class CustomDataTable extends StatelessWidget {
   Widget _buildTable(bool isDark) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        final isDesktop = Responsive.isDesktop(context);
-        final isTablet = Responsive.isTablet(context);
+        final screenWidth = MediaQuery.of(context).size.width;
+        final isDesktop = screenWidth >= 1100;
+        final isTablet = screenWidth < 1100 && screenWidth >= 850;
 
         final columnSpacing = isDesktop
             ? AppSpacing.xxl

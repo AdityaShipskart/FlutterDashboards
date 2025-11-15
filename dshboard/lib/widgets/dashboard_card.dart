@@ -72,14 +72,23 @@ class DashboardCard extends StatelessWidget {
               // Icon Container
               Expanded(
                 flex: 3,
-                child: Container(
-                  width: 60,
-                  height: 60,
-                  decoration: BoxDecoration(
-                    color: iconBgColor,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Center(child: _buildIcon(iconPath, color)),
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    // Responsive icon container size
+                    double iconSize = constraints.maxWidth > 200 ? 60 : 48;
+
+                    return Container(
+                      width: iconSize,
+                      height: iconSize,
+                      decoration: BoxDecoration(
+                        color: iconBgColor,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Center(
+                        child: _buildIcon(iconPath, color, iconSize),
+                      ),
+                    );
+                  },
                 ),
               ),
 
@@ -90,37 +99,49 @@ class DashboardCard extends StatelessWidget {
                 flex: 5,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Flexible(
-                        child: FittedBox(
-                          fit: BoxFit.scaleDown,
-                          child: Text(
-                            value,
-                            style: const TextStyle(
-                              fontSize: 28,
-                              fontWeight: FontWeight.w700,
-                              color: Color(0xFF111827),
-                              height: 1.0,
-                              letterSpacing: -0.5,
+                  child: LayoutBuilder(
+                    builder: (context, constraints) {
+                      // Responsive font sizes based on available width
+                      double valueFontSize = constraints.maxWidth > 200
+                          ? 28
+                          : 24;
+                      double labelFontSize = constraints.maxWidth > 200
+                          ? 14
+                          : 12;
+
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Flexible(
+                            child: FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Text(
+                                value,
+                                style: TextStyle(
+                                  fontSize: valueFontSize,
+                                  fontWeight: FontWeight.w700,
+                                  color: const Color(0xFF111827),
+                                  height: 1.0,
+                                  letterSpacing: -0.5,
+                                ),
+                              ),
                             ),
                           ),
-                        ),
-                      ),
 
-                      Text(
-                        label,
-                        style: const TextStyle(
-                          fontSize: 14,
-                          color: Color(0xFF6B7280),
-                          fontWeight: FontWeight.w500,
-                        ),
-                        maxLines: 2,
-                        overflow: TextOverflow.clip,
-                      ),
-                    ],
+                          Text(
+                            label,
+                            style: TextStyle(
+                              fontSize: labelFontSize,
+                              color: const Color(0xFF6B7280),
+                              fontWeight: FontWeight.w500,
+                            ),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
+                      );
+                    },
                   ),
                 ),
               ),
@@ -131,7 +152,7 @@ class DashboardCard extends StatelessWidget {
     );
   }
 
-  Widget _buildIcon(String iconPath, Color color) {
+  Widget _buildIcon(String iconPath, Color color, double size) {
     // Map icon paths to Material Icons as fallbacks
     IconData getIconData(String path) {
       switch (path) {
@@ -150,12 +171,12 @@ class DashboardCard extends StatelessWidget {
 
     return SvgPicture.asset(
       iconPath,
-      width: 60,
-      height: 60,
+      width: size,
+      height: size,
       // Apply color to SVG - easy to change by modifying the color parameter
       colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
       placeholderBuilder: (context) =>
-          Icon(getIconData(iconPath), size: 24, color: color),
+          Icon(getIconData(iconPath), size: size * 0.6, color: color),
     );
   }
 }

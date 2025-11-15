@@ -11,7 +11,7 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:flutte_design_application/widgets/dashboard_card_container.dart';
-import 'package:flutte_design_application/services/card_data_service.dart';
+import 'package:responsive_grid/responsive_grid.dart';
 
 class VendorDashboard extends StatefulWidget {
   const VendorDashboard({super.key});
@@ -27,6 +27,12 @@ class _VendorDashboardState extends State<VendorDashboard> {
   Map<String, dynamic>? leadingPortsData;
   Map<String, dynamic>? leadingPortsData2;
   Map<String, dynamic>? leadingPortsData3;
+  Map<String, dynamic>? combobarChartData;
+  Map<String, dynamic>? pieChartData;
+  Map<String, dynamic>? financialCardData;
+  Map<String, dynamic>? barChartData;
+  Map<String, dynamic>? comparisonData;
+  Map<String, dynamic>? tableData;
 
   @override
   void initState() {
@@ -42,7 +48,15 @@ class _VendorDashboardState extends State<VendorDashboard> {
     final data = json.decode(response);
 
     // Load cards data
-    final cards = await CardDataService.loadCardsData();
+    final String cardsResponse = await rootBundle.loadString(
+      'assets/data/cards_data.json',
+    );
+    final cardsJson = json.decode(cardsResponse);
+    final cards = List<Map<String, dynamic>>.from(
+      (cardsJson['cards'] as List).map(
+        (card) => Map<String, dynamic>.from(card),
+      ),
+    );
 
     // Load area chart data
     final String areaChartResponse = await rootBundle.loadString(
@@ -58,6 +72,48 @@ class _VendorDashboardState extends State<VendorDashboard> {
 
     final leadingPorts = json.decode(leadingPortsResponse);
 
+    // Load combobar chart data
+    final String combobarChartResponse = await rootBundle.loadString(
+      'assets/data/combobar_chart.json',
+    );
+
+    final combobarChart = json.decode(combobarChartResponse);
+
+    // Load pie chart data
+    final String pieChartResponse = await rootBundle.loadString(
+      'assets/data/pie_chart.json',
+    );
+
+    final pieChart = json.decode(pieChartResponse);
+
+    // Load financial card data
+    final String financialCardResponse = await rootBundle.loadString(
+      'assets/data/financial_data.json',
+    );
+
+    final financialCard = json.decode(financialCardResponse);
+
+    // Load bar chart data
+    final String barChartResponse = await rootBundle.loadString(
+      'assets/data/bar_chart.json',
+    );
+
+    final barChart = json.decode(barChartResponse);
+
+    // Load comparison data
+    final String comparisonResponse = await rootBundle.loadString(
+      'assets/data/comparison_data.json',
+    );
+
+    final comparison = json.decode(comparisonResponse);
+
+    // Load table data
+    final String tableResponse = await rootBundle.loadString(
+      'assets/data/top_performance_table_data.json',
+    );
+
+    final table = json.decode(tableResponse);
+
     setState(() {
       contentData = data;
       cardsData = cards;
@@ -65,6 +121,12 @@ class _VendorDashboardState extends State<VendorDashboard> {
       leadingPortsData = Map<String, dynamic>.from(leadingPorts);
       leadingPortsData2 = Map<String, dynamic>.from(leadingPorts);
       leadingPortsData3 = Map<String, dynamic>.from(leadingPorts);
+      combobarChartData = combobarChart;
+      pieChartData = pieChart;
+      financialCardData = financialCard;
+      barChartData = barChart;
+      comparisonData = comparison;
+      tableData = table;
 
       leadingPortsData2!['title'] = 'Top Exporting Ports';
       leadingPortsData2!['subtitle'] = 'Summary of your top exporting ports';
@@ -76,283 +138,253 @@ class _VendorDashboardState extends State<VendorDashboard> {
 
   @override
   Widget build(BuildContext context) {
-    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    return cardsData != null &&
+            areaChartData != null &&
+            leadingPortsData != null &&
+            combobarChartData != null &&
+            pieChartData != null &&
+            financialCardData != null &&
+            barChartData != null &&
+            comparisonData != null &&
+            tableData != null
+        ? RefreshIndicator(
+            onRefresh: loadData,
+            child: SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16.0,
+                  vertical: 12.0,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // First Row - Dashboard Cards and Recent Data
+                    ResponsiveGridRow(
+                      rowSegments: 12,
+                      children: [
+                        ResponsiveGridCol(
+                          xs: 12,
+                          md: 8,
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                              bottom: 16.0,
+                              right: 8.0,
+                            ),
+                            child: DashboardCardContainer(
+                              cards: cardsData!,
+                              contentData: contentData,
+                              contentKey: "child_dashboard",
+                            ),
+                          ),
+                        ),
+                        ResponsiveGridCol(
+                          xs: 12,
+                          md: 4,
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                              bottom: 16.0,
+                              left: 8.0,
+                            ),
+                            child: DashboardRecentData(),
+                          ),
+                        ),
+                      ],
+                    ),
 
-    var dashboard_section_1 = [
-      Expanded(
-        flex: 7,
-        child: DashboardCardContainer(
-          cards: cardsData!,
-          contentData: contentData,
-          contentKey: "child_dashboard",
-        ),
-      ),
-      const SizedBox(width: 16),
-      Expanded(flex: 3, child: DashboardRecentData()),
-    ];
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: isDarkMode ? Colors.grey[900] : Colors.white,
-        title: Text(
-          'Vendor Dashboard',
-          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-            fontWeight: FontWeight.bold,
-            color: isDarkMode ? Colors.white : Colors.black87,
-          ),
-        ),
-        centerTitle: false,
-      ),
-      body:
-          cardsData != null && areaChartData != null && leadingPortsData != null
-          ? RefreshIndicator(
-              onRefresh: loadData,
-              child: SingleChildScrollView(
-                physics: const AlwaysScrollableScrollPhysics(),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16.0,
-                    vertical: 12.0,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // First Row - Dashboard Cards and Recent Data
-                      Row(children: dashboard_section_1),
+                    SizedBox(height: 28),
+                    ResponsiveGridRow(
+                      children: [
+                        ResponsiveGridCol(
+                          xs: 12,
+                          md: 6,
+                          lg: 6,
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                              bottom: 16.0,
+                              right: 8.0,
+                            ),
+                            child: RevenueGeneratedCard(
+                              chartData: areaChartData!,
+                            ),
+                          ),
+                        ),
+                        ResponsiveGridCol(
+                          xs: 12,
+                          md: 6,
+                          lg: 3,
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                              bottom: 16.0,
+                              left: 4.0,
+                              right: 4.0,
+                            ),
+                            child: DashboardPieChart(chartData: pieChartData!),
+                          ),
+                        ),
+                        ResponsiveGridCol(
+                          xs: 12,
+                          md: 6,
+                          lg: 3,
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                              bottom: 16.0,
+                              left: 8.0,
+                            ),
+                            child: DashboardFinancialCard(
+                              chartData: financialCardData!,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 28),
 
-                      SizedBox(height: 28),
-                      LayoutBuilder(
-                        builder: (context, constraints) {
-                          final isMobile = constraints.maxWidth < 768;
+                    const SizedBox(height: 12),
+                    ResponsiveGridRow(
+                      children: [
+                        ResponsiveGridCol(
+                          xs: 12,
+                          md: 4,
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                              bottom: 16.0,
+                              right: 8.0,
+                            ),
+                            child: DashboardFinancialCard(
+                              chartData: financialCardData!,
+                            ),
+                          ),
+                        ),
+                        ResponsiveGridCol(
+                          xs: 12,
+                          md: 8,
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                              bottom: 16.0,
+                              left: 8.0,
+                            ),
+                            child: DashboardBarChart(chartData: barChartData!),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 28),
 
-                          if (isMobile) {
-                            // Stack vertically on mobile
-                            return Column(
-                              children: [
-                                RevenueGeneratedCard(chartData: areaChartData!),
-                                const SizedBox(height: 20),
-                                DashboardPieChart(
-                                  jsonFilePath: 'assets/data/pie_chart.json',
-                                ),
-                              ],
-                            );
-                          } else {
-                            // Side by side on larger screens
-                            return Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                // Revenue chart - 65% width
-                                Expanded(
-                                  flex: 35,
-                                  child: RevenueGeneratedCard(
-                                    chartData: areaChartData!,
-                                  ),
-                                ),
-                                const SizedBox(width: 20),
-                                // Pie chart - 35% width
-                                Expanded(
-                                  flex: 25,
-                                  child: DashboardPieChart(
-                                    jsonFilePath: 'assets/data/pie_chart.json',
-                                  ),
-                                ),
-                                const SizedBox(width: 20),
-                                Expanded(
-                                  flex: 25,
-                                  child: DashboardFinancialCard(
-                                    jsonFilePath:
-                                        "assets/data/financial_data.json",
-                                  ),
-                                ),
-                              ],
-                            );
-                          }
-                        },
-                      ),
-                      const SizedBox(height: 28),
+                    const SizedBox(height: 12),
+                    ResponsiveGridRow(
+                      children: [
+                        ResponsiveGridCol(
+                          xs: 12,
+                          md: 6,
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                              bottom: 16.0,
+                              right: 8.0,
+                            ),
+                            child: DashboardcombobarChart(
+                              chartData: combobarChartData!,
+                            ),
+                          ),
+                        ),
+                        ResponsiveGridCol(
+                          xs: 12,
+                          md: 6,
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                              bottom: 16.0,
+                              left: 8.0,
+                            ),
+                            child: MultiAnalyticsOveriview(
+                              chartData: comparisonData!,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 28),
 
-                      const SizedBox(height: 12),
-                      LayoutBuilder(
-                        builder: (context, constraints) {
-                          final isMobile = constraints.maxWidth < 768;
+                    // Performance Table Section
+                    const SizedBox(height: 12),
+                    DashboardTable(chartData: tableData!),
 
-                          if (isMobile) {
-                            // Stack vertically on mobile
-                            return Column(
-                              children: [
-                                DashboardFinancialCard(
-                                  jsonFilePath:
-                                      "assets/data/financial_data.json",
-                                ),
-                                const SizedBox(height: 20),
-                                DashboardBarChart(
-                                  jsonFilePath: 'assets/data/bar_chart.json',
-                                ),
-                              ],
-                            );
-                          } else {
-                            // Side by side on larger screens
-                            return Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                // Financial card - 30% width
-                                Expanded(
-                                  flex: 30,
-                                  child: DashboardFinancialCard(
-                                    jsonFilePath:
-                                        "assets/data/financial_data.json",
-                                  ),
-                                ),
-                                const SizedBox(width: 20),
-                                // Bar chart - 70% width
-                                Expanded(
-                                  flex: 70,
-                                  child: DashboardBarChart(
-                                    jsonFilePath: 'assets/data/bar_chart.json',
-                                  ),
-                                ),
-                              ],
-                            );
-                          }
-                        },
-                      ),
-                      const SizedBox(height: 28),
+                    // Multi Table Section
+                    const SizedBox(height: 24),
 
-                      const SizedBox(height: 12),
-                      LayoutBuilder(
-                        builder: (context, constraints) {
-                          final isMobile = constraints.maxWidth < 768;
-
-                          if (isMobile) {
-                            // Stack vertically on mobile
-                            return Column(
-                              children: [
-                                DashboardcombobarChart(
-                                  jsonFilePath:
-                                      'assets/data/combobar_chart.json',
-                                ),
-                                const SizedBox(height: 20),
-                                MultiAnalyticsOveriview(
-                                  jsonFilePath:
-                                      'assets/data/comparison_data.json',
-                                ),
-                              ],
-                            );
-                          } else {
-                            // Side by side on larger screens - 50/50 split
-                            return Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                // Combo bar chart - 50% width
-                                Expanded(
-                                  flex: 50,
-                                  child: DashboardcombobarChart(
-                                    jsonFilePath:
-                                        'assets/data/combobar_chart.json',
-                                  ),
-                                ),
-                                const SizedBox(width: 20),
-                                // Comparison chart - 50% width
-                                Expanded(
-                                  flex: 50,
-                                  child: MultiAnalyticsOveriview(
-                                    jsonFilePath:
-                                        'assets/data/comparison_data.json',
-                                  ),
-                                ),
-                              ],
-                            );
-                          }
-                        },
-                      ),
-                      const SizedBox(height: 28),
-
-                      // Performance Table Section
-                      const SizedBox(height: 12),
-                      DashboardTable(
-                        jsonFilePath:
-                            'assets/data/top_performance_table_data.json',
-                      ),
-
-                      // Multi Table Section
-                      const SizedBox(height: 24),
-
-                      LayoutBuilder(
-                        builder: (context, constraints) {
-                          const double gap = 16;
-                          final double availableWidth =
-                              constraints.hasBoundedWidth &&
-                                  constraints.maxWidth.isFinite
-                              ? constraints.maxWidth
-                              : MediaQuery.of(context).size.width;
-
-                          // Responsive column count
-                          final int columns = availableWidth < 768
-                              ? 1
-                              : availableWidth < 1200
-                              ? 2
-                              : 3;
-
-                          final double totalGap = columns > 1
-                              ? gap * (columns - 1)
-                              : 0;
-                          final double itemWidth =
-                              (availableWidth - totalGap) / columns;
-
-                          return Wrap(
-                            spacing: gap,
-                            runSpacing: gap,
-                            children: [
-                              SizedBox(
-                                width: itemWidth,
-                                child: DashboardLeadingPort(
-                                  data: leadingPortsData!,
-                                  minWidth: itemWidth,
-                                  expandToAvailableWidth: false,
-                                ),
-                              ),
-                              SizedBox(
-                                width: itemWidth,
-                                child: DashboardLeadingPort(
-                                  data: leadingPortsData2!,
-                                  minWidth: itemWidth,
-                                  expandToAvailableWidth: false,
-                                ),
-                              ),
-                              SizedBox(
-                                width: itemWidth,
-                                child: DashboardLeadingPort(
-                                  data: leadingPortsData3!,
-                                  minWidth: itemWidth,
-                                  expandToAvailableWidth: false,
-                                ),
-                              ),
-                            ],
-                          );
-                        },
-                      ),
-                    ],
-                  ),
+                    ResponsiveGridRow(
+                      children: [
+                        ResponsiveGridCol(
+                          xs: 12,
+                          md: 6,
+                          lg: 4,
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                              bottom: 16.0,
+                              right: 8.0,
+                            ),
+                            child: DashboardLeadingPort(
+                              data: leadingPortsData!,
+                              minWidth: 350,
+                              expandToAvailableWidth: true,
+                            ),
+                          ),
+                        ),
+                        ResponsiveGridCol(
+                          xs: 12,
+                          md: 6,
+                          lg: 4,
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                              bottom: 16.0,
+                              left: 4.0,
+                              right: 4.0,
+                            ),
+                            child: DashboardLeadingPort(
+                              data: leadingPortsData2!,
+                              minWidth: 350,
+                              expandToAvailableWidth: true,
+                            ),
+                          ),
+                        ),
+                        ResponsiveGridCol(
+                          xs: 12,
+                          md: 6,
+                          lg: 4,
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                              bottom: 16.0,
+                              left: 8.0,
+                            ),
+                            child: DashboardLeadingPort(
+                              data: leadingPortsData3!,
+                              minWidth: 350,
+                              expandToAvailableWidth: true,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
-            )
-          : Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  CircularProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation<Color>(
-                      Theme.of(context).primaryColor,
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  Text(
-                    'Loading dashboard data...',
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
-                ],
-              ),
             ),
-    );
+          )
+        : Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                    Theme.of(context).primaryColor,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  'Loading dashboard data...',
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+              ],
+            ),
+          );
   }
 }
