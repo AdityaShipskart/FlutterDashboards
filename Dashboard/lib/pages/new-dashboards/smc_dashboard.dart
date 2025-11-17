@@ -42,16 +42,32 @@ const List<Map<String, dynamic>> _smcCards = [
   },
   {
     'iconKey': 'revenue',
-    'value': '\$8.6M',
-    'label': 'Monthly Procurement Spend',
+    'value': '100',
+    'label': 'Active Requisitions',
+    'growth': '-2.3%',
+    'color': Color(0xFF10B981),
+    'iconBgColor': Color(0xFFD1FAE5),
+  },
+  {
+    'iconKey': 'revenue',
+    'value': '100',
+    'label': 'Pending RFQs',
     'growth': '-2.3%',
     'color': Color(0xFF10B981),
     'iconBgColor': Color(0xFFD1FAE5),
   },
   {
     'iconKey': 'orders',
-    'value': '87.4%',
-    'label': 'Budget Utilization',
+    'value': '284',
+    'label': 'Purchase Order',
+    'growth': '+4.1%',
+    'color': Color(0xFFF97316),
+    'iconBgColor': Color(0xFFFFEAD5),
+  },
+  {
+    'iconKey': 'orders',
+    'value': '284',
+    'label': 'GRN',
     'growth': '+4.1%',
     'color': Color(0xFFF97316),
     'iconBgColor': Color(0xFFFFEAD5),
@@ -603,6 +619,12 @@ class SMCDashboard extends StatelessWidget {
               child: DashboardCardContainer(cards: _smcCards),
             ),
 
+            DashboardGridCol(
+              xs: 12,
+              md: 6,
+              lg: 4,
+              child: DashboardLeadingPort(data: _smcPerformanceMetrics[3]),
+            ),
             // Procurement Breakdown
             DashboardGridCol(
               xs: 12,

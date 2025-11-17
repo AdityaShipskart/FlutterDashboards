@@ -12,23 +12,11 @@ import '../../widgets/dashboard_bar_chart.dart';
 import '../../widgets/dashboard_leading_port.dart';
 import '../../widgets/dashboard_table.dart';
 
-/// Catalogue Dashboard (Enhanced)
-///
-/// Comprehensive dashboard for catalogue management:
-/// - Total categories and product counts
-/// - Products by category breakdown
-/// - Order volume tracking
-/// - New vs discontinued products
-/// - Performance analytics
-/// - Utilization by client type
-/// - Custom requirements tracking
-/// - Category health metrics
-/// - Search and discovery analytics
 const List<Map<String, dynamic>> _catalogueCards = [
   {
     'iconKey': 'orders',
     'value': '247',
-    'label': 'Active Categories',
+    'label': 'Total Products',
     'growth': '+12',
     'color': Color(0xFF6366F1),
     'iconBgColor': Color(0xFFEEF2FF),
@@ -36,7 +24,7 @@ const List<Map<String, dynamic>> _catalogueCards = [
   {
     'iconKey': 'revenue',
     'value': '18,462',
-    'label': 'Total Products',
+    'label': 'Total Categories',
     'growth': '+842',
     'color': Color(0xFFEC4899),
     'iconBgColor': Color(0xFFFDE0F0),
@@ -44,7 +32,7 @@ const List<Map<String, dynamic>> _catalogueCards = [
   {
     'iconKey': 'profit',
     'value': '14.2K',
-    'label': 'Monthly Orders',
+    'label': 'Total Brands',
     'growth': '+18.6%',
     'color': Color(0xFF10B981),
     'iconBgColor': Color(0xFFD1FAE5),
@@ -52,7 +40,24 @@ const List<Map<String, dynamic>> _catalogueCards = [
   {
     'iconKey': 'users',
     'value': '92.4%',
-    'label': 'Catalogue Utilization',
+    'label': 'Manufacturers',
+    'growth': '+3.8%',
+    'color': Color(0xFF0EA5E9),
+    'iconBgColor': Color(0xFFE0F2FE),
+  },
+  {
+    'iconKey': 'users',
+    'value': '92.4%',
+    'label': 'Ports',
+    'growth': '+3.8%',
+    'color': Color(0xFF0EA5E9),
+    'iconBgColor': Color(0xFFE0F2FE),
+  },
+
+  {
+    'iconKey': 'users',
+    'value': '92.4%',
+    'label': 'Countries',
     'growth': '+3.8%',
     'color': Color(0xFF0EA5E9),
     'iconBgColor': Color(0xFFE0F2FE),
@@ -107,9 +112,9 @@ const Map<String, dynamic> _catalogueProductBreakdown = {
 
 final Map<String, dynamic> _catalogueGrowthChart = {
   'cardTitle': 'Catalogue Growth',
-  'cardSubtitle': 'New products vs discontinued',
+  'cardSubtitle': 'New products vs custom products',
   'thisYearLabel': 'New Products',
-  'lastYearLabel': 'Discontinued',
+  'lastYearLabel': 'Custom Products',
   'percentageChange': '+4.6%',
   'isPositiveChange': true,
   'availablePeriods': ['Jan-Jun', 'Jul-Dec', 'Full Year'],
@@ -160,20 +165,94 @@ final Map<String, dynamic> _catalogueGrowthChart = {
 };
 
 const Map<String, dynamic> _clientTypePieData = {
-  'cardTitle': 'Utilization by Client Type',
-  'cardSubtitle': 'Orders by customer segment',
+  'cardTitle': 'Categories',
+  'cardSubtitle': 'Categories wise products',
   'totalLeads': '14.2K',
   'pieChartData': [
-    {'label': 'SMC', 'value': 42.0, 'color': '0xFF6366F1'},
-    {'label': 'Vendor', 'value': 31.0, 'color': '0xFFEC4899'},
-    {'label': 'Partner', 'value': 18.0, 'color': '0xFF10B981'},
-    {'label': 'Retail', 'value': 9.0, 'color': '0xFF0EA5E9'},
+    {
+      'label': 'IMPA',
+      'value': 42.0,
+      'color': '0xFF2563EB',
+    }, // Professional blue for standards
+    {
+      'label': 'Deck',
+      'value': 31.0,
+      'color': '0xFF059669',
+    }, // Deep green for nautical/deck
+    {
+      'label': 'Provision',
+      'value': 18.0,
+      'color': '0xFFEA580C',
+    }, // Vibrant orange for supplies
+    {
+      'label': 'Lubes',
+      'value': 9.0,
+      'color': '0xFF0891B2',
+    }, // Ocean blue for lubricants
+    {
+      'label': 'Chemicals',
+      'value': 9.0,
+      'color': '0xFFF59E0B',
+    }, // Warning amber for chemicals
+    {
+      'label': 'Services',
+      'value': 9.0,
+      'color': '0xFF7C3AED',
+    }, // Royal purple for services
+    {
+      'label': 'Spares',
+      'value': 9.0,
+      'color': '0xFFDC2626',
+    }, // Alert red for spare parts
+    {
+      'label': 'Paints',
+      'value': 9.0,
+      'color': '0xFF0D9488',
+    }, // Teal for coatings
   ],
   'legendData': [
-    {'label': 'SMC', 'color': '0xFF6366F1'},
-    {'label': 'Vendor', 'color': '0xFFEC4899'},
-    {'label': 'Partner', 'color': '0xFF10B981'},
-    {'label': 'Retail', 'color': '0xFF0EA5E9'},
+    {'label': 'IMPA', 'color': '0xFF2563EB'},
+    {'label': 'Deck', 'color': '0xFF059669'},
+    {'label': 'Provision', 'color': '0xFFEA580C'},
+    {'label': 'Lubes', 'color': '0xFF0891B2'},
+    {'label': 'Chemicals', 'color': '0xFFF59E0B'},
+    {'label': 'Services', 'color': '0xFF7C3AED'},
+    {'label': 'Spares', 'color': '0xFFDC2626'},
+    {'label': 'Paints', 'color': '0xFF0D9488'},
+  ],
+};
+
+const Map<String, dynamic> _statusPieData = {
+  'cardTitle': 'Catalogue Status',
+  'cardSubtitle': 'Products wise status',
+  'totalLeads': '100',
+  'pieChartData': [
+    {
+      'label': 'New requests',
+      'value': 42.0,
+      'color': '0xFF3B82F6',
+    }, // Fresh blue for new requests
+    {
+      'label': 'Approved',
+      'value': 31.0,
+      'color': '0xFF10B981',
+    }, // Success green for approved
+    {
+      'label': 'Rejected',
+      'value': 18.0,
+      'color': '0xFFEF4444',
+    }, // Error red for rejected
+    {
+      'label': 'Pending',
+      'value': 9.0,
+      'color': '0xFFF59E0B',
+    }, // Warning orange for pending
+  ],
+  'legendData': [
+    {'label': 'New requests', 'color': '0xFF3B82F6'},
+    {'label': 'Approved', 'color': '0xFF10B981'},
+    {'label': 'Rejected', 'color': '0xFFEF4444'},
+    {'label': 'Pending', 'color': '0xFFF59E0B'},
   ],
 };
 
@@ -238,8 +317,8 @@ const Map<String, dynamic> _categoryPerformanceCombo = {
 const Map<String, dynamic> _customRequirementsComparison = {
   'tabs': [
     {
-      'label': 'Standard vs Custom',
-      'subtitle': 'Product configuration requests',
+      'label': 'Approval TAT',
+      'subtitle': 'requester vs approval time',
       'onTimeOrder': [11200, 11800, 12400, 12800, 13200, 13600],
       'delayedOrder': [1800, 1900, 2100, 2200, 2400, 2600],
       'maxY': 14000,
@@ -319,7 +398,20 @@ const List<Map<String, dynamic>> _catalogueInsights = [
   {
     'title': 'Top Performing Categories',
     'subtitle': 'Highest order volume',
+    'columns': {'first': 'Category', 'second': 'Order Volume'},
     'ports': [
+      {
+        'portName': 'Marine Equipment',
+        'purchaseValue': '2,847',
+        'percentageChange': 22.4,
+        'trend': 'up',
+      },
+      {
+        'portName': 'Safety Equipment',
+        'purchaseValue': '2,268',
+        'percentageChange': 18.6,
+        'trend': 'up',
+      },
       {
         'portName': 'Marine Equipment',
         'purchaseValue': '2,847',
@@ -335,8 +427,9 @@ const List<Map<String, dynamic>> _catalogueInsights = [
     ],
   },
   {
-    'title': 'Fastest Growing',
+    'title': 'Top Products',
     'subtitle': 'Month-over-month growth',
+    'columns': {'first': 'Products', 'second': 'Growth Rate'},
     'ports': [
       {
         'portName': 'Smart Sensors',
@@ -350,11 +443,24 @@ const List<Map<String, dynamic>> _catalogueInsights = [
         'percentageChange': 38.2,
         'trend': 'up',
       },
+      {
+        'portName': 'Navigation Systems',
+        'purchaseValue': '1,247',
+        'percentageChange': 52.3,
+        'trend': 'up',
+      },
+      {
+        'portName': 'Safety Harnesses',
+        'purchaseValue': '689',
+        'percentageChange': 41.8,
+        'trend': 'up',
+      },
     ],
   },
   {
     'title': 'Needs Attention',
     'subtitle': 'Low utilization categories',
+    'columns': {'first': 'Category', 'second': 'Decline Rate'},
     'ports': [
       {
         'portName': 'Legacy Parts',
@@ -370,195 +476,329 @@ const List<Map<String, dynamic>> _catalogueInsights = [
       },
     ],
   },
+  {
+    'title': 'Recent Activity',
+    'subtitle': 'Latest Catalogue Updates',
+    'switch-options': ['newly_added', 'pending', 'custom'],
+    'columns': {'first': 'Product Name', 'second': 'Order Value'},
+    'newly_added': [
+      {
+        'portName': 'Smart Fuel Monitor',
+        'purchaseValue': '1,420',
+        'percentageChange': 32.1,
+        'trend': 'up',
+      },
+      {
+        'portName': 'Smart Fuel Monitor',
+        'purchaseValue': '1,420',
+        'percentageChange': 32.1,
+        'trend': 'up',
+      },
+      {
+        'portName': 'Eco-Friendly Cleaner',
+        'purchaseValue': '986',
+        'percentageChange': 28.4,
+        'trend': 'up',
+      },
+      {
+        'portName': 'Smart Fuel Monitor',
+        'purchaseValue': '1,420',
+        'percentageChange': 32.1,
+        'trend': 'up',
+      },
+      {
+        'portName': 'Digital Compass Pro',
+        'purchaseValue': '742',
+        'percentageChange': 45.7,
+        'trend': 'up',
+      },
+    ],
+    'pending': [
+      {
+        'portName': 'Navigation System Upgrade',
+        'purchaseValue': '3,124',
+        'percentageChange': 15.8,
+        'trend': 'up',
+      },
+      {
+        'portName': 'Marine Radio Kit',
+        'purchaseValue': '1,876',
+        'percentageChange': 8.2,
+        'trend': 'up',
+      },
+      {
+        'portName': 'Emergency Beacon',
+        'purchaseValue': '1,542',
+        'percentageChange': 12.4,
+        'trend': 'up',
+      },
+
+      {
+        'portName': 'Marine Radio Kit',
+        'purchaseValue': '1,876',
+        'percentageChange': 8.2,
+        'trend': 'up',
+      },
+
+      {
+        'portName': 'Marine Radio Kit',
+        'purchaseValue': '1,876',
+        'percentageChange': 8.2,
+        'trend': 'up',
+      },
+    ],
+    'custom': [
+      {
+        'portName': 'Custom Navigation Integration',
+        'purchaseValue': '4,280',
+        'percentageChange': 38.9,
+        'trend': 'up',
+      },
+      {
+        'portName': 'Modified Safety System',
+        'purchaseValue': '3,640',
+        'percentageChange': 42.3,
+        'trend': 'up',
+      },
+      {
+        'portName': 'Specialized Engine Parts',
+        'purchaseValue': '2,890',
+        'percentageChange': 35.6,
+        'trend': 'up',
+      },
+
+      {
+        'portName': 'Specialized Engine Parts',
+        'purchaseValue': '2,890',
+        'percentageChange': 35.6,
+        'trend': 'up',
+      },
+      {
+        'portName': 'Specialized Engine Parts',
+        'purchaseValue': '2,890',
+        'percentageChange': 35.6,
+        'trend': 'up',
+      },
+    ],
+  },
 ];
 
 const Map<String, dynamic> _catalogueTableData = {
   'header': {
-    'title': 'Top Products by Orders',
-    'subtitle': 'Most ordered products this month',
+    'title': 'Product Quality',
+    'subtitle': 'Incomplete product information',
+    'options': ['All', 'Missing info', 'Incomplete Categories', 'Not mapped'],
   },
-  'rfqs': [
+  'All': [
     {
       'rank': 1,
-      'rfqId': 'PRD-8472',
-      'title': 'Marine Engine Oil',
-      'supplier': 'Lubricants',
-      'estimatedValue': 428,
-      'percentageChange': 24.8,
-      'responsesReceived': 142,
-      'daysRemaining': 98,
+      'productId': 'PRD-8472',
+      'productName': 'Marine Engine Oil',
+      'category': 'Lubricants',
+      'issueType': 'Missing info',
+      'completeness': 52,
+      'missingFields': ['Technical specs', 'Safety data', 'Usage guide'],
+      'lastUpdated': '2025-10-28',
+      'status': 'Needs Review',
     },
     {
       'rank': 2,
-      'rfqId': 'PRD-8461',
-      'title': 'Navigation System Pro',
-      'supplier': 'Electronics',
-      'estimatedValue': 386,
-      'percentageChange': 21.4,
-      'responsesReceived': 86,
-      'daysRemaining': 76,
+      'productId': 'PRD-8461',
+      'productName': 'Navigation System Pro',
+      'category': 'Electronics',
+      'issueType': 'Not mapped',
+      'completeness': 64,
+      'missingFields': ['Category mapping', 'Related products'],
+      'lastUpdated': '2025-11-02',
+      'status': 'In Progress',
     },
     {
       'rank': 3,
-      'rfqId': 'PRD-8448',
-      'title': 'Safety Harness Kit',
-      'supplier': 'Safety',
-      'estimatedValue': 342,
-      'percentageChange': 18.6,
-      'responsesReceived': 124,
-      'daysRemaining': 84,
+      'productId': 'PRD-8448',
+      'productName': 'Safety Harness Kit',
+      'category': 'Safety',
+      'issueType': 'Incomplete Categories',
+      'completeness': 71,
+      'missingFields': ['Subcategory', 'Product attributes'],
+      'lastUpdated': '2025-11-05',
+      'status': 'Needs Review',
     },
     {
       'rank': 4,
-      'rfqId': 'PRD-8432',
-      'title': 'Deck Paint Premium',
-      'supplier': 'Coatings',
-      'estimatedValue': 298,
-      'percentageChange': 16.2,
-      'responsesReceived': 168,
-      'daysRemaining': 92,
+      'productId': 'PRD-8432',
+      'productName': 'Deck Paint Premium',
+      'category': 'Coatings',
+      'issueType': 'Missing info',
+      'completeness': 58,
+      'missingFields': ['Images', 'Dimensions', 'Certifications'],
+      'lastUpdated': '2025-10-15',
+      'status': 'Urgent',
+    },
+    {
+      'rank': 5,
+      'productId': 'PRD-8419',
+      'productName': 'Hydraulic Fluid Premium',
+      'category': 'Lubricants',
+      'issueType': 'Not mapped',
+      'completeness': 45,
+      'missingFields': ['Product hierarchy', 'Cross-references'],
+      'lastUpdated': '2025-10-22',
+      'status': 'Needs Review',
+    },
+    {
+      'rank': 6,
+      'productId': 'PRD-8398',
+      'productName': 'LED Deck Light Set',
+      'category': 'Lighting',
+      'issueType': 'Incomplete Categories',
+      'completeness': 68,
+      'missingFields': ['Tags', 'Attributes'],
+      'lastUpdated': '2025-11-01',
+      'status': 'In Progress',
     },
   ],
-  'pendingQuotes': {
-    'header': {
-      'title': 'New Products (MTD)',
-      'subtitle': 'Recently added to catalogue',
+  'Missing info': [
+    {
+      'rank': 1,
+      'productId': 'PRD-8472',
+      'productName': 'Marine Engine Oil',
+      'category': 'Lubricants',
+      'issueType': 'Missing info',
+      'completeness': 52,
+      'missingFields': ['Technical specs', 'Safety data', 'Usage guide'],
+      'lastUpdated': '2025-10-28',
+      'status': 'Needs Review',
     },
-    'quotes': [
-      {
-        'rank': 1,
-        'quoteId': 'NEW-7284',
-        'customer': 'Smart Fuel Monitor',
-        'quoteValue': 0,
-        'percentageChange': 0.0,
-        'daysInReview': 3,
-        'expiresInDays': 0,
-        'status': 'Active',
-      },
-      {
-        'rank': 2,
-        'quoteId': 'NEW-7268',
-        'customer': 'Eco-Friendly Cleaner',
-        'quoteValue': 0,
-        'percentageChange': 0.0,
-        'daysInReview': 5,
-        'expiresInDays': 0,
-        'status': 'Active',
-      },
-    ],
-  },
-  'activeOrders': {
-    'header': {
-      'title': 'Low Stock Products',
-      'subtitle': 'Items needing restocking',
+    {
+      'rank': 2,
+      'productId': 'PRD-8432',
+      'productName': 'Deck Paint Premium',
+      'category': 'Coatings',
+      'issueType': 'Missing info',
+      'completeness': 58,
+      'missingFields': ['Images', 'Dimensions', 'Certifications'],
+      'lastUpdated': '2025-10-15',
+      'status': 'Urgent',
     },
-    'orders': [
-      {
-        'rank': 1,
-        'orderId': 'STK-6842',
-        'customer': 'Navigation System Pro',
-        'orderValue': 12,
-        'percentageChange': -68.0,
-        'progressPercentage': 12,
-        'deliveryStatus': 'Low Stock',
-        'expectedDelivery': 'Restock needed',
-      },
-      {
-        'rank': 2,
-        'orderId': 'STK-6821',
-        'customer': 'Safety Harness Kit',
-        'orderValue': 18,
-        'percentageChange': -58.0,
-        'progressPercentage': 18,
-        'deliveryStatus': 'Low Stock',
-        'expectedDelivery': 'Restock needed',
-      },
-    ],
-  },
-  'completedDeliveries': {
-    'header': {
-      'title': 'Discontinued Products',
-      'subtitle': 'Recently removed from catalogue',
+    {
+      'rank': 3,
+      'productId': 'PRD-8401',
+      'productName': 'Anchor Chain 10mm',
+      'category': 'Marine Hardware',
+      'issueType': 'Missing info',
+      'completeness': 48,
+      'missingFields': ['Product description', 'Specifications', 'Images'],
+      'lastUpdated': '2025-10-18',
+      'status': 'Urgent',
     },
-    'deliveries': [
-      {
-        'rank': 1,
-        'deliveryId': 'DSC-1824',
-        'customer': 'Legacy Engine Part X42',
-        'deliveryValue': 0,
-        'percentageChange': -100.0,
-        'deliveryDate': '2025-01-15',
-        'rating': 0.0,
-        'onTime': false,
-      },
-      {
-        'rank': 2,
-        'deliveryId': 'DSC-1796',
-        'customer': 'Old Navigation Unit V3',
-        'deliveryValue': 0,
-        'percentageChange': -100.0,
-        'deliveryDate': '2025-01-08',
-        'rating': 0.0,
-        'onTime': false,
-      },
-    ],
-  },
-  'customerMetrics': {
-    'header': {
-      'title': 'Category Health',
-      'subtitle': 'Performance by category',
+    {
+      'rank': 4,
+      'productId': 'PRD-8385',
+      'productName': 'Bilge Pump 1200GPH',
+      'category': 'Pumps',
+      'issueType': 'Missing info',
+      'completeness': 55,
+      'missingFields': ['Installation guide', 'Warranty info', 'Compatibility'],
+      'lastUpdated': '2025-10-25',
+      'status': 'Needs Review',
     },
-    'customers': [
-      {
-        'rank': 1,
-        'customerName': 'Marine Equipment',
-        'region': 'Core',
-        'totalOrders': 2847,
-        'percentageChange': 22.4,
-        'totalValue': 5908,
-        'averageOrderValue': 2,
-        'satisfactionScore': 4.8,
-      },
-      {
-        'rank': 2,
-        'customerName': 'Electronics',
-        'region': 'Technology',
-        'totalOrders': 2268,
-        'percentageChange': 18.6,
-        'totalValue': 4800,
-        'averageOrderValue': 2,
-        'satisfactionScore': 4.7,
-      },
-    ],
-  },
-  'productPerformance': {
-    'header': {
-      'title': 'Custom Requirements',
-      'subtitle': 'Top custom product requests',
+  ],
+  'Incomplete Categories': [
+    {
+      'rank': 1,
+      'productId': 'PRD-8448',
+      'productName': 'Safety Harness Kit',
+      'category': 'Safety',
+      'issueType': 'Incomplete Categories',
+      'completeness': 71,
+      'missingFields': ['Subcategory', 'Product attributes'],
+      'lastUpdated': '2025-11-05',
+      'status': 'Needs Review',
     },
-    'products': [
-      {
-        'rank': 1,
-        'productName': 'Custom Navigation Integration',
-        'category': 'Electronics',
-        'unitsSold': 142,
-        'percentageChange': 32.4,
-        'revenue': 428000,
-        'averagePrice': 3014,
-        'stockStatus': 'Custom',
-      },
-      {
-        'rank': 2,
-        'productName': 'Modified Safety System',
-        'category': 'Safety',
-        'unitsSold': 98,
-        'percentageChange': 28.6,
-        'revenue': 294000,
-        'averagePrice': 3000,
-        'stockStatus': 'Custom',
-      },
-    ],
-  },
+    {
+      'rank': 2,
+      'productId': 'PRD-8398',
+      'productName': 'LED Deck Light Set',
+      'category': 'Lighting',
+      'issueType': 'Incomplete Categories',
+      'completeness': 68,
+      'missingFields': ['Tags', 'Attributes'],
+      'lastUpdated': '2025-11-01',
+      'status': 'In Progress',
+    },
+    {
+      'rank': 3,
+      'productId': 'PRD-8376',
+      'productName': 'Fender Inflatable Large',
+      'category': 'Accessories',
+      'issueType': 'Incomplete Categories',
+      'completeness': 62,
+      'missingFields': ['Product type', 'Classification', 'Subcategory'],
+      'lastUpdated': '2025-10-30',
+      'status': 'Needs Review',
+    },
+    {
+      'rank': 4,
+      'productId': 'PRD-8354',
+      'productName': 'Marine Radio VHF',
+      'category': 'Electronics',
+      'issueType': 'Incomplete Categories',
+      'completeness': 75,
+      'missingFields': ['Product attributes', 'Filters'],
+      'lastUpdated': '2025-11-08',
+      'status': 'In Progress',
+    },
+  ],
+  'Not mapped': [
+    {
+      'rank': 1,
+      'productId': 'PRD-8461',
+      'productName': 'Navigation System Pro',
+      'category': 'Electronics',
+      'issueType': 'Not mapped',
+      'completeness': 64,
+      'missingFields': ['Category mapping', 'Related products'],
+      'lastUpdated': '2025-11-02',
+      'status': 'In Progress',
+    },
+    {
+      'rank': 2,
+      'productId': 'PRD-8419',
+      'productName': 'Hydraulic Fluid Premium',
+      'category': 'Lubricants',
+      'issueType': 'Not mapped',
+      'completeness': 45,
+      'missingFields': ['Product hierarchy', 'Cross-references'],
+      'lastUpdated': '2025-10-22',
+      'status': 'Needs Review',
+    },
+    {
+      'rank': 3,
+      'productId': 'PRD-8392',
+      'productName': 'Stainless Steel Cleat',
+      'category': 'Hardware',
+      'issueType': 'Not mapped',
+      'completeness': 51,
+      'missingFields': [
+        'Category path',
+        'Product relationships',
+        'Cross-sell items',
+      ],
+      'lastUpdated': '2025-10-27',
+      'status': 'Needs Review',
+    },
+    {
+      'rank': 4,
+      'productId': 'PRD-8367',
+      'productName': 'Fuel Tank Sensor',
+      'category': 'Sensors',
+      'issueType': 'Not mapped',
+      'completeness': 58,
+      'missingFields': ['Taxonomy mapping', 'Compatible products'],
+      'lastUpdated': '2025-11-03',
+      'status': 'In Progress',
+    },
+  ],
 };
 
 /// Catalogue Dashboard (Enhanced) - Production Ready
@@ -598,38 +838,56 @@ class CatalogueDashboard extends StatelessWidget {
             ),
 
             // Product Breakdown
+            // DashboardGridCol(
+            //   xs: 12,
+            //   md: 4,
+            //   child: DashboardRecentData(data: _catalogueProductBreakdown),
+            // ),
             DashboardGridCol(
               xs: 12,
-              md: 4,
-              child: DashboardRecentData(data: _catalogueProductBreakdown),
+              md: 6,
+              lg: 4,
+              child: DashboardLeadingPort(data: _catalogueInsights[3]),
             ),
 
             // Catalogue Growth Line Chart
             DashboardGridCol(
               xs: 12,
-              md: 5,
+              md: 8,
               child: RevenueGeneratedCard(chartData: _catalogueGrowthChart),
             ),
 
             // Client Type Utilization Pie Chart
             DashboardGridCol(
               xs: 12,
-              md: 3,
+              md: 4,
               child: DashboardPieChart(data: _clientTypePieData),
             ),
 
             // Catalogue Utilization Card
+            // DashboardGridCol(
+            //   xs: 12,
+            //   md: 4,
+            //   child: DashboardFinancialCard(data: _catalogueUtilizationCard),
+            // ),
+
+            // Status Overview Pie Chart
             DashboardGridCol(
               xs: 12,
               md: 4,
-              child: DashboardFinancialCard(data: _catalogueUtilizationCard),
+              child: DashboardPieChart(data: _statusPieData),
             ),
-
-            // Category Performance
+            // Orders by Category Bar Chart
             DashboardGridCol(
               xs: 12,
-              md: 6,
-              child: DashboardcombobarChart(data: _categoryPerformanceCombo),
+              md: 8,
+              child: DashboardBarChart(data: _ordersByCategoryBar),
+            ),
+
+            // Multi-Tab Table (Products, New Items, Stock, Discontinued, etc.)
+            DashboardGridCol(
+              xs: 12,
+              child: DashboardTable(data: _catalogueTableData),
             ),
 
             // Custom Requirements & Search Analytics
@@ -640,38 +898,32 @@ class CatalogueDashboard extends StatelessWidget {
                 data: _customRequirementsComparison,
               ),
             ),
-
-            // Orders by Category Bar Chart
-            DashboardGridCol(
-              xs: 12,
-              child: DashboardBarChart(data: _ordersByCategoryBar),
-            ),
-
             // Catalogue Insights Cards
             DashboardGridCol(
               xs: 12,
-              md: 6,
-              lg: 4,
+              md: 5,
+              lg: 3,
               child: DashboardLeadingPort(data: _catalogueInsights[0]),
             ),
             DashboardGridCol(
               xs: 12,
-              md: 6,
-              lg: 4,
+              md: 5,
+              lg: 3,
               child: DashboardLeadingPort(data: _catalogueInsights[1]),
             ),
-            DashboardGridCol(
-              xs: 12,
-              md: 6,
-              lg: 4,
-              child: DashboardLeadingPort(data: _catalogueInsights[2]),
-            ),
+            // DashboardGridCol(
+            //   xs: 12,
+            //   md: 5,
+            //   lg: 3,
+            //   child: DashboardLeadingPort(data: _catalogueInsights[2]),
+            // ),
 
-            // Multi-Tab Table (Products, New Items, Stock, Discontinued, etc.)
-            DashboardGridCol(
-              xs: 12,
-              child: DashboardTable(data: _catalogueTableData),
-            ),
+            // Category Performance
+            // DashboardGridCol(
+            //   xs: 12,
+            //   md: 6,
+            //   child: DashboardcombobarChart(data: _categoryPerformanceCombo),
+            // ),
           ],
         ),
       ),

@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'common/custom_data_table.dart';
-import 'common/percentage_chip.dart';
 
 // Local standalone constants to avoid external dependencies
 class AppColors {
@@ -30,68 +29,6 @@ class DashboardTable extends StatefulWidget {
   final String? jsonFilePath;
   final Map<String, dynamic>? data;
 
-  /// Example data for demo purposes
-  static const Map<String, dynamic> exampleData = {
-    'header': {
-      'title': 'Active RFQs',
-      'subtitle': 'Current request for quotations awaiting responses',
-    },
-    'rfqs': [
-      {
-        'rank': 1,
-        'rfqId': 'RFQ001',
-        'title': 'Steel Pipes',
-        'supplier': 'ABC Corp',
-        'estimatedValue': 50000,
-        'percentageChange': 5.5,
-        'responsesReceived': 3,
-        'daysRemaining': 5,
-      },
-      {
-        'rank': 2,
-        'rfqId': 'RFQ002',
-        'title': 'Industrial Valves',
-        'supplier': 'XYZ Ltd',
-        'estimatedValue': 35000,
-        'percentageChange': -2.3,
-        'responsesReceived': 2,
-        'daysRemaining': 7,
-      },
-    ],
-    'pendingQuotes': {
-      'header': {
-        'title': 'Pending Quotes',
-        'subtitle': 'Quotes awaiting review',
-      },
-      'quotes': [],
-    },
-    'activeOrders': {
-      'header': {'title': 'Active Orders', 'subtitle': 'Orders in progress'},
-      'orders': [],
-    },
-    'completedDeliveries': {
-      'header': {
-        'title': 'Completed Deliveries',
-        'subtitle': 'Recently completed',
-      },
-      'deliveries': [],
-    },
-    'customerMetrics': {
-      'header': {
-        'title': 'Customer Metrics',
-        'subtitle': 'Customer performance',
-      },
-      'customers': [],
-    },
-    'productPerformance': {
-      'header': {
-        'title': 'Product Performance',
-        'subtitle': 'Product sales data',
-      },
-      'products': [],
-    },
-  };
-
   const DashboardTable({super.key, this.jsonFilePath, this.data});
 
   @override
@@ -102,7 +39,7 @@ class _DashboardTableState extends State<DashboardTable> {
   bool _isLoading = true;
   Map<String, dynamic>? _data;
   String? _errorMessage;
-  String _selectedTableType = 'Active RFQs';
+  String _selectedTableType = '';
 
   @override
   void initState() {
@@ -117,19 +54,27 @@ class _DashboardTableState extends State<DashboardTable> {
     });
 
     try {
-      // Use provided data if available, otherwise load from JSON file, or use example data
+      // Use provided data if available, otherwise load from JSON file
       final data =
           widget.data ??
           (widget.jsonFilePath != null
                   ? json.decode(
                       await rootBundle.loadString(widget.jsonFilePath!),
                     )
-                  : DashboardTable.exampleData)
+                  : <String, dynamic>{})
               as Map<String, dynamic>;
 
       if (mounted) {
         setState(() {
           _data = data;
+          // Set default selected type to first option if available
+          if (data.containsKey('header') &&
+              data['header'] is Map<String, dynamic> &&
+              data['header']['options'] is List &&
+              (data['header']['options'] as List).isNotEmpty) {
+            _selectedTableType = (data['header']['options'] as List)[0]
+                .toString();
+          }
           _isLoading = false;
         });
       }
@@ -227,14 +172,21 @@ class _DashboardTableState extends State<DashboardTable> {
   }
 
   Widget _buildTabSwitches(bool isDark) {
-    final tabs = [
-      'Active RFQs',
-      'Pending Quotes',
-      'Active Orders',
-      'Completed Deliveries',
-      'Customer Metrics',
-      'Product Performance',
-    ];
+    // Get tabs from JSON options
+    final List<String> tabs = [];
+    if (_data != null &&
+        _data!.containsKey('header') &&
+        _data!['header'] is Map<String, dynamic> &&
+        _data!['header']['options'] is List) {
+      tabs.addAll(
+        (_data!['header']['options'] as List).map((e) => e.toString()).toList(),
+      );
+    }
+
+    // If no tabs found, return empty widget
+    if (tabs.isEmpty) {
+      return const SizedBox();
+    }
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 32.0),
@@ -263,7 +215,7 @@ class _DashboardTableState extends State<DashboardTable> {
                       color: isSelected
                           ? const Color(0xFF1379F0)
                           : (isDark
-                                ? const Color(0xFFB5B7C8)
+                                ? const Color(0xFF363843)
                                 : const Color(0xFFF4F4F4)),
                       borderRadius: BorderRadius.circular(8.0),
                       border: Border.all(
@@ -306,95 +258,25 @@ class _DashboardTableState extends State<DashboardTable> {
     List<Map<String, dynamic>> dataRows = [];
     List<TableColumn> columns = [];
 
-    // Use switch statement based on selected table type
-    switch (tableType) {
-      case 'Active RFQs':
-        if (_data!.containsKey('header') && _data!.containsKey('rfqs')) {
-          final headerData = _data!['header'] as Map<String, dynamic>;
-          title = headerData['title'] as String? ?? 'Active RFQs';
-          subtitle = headerData['subtitle'] as String? ?? '';
-          dataRows = (_data!['rfqs'] as List)
-              .map((item) => item as Map<String, dynamic>)
-              .toList();
-          columns = _buildRFQColumns();
-        }
-        break;
+    // Get header information
+    if (_data!.containsKey('header') &&
+        _data!['header'] is Map<String, dynamic>) {
+      final headerData = _data!['header'] as Map<String, dynamic>;
+      title = headerData['title'] as String? ?? 'Data Table';
+      subtitle = headerData['subtitle'] as String? ?? '';
+    }
 
-      case 'Pending Quotes':
-        if (_data!.containsKey('pendingQuotes')) {
-          final section = _data!['pendingQuotes'] as Map<String, dynamic>;
-          final headerData = section['header'] as Map<String, dynamic>;
-          title = headerData['title'] as String? ?? 'Pending Quotes';
-          subtitle = headerData['subtitle'] as String? ?? '';
-          dataRows = (section['quotes'] as List)
-              .map((item) => item as Map<String, dynamic>)
-              .toList();
-          columns = _buildQuoteColumns();
-        }
-        break;
+    // Get data for the selected option
+    if (_data!.containsKey(tableType)) {
+      final data = _data![tableType];
+      if (data is List) {
+        dataRows = data.map((item) => item as Map<String, dynamic>).toList();
 
-      case 'Active Orders':
-        if (_data!.containsKey('activeOrders')) {
-          final section = _data!['activeOrders'] as Map<String, dynamic>;
-          final headerData = section['header'] as Map<String, dynamic>;
-          title = headerData['title'] as String? ?? 'Active Orders';
-          subtitle = headerData['subtitle'] as String? ?? '';
-          dataRows = (section['orders'] as List)
-              .map((item) => item as Map<String, dynamic>)
-              .toList();
-          columns = _buildOrderColumns();
+        // Build columns based on the first row structure
+        if (dataRows.isNotEmpty) {
+          columns = _buildDynamicColumns(dataRows[0]);
         }
-        break;
-
-      case 'Completed Deliveries':
-        if (_data!.containsKey('completedDeliveries')) {
-          final section = _data!['completedDeliveries'] as Map<String, dynamic>;
-          final headerData = section['header'] as Map<String, dynamic>;
-          title = headerData['title'] as String? ?? 'Completed Deliveries';
-          subtitle = headerData['subtitle'] as String? ?? '';
-          dataRows = (section['deliveries'] as List)
-              .map((item) => item as Map<String, dynamic>)
-              .toList();
-          columns = _buildDeliveryColumns();
-        }
-        break;
-
-      case 'Customer Metrics':
-        if (_data!.containsKey('customerMetrics')) {
-          final section = _data!['customerMetrics'] as Map<String, dynamic>;
-          final headerData = section['header'] as Map<String, dynamic>;
-          title = headerData['title'] as String? ?? 'Customer Metrics';
-          subtitle = headerData['subtitle'] as String? ?? '';
-          dataRows = (section['customers'] as List)
-              .map((item) => item as Map<String, dynamic>)
-              .toList();
-          columns = _buildCustomerColumns();
-        }
-        break;
-
-      case 'Product Performance':
-        if (_data!.containsKey('productPerformance')) {
-          final section = _data!['productPerformance'] as Map<String, dynamic>;
-          final headerData = section['header'] as Map<String, dynamic>;
-          title = headerData['title'] as String? ?? 'Product Performance';
-          subtitle = headerData['subtitle'] as String? ?? '';
-          dataRows = (section['products'] as List)
-              .map((item) => item as Map<String, dynamic>)
-              .toList();
-          columns = _buildProductColumns();
-        }
-        break;
-
-      default:
-        if (_data!.containsKey('header') && _data!.containsKey('rfqs')) {
-          final headerData = _data!['header'] as Map<String, dynamic>;
-          title = headerData['title'] as String? ?? 'Active RFQs';
-          subtitle = headerData['subtitle'] as String? ?? '';
-          dataRows = (_data!['rfqs'] as List)
-              .map((item) => item as Map<String, dynamic>)
-              .toList();
-          columns = _buildRFQColumns();
-        }
+      }
     }
 
     return {
@@ -405,723 +287,220 @@ class _DashboardTableState extends State<DashboardTable> {
     };
   }
 
-  // RFQ Columns
-  List<TableColumn> _buildRFQColumns() {
-    return [
-      TableColumn(key: 'rank', label: '#'),
-      TableColumn(
-        key: 'rfqId',
-        label: 'RFQ ID',
-        builder: (value, isDark, isSummary) {
-          if (isSummary) return const SizedBox();
-          return Text(
-            value.toString(),
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-              color: isDark
-                  ? AppColors.textPrimaryDark
-                  : AppColors.textPrimaryLight,
-              letterSpacing: 0,
-            ),
-          );
-        },
-      ),
-      TableColumn(
-        key: 'title',
-        label: 'Title',
-        builder: (value, isDark, isSummary) {
-          if (isSummary) return const SizedBox();
-          return Text(
-            value.toString(),
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-              color: isDark
-                  ? AppColors.textPrimaryDark
-                  : AppColors.textPrimaryLight,
-              letterSpacing: 0,
-            ),
-          );
-        },
-      ),
-      TableColumn(
-        key: 'supplier',
-        label: 'Supplier',
-        builder: (value, isDark, isSummary) {
-          if (isSummary) return const SizedBox();
-          return Text(
-            value.toString(),
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-              color: isDark
-                  ? AppColors.textPrimaryDark
-                  : AppColors.textPrimaryLight,
-              letterSpacing: 0,
-            ),
-          );
-        },
-      ),
-      TableColumn(
-        key: 'estimatedValue',
-        label: 'Estimated Value',
-        builder: (value, isDark, isSummary) {
-          return Text(
-            '\$${_formatNumber(value as int)}',
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: isSummary ? FontWeight.w700 : FontWeight.w600,
-              color: isDark
-                  ? AppColors.textPrimaryDark
-                  : AppColors.textPrimaryLight,
-              letterSpacing: 0,
-            ),
-          );
-        },
-      ),
-      TableColumn(
-        key: 'percentageChange',
-        label: 'Change',
-        builder: (value, isDark, isSummary) =>
-            PercentageChip(percentage: value as double, isDark: isDark),
-      ),
-      TableColumn(
-        key: 'responsesReceived',
-        label: 'Responses',
-        builder: (value, isDark, isSummary) {
-          return Text(
-            value.toString(),
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: isSummary ? FontWeight.w700 : FontWeight.w500,
-              color: isDark
-                  ? AppColors.textPrimaryDark
-                  : AppColors.textPrimaryLight,
-              letterSpacing: 0,
-            ),
-          );
-        },
-      ),
-      TableColumn(
-        key: 'daysRemaining',
-        label: 'Days Left',
-        builder: (value, isDark, isSummary) {
-          return Text(
-            '$value days',
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: isSummary ? FontWeight.w700 : FontWeight.w500,
-              color: isDark
-                  ? AppColors.textPrimaryDark
-                  : AppColors.textPrimaryLight,
-              letterSpacing: 0,
-            ),
-          );
-        },
-      ),
-      const TableColumn(key: 'action', label: ''),
-    ];
-  }
+  // Build columns dynamically from data structure
+  List<TableColumn> _buildDynamicColumns(Map<String, dynamic> sampleRow) {
+    final columns = <TableColumn>[];
 
-  // Quote Columns
-  List<TableColumn> _buildQuoteColumns() {
-    return [
-      TableColumn(key: 'rank', label: '#'),
-      TableColumn(
-        key: 'quoteId',
-        label: 'Quote ID',
-        builder: (value, isDark, isSummary) {
-          if (isSummary) return const SizedBox();
-          return Text(
-            value.toString(),
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-              color: isDark
-                  ? AppColors.textPrimaryDark
-                  : AppColors.textPrimaryLight,
-              letterSpacing: 0,
-            ),
-          );
-        },
-      ),
-      TableColumn(
-        key: 'customer',
-        label: 'Customer',
-        builder: (value, isDark, isSummary) {
-          if (isSummary) return const SizedBox();
-          return Text(
-            value.toString(),
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-              color: isDark
-                  ? AppColors.textPrimaryDark
-                  : AppColors.textPrimaryLight,
-              letterSpacing: 0,
-            ),
-          );
-        },
-      ),
-      TableColumn(
-        key: 'quoteValue',
-        label: 'Quote Value',
-        builder: (value, isDark, isSummary) {
-          return Text(
-            '\$${_formatNumber(value as int)}',
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: isSummary ? FontWeight.w700 : FontWeight.w600,
-              color: isDark
-                  ? AppColors.textPrimaryDark
-                  : AppColors.textPrimaryLight,
-              letterSpacing: 0,
-            ),
-          );
-        },
-      ),
-      TableColumn(
-        key: 'percentageChange',
-        label: 'Change',
-        builder: (value, isDark, isSummary) =>
-            PercentageChip(percentage: value as double, isDark: isDark),
-      ),
-      TableColumn(
-        key: 'daysInReview',
-        label: 'In Review',
-        builder: (value, isDark, isSummary) {
-          return Text(
-            '$value days',
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-              color: isDark
-                  ? AppColors.textPrimaryDark
-                  : AppColors.textPrimaryLight,
-              letterSpacing: 0,
-            ),
-          );
-        },
-      ),
-      TableColumn(
-        key: 'expiresInDays',
-        label: 'Expires In',
-        builder: (value, isDark, isSummary) {
-          return Text(
-            '$value days',
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-              color: isDark
-                  ? AppColors.textPrimaryDark
-                  : AppColors.textPrimaryLight,
-              letterSpacing: 0,
-            ),
-          );
-        },
-      ),
-      TableColumn(
-        key: 'status',
-        label: 'Status',
-        builder: (value, isDark, isSummary) {
-          if (isSummary) return const SizedBox();
-          return Text(
-            value.toString(),
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-              color: isDark
-                  ? AppColors.textPrimaryDark
-                  : AppColors.textPrimaryLight,
-              letterSpacing: 0,
-            ),
-          );
-        },
-      ),
-      const TableColumn(key: 'action', label: ''),
-    ];
-  }
+    sampleRow.forEach((key, value) {
+      if (key == 'rank') {
+        columns.add(TableColumn(key: 'rank', label: '#'));
+      } else if (key == 'productId') {
+        columns.add(
+          TableColumn(
+            key: 'productId',
+            label: 'Product ID',
+            builder: (value, isDark, isSummary) {
+              if (isSummary) return const SizedBox();
+              return Text(
+                value.toString(),
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  color: isDark
+                      ? AppColors.textPrimaryDark
+                      : AppColors.textPrimaryLight,
+                  letterSpacing: 0,
+                ),
+              );
+            },
+          ),
+        );
+      } else if (key == 'productName') {
+        columns.add(
+          TableColumn(
+            key: 'productName',
+            label: 'Product Name',
+            builder: (value, isDark, isSummary) {
+              if (isSummary) return const SizedBox();
+              return Text(
+                value.toString(),
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                  color: isDark
+                      ? AppColors.textPrimaryDark
+                      : AppColors.textPrimaryLight,
+                  letterSpacing: 0,
+                ),
+              );
+            },
+          ),
+        );
+      } else if (key == 'category') {
+        columns.add(TableColumn(key: 'category', label: 'Category'));
+      } else if (key == 'issueType') {
+        columns.add(TableColumn(key: 'issueType', label: 'Issue Type'));
+      } else if (key == 'completeness') {
+        columns.add(
+          TableColumn(
+            key: 'completeness',
+            label: 'Completeness',
+            builder: (value, isDark, isSummary) {
+              if (isSummary) return const SizedBox();
+              final percent = value is int ? value : 0;
+              return Row(
+                children: [
+                  Expanded(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(4),
+                      child: LinearProgressIndicator(
+                        value: percent / 100,
+                        backgroundColor: isDark
+                            ? const Color(0xFF363843)
+                            : const Color(0xFFE0E0E0),
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          percent < 50
+                              ? const Color(0xFFEF4444)
+                              : percent < 75
+                              ? const Color(0xFFF59E0B)
+                              : const Color(0xFF10B981),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    '$percent%',
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w500,
+                      color: isDark
+                          ? AppColors.textSecondaryDark
+                          : AppColors.textSecondaryLight,
+                    ),
+                  ),
+                ],
+              );
+            },
+          ),
+        );
+      } else if (key == 'missingFields') {
+        columns.add(
+          TableColumn(
+            key: 'missingFields',
+            label: 'Missing Fields',
+            builder: (value, isDark, isSummary) {
+              if (isSummary) return const SizedBox();
+              final fields = value is List ? value : [];
+              return Wrap(
+                spacing: 4,
+                runSpacing: 4,
+                children:
+                    fields.take(2).map((field) {
+                      return Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 4,
+                        ),
+                        decoration: BoxDecoration(
+                          color: isDark
+                              ? const Color(0xFF363843)
+                              : const Color(0xFFF4F4F4),
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: Text(
+                          field.toString(),
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                            color: isDark
+                                ? AppColors.textSecondaryDark
+                                : AppColors.textSecondaryLight,
+                          ),
+                        ),
+                      );
+                    }).toList()..addAll(
+                      fields.length > 2
+                          ? [
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                  vertical: 4,
+                                ),
+                                child: Text(
+                                  '+${fields.length - 2}',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w500,
+                                    color: isDark
+                                        ? AppColors.textSecondaryDark
+                                        : AppColors.textSecondaryLight,
+                                  ),
+                                ),
+                              ),
+                            ]
+                          : [],
+                    ),
+              );
+            },
+          ),
+        );
+      } else if (key == 'lastUpdated') {
+        columns.add(TableColumn(key: 'lastUpdated', label: 'Last Updated'));
+      } else if (key == 'status') {
+        columns.add(
+          TableColumn(
+            key: 'status',
+            label: 'Status',
+            builder: (value, isDark, isSummary) {
+              if (isSummary) return const SizedBox();
+              final status = value.toString();
+              Color bgColor;
+              Color textColor;
 
-  // Order Columns
-  List<TableColumn> _buildOrderColumns() {
-    return [
-      TableColumn(key: 'rank', label: '#'),
-      TableColumn(
-        key: 'orderId',
-        label: 'Order ID',
-        builder: (value, isDark, isSummary) {
-          if (isSummary) return const SizedBox();
-          return Text(
-            value.toString(),
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-              color: isDark
-                  ? AppColors.textPrimaryDark
-                  : AppColors.textPrimaryLight,
-              letterSpacing: 0,
-            ),
-          );
-        },
-      ),
-      TableColumn(
-        key: 'customer',
-        label: 'Customer',
-        builder: (value, isDark, isSummary) {
-          if (isSummary) return const SizedBox();
-          return Text(
-            value.toString(),
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-              color: isDark
-                  ? AppColors.textPrimaryDark
-                  : AppColors.textPrimaryLight,
-              letterSpacing: 0,
-            ),
-          );
-        },
-      ),
-      TableColumn(
-        key: 'orderValue',
-        label: 'Order Value',
-        builder: (value, isDark, isSummary) {
-          return Text(
-            '\$${_formatNumber(value as int)}',
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: isSummary ? FontWeight.w700 : FontWeight.w600,
-              color: isDark
-                  ? AppColors.textPrimaryDark
-                  : AppColors.textPrimaryLight,
-              letterSpacing: 0,
-            ),
-          );
-        },
-      ),
-      TableColumn(
-        key: 'percentageChange',
-        label: 'Change',
-        builder: (value, isDark, isSummary) =>
-            PercentageChip(percentage: value as double, isDark: isDark),
-      ),
-      TableColumn(
-        key: 'progressPercentage',
-        label: 'Progress',
-        builder: (value, isDark, isSummary) {
-          return Text(
-            '$value%',
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-              color: isDark
-                  ? AppColors.textPrimaryDark
-                  : AppColors.textPrimaryLight,
-              letterSpacing: 0,
-            ),
-          );
-        },
-      ),
-      TableColumn(
-        key: 'deliveryStatus',
-        label: 'Status',
-        builder: (value, isDark, isSummary) {
-          if (isSummary) return const SizedBox();
-          return Text(
-            value.toString(),
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-              color: isDark
-                  ? AppColors.textPrimaryDark
-                  : AppColors.textPrimaryLight,
-              letterSpacing: 0,
-            ),
-          );
-        },
-      ),
-      TableColumn(
-        key: 'expectedDelivery',
-        label: 'Expected Delivery',
-        builder: (value, isDark, isSummary) {
-          if (isSummary) return const SizedBox();
-          return Text(
-            value.toString(),
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-              color: isDark
-                  ? AppColors.textPrimaryDark
-                  : AppColors.textPrimaryLight,
-              letterSpacing: 0,
-            ),
-          );
-        },
-      ),
-      const TableColumn(key: 'action', label: ''),
-    ];
-  }
+              switch (status) {
+                case 'Urgent':
+                  bgColor = const Color(0xFFEF4444).withValues(alpha: 0.1);
+                  textColor = const Color(0xFFEF4444);
+                  break;
+                case 'Needs Review':
+                  bgColor = const Color(0xFFF59E0B).withValues(alpha: 0.1);
+                  textColor = const Color(0xFFF59E0B);
+                  break;
+                case 'In Progress':
+                  bgColor = const Color(0xFF3B82F6).withValues(alpha: 0.1);
+                  textColor = const Color(0xFF3B82F6);
+                  break;
+                default:
+                  bgColor = const Color(0xFF10B981).withValues(alpha: 0.1);
+                  textColor = const Color(0xFF10B981);
+              }
 
-  // Delivery Columns
-  List<TableColumn> _buildDeliveryColumns() {
-    return [
-      TableColumn(key: 'rank', label: '#'),
-      TableColumn(
-        key: 'deliveryId',
-        label: 'Delivery ID',
-        builder: (value, isDark, isSummary) {
-          if (isSummary) return const SizedBox();
-          return Text(
-            value.toString(),
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-              color: isDark
-                  ? AppColors.textPrimaryDark
-                  : AppColors.textPrimaryLight,
-              letterSpacing: 0,
-            ),
-          );
-        },
-      ),
-      TableColumn(
-        key: 'customer',
-        label: 'Customer',
-        builder: (value, isDark, isSummary) {
-          if (isSummary) return const SizedBox();
-          return Text(
-            value.toString(),
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-              color: isDark
-                  ? AppColors.textPrimaryDark
-                  : AppColors.textPrimaryLight,
-              letterSpacing: 0,
-            ),
-          );
-        },
-      ),
-      TableColumn(
-        key: 'deliveryValue',
-        label: 'Delivery Value',
-        builder: (value, isDark, isSummary) {
-          return Text(
-            '\$${_formatNumber(value as int)}',
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: isSummary ? FontWeight.w700 : FontWeight.w600,
-              color: isDark
-                  ? AppColors.textPrimaryDark
-                  : AppColors.textPrimaryLight,
-              letterSpacing: 0,
-            ),
-          );
-        },
-      ),
-      TableColumn(
-        key: 'percentageChange',
-        label: 'Change',
-        builder: (value, isDark, isSummary) =>
-            PercentageChip(percentage: value as double, isDark: isDark),
-      ),
-      TableColumn(
-        key: 'deliveryDate',
-        label: 'Delivery Date',
-        builder: (value, isDark, isSummary) {
-          if (isSummary) return const SizedBox();
-          return Text(
-            value.toString(),
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-              color: isDark
-                  ? AppColors.textPrimaryDark
-                  : AppColors.textPrimaryLight,
-              letterSpacing: 0,
-            ),
-          );
-        },
-      ),
-      TableColumn(
-        key: 'rating',
-        label: 'Rating',
-        builder: (value, isDark, isSummary) {
-          return Text(
-            '${value.toString()} ⭐',
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-              color: isDark
-                  ? AppColors.textPrimaryDark
-                  : AppColors.textPrimaryLight,
-              letterSpacing: 0,
-            ),
-          );
-        },
-      ),
-      TableColumn(
-        key: 'onTime',
-        label: 'On Time',
-        builder: (value, isDark, isSummary) {
-          if (isSummary) return const SizedBox();
-          final onTime = value as bool;
-          return Text(
-            onTime ? 'Yes' : 'No',
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-              color: onTime ? Colors.green : Colors.orange,
-              letterSpacing: 0,
-            ),
-          );
-        },
-      ),
-      const TableColumn(key: 'action', label: ''),
-    ];
-  }
+              return Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 6,
+                ),
+                decoration: BoxDecoration(
+                  color: bgColor,
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                child: Text(
+                  status,
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600,
+                    color: textColor,
+                  ),
+                ),
+              );
+            },
+          ),
+        );
+      }
+    });
 
-  // Customer Columns
-  List<TableColumn> _buildCustomerColumns() {
-    return [
-      TableColumn(key: 'rank', label: '#'),
-      TableColumn(
-        key: 'customerName',
-        label: 'Customer',
-        builder: (value, isDark, isSummary) {
-          if (isSummary) return const SizedBox();
-          return Text(
-            value.toString(),
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-              color: isDark
-                  ? AppColors.textPrimaryDark
-                  : AppColors.textPrimaryLight,
-              letterSpacing: 0,
-            ),
-          );
-        },
-      ),
-      TableColumn(
-        key: 'region',
-        label: 'Region',
-        builder: (value, isDark, isSummary) {
-          if (isSummary) return const SizedBox();
-          return Text(
-            value.toString(),
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-              color: isDark
-                  ? AppColors.textPrimaryDark
-                  : AppColors.textPrimaryLight,
-              letterSpacing: 0,
-            ),
-          );
-        },
-      ),
-      TableColumn(
-        key: 'totalOrders',
-        label: 'Orders',
-        builder: (value, isDark, isSummary) {
-          return Text(
-            value.toString(),
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: isSummary ? FontWeight.w700 : FontWeight.w600,
-              color: isDark
-                  ? AppColors.textPrimaryDark
-                  : AppColors.textPrimaryLight,
-              letterSpacing: 0,
-            ),
-          );
-        },
-      ),
-      TableColumn(
-        key: 'percentageChange',
-        label: 'Change',
-        builder: (value, isDark, isSummary) =>
-            PercentageChip(percentage: value as double, isDark: isDark),
-      ),
-      TableColumn(
-        key: 'totalValue',
-        label: 'Total Value',
-        builder: (value, isDark, isSummary) {
-          return Text(
-            '\$${_formatNumber(value as int)}',
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: isSummary ? FontWeight.w700 : FontWeight.w600,
-              color: isDark
-                  ? AppColors.textPrimaryDark
-                  : AppColors.textPrimaryLight,
-              letterSpacing: 0,
-            ),
-          );
-        },
-      ),
-      TableColumn(
-        key: 'averageOrderValue',
-        label: 'Avg Order',
-        builder: (value, isDark, isSummary) {
-          return Text(
-            '\$${_formatNumber(value as int)}',
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-              color: isDark
-                  ? AppColors.textPrimaryDark
-                  : AppColors.textPrimaryLight,
-              letterSpacing: 0,
-            ),
-          );
-        },
-      ),
-      TableColumn(
-        key: 'satisfactionScore',
-        label: 'Rating',
-        builder: (value, isDark, isSummary) {
-          return Text(
-            '${value.toString()} ⭐',
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-              color: isDark
-                  ? AppColors.textPrimaryDark
-                  : AppColors.textPrimaryLight,
-              letterSpacing: 0,
-            ),
-          );
-        },
-      ),
-      const TableColumn(key: 'action', label: ''),
-    ];
-  }
-
-  // Product Columns
-  List<TableColumn> _buildProductColumns() {
-    return [
-      TableColumn(key: 'rank', label: '#'),
-      TableColumn(
-        key: 'productName',
-        label: 'Product',
-        builder: (value, isDark, isSummary) {
-          if (isSummary) return const SizedBox();
-          return Text(
-            value.toString(),
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-              color: isDark
-                  ? AppColors.textPrimaryDark
-                  : AppColors.textPrimaryLight,
-              letterSpacing: 0,
-            ),
-          );
-        },
-      ),
-      TableColumn(
-        key: 'category',
-        label: 'Category',
-        builder: (value, isDark, isSummary) {
-          if (isSummary) return const SizedBox();
-          return Text(
-            value.toString(),
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-              color: isDark
-                  ? AppColors.textPrimaryDark
-                  : AppColors.textPrimaryLight,
-              letterSpacing: 0,
-            ),
-          );
-        },
-      ),
-      TableColumn(
-        key: 'unitsSold',
-        label: 'Units Sold',
-        builder: (value, isDark, isSummary) {
-          return Text(
-            _formatNumber(value as int),
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: isSummary ? FontWeight.w700 : FontWeight.w600,
-              color: isDark
-                  ? AppColors.textPrimaryDark
-                  : AppColors.textPrimaryLight,
-              letterSpacing: 0,
-            ),
-          );
-        },
-      ),
-      TableColumn(
-        key: 'percentageChange',
-        label: 'Change',
-        builder: (value, isDark, isSummary) =>
-            PercentageChip(percentage: value as double, isDark: isDark),
-      ),
-      TableColumn(
-        key: 'revenue',
-        label: 'Revenue',
-        builder: (value, isDark, isSummary) {
-          return Text(
-            '\$${_formatNumber(value as int)}',
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: isSummary ? FontWeight.w700 : FontWeight.w600,
-              color: isDark
-                  ? AppColors.textPrimaryDark
-                  : AppColors.textPrimaryLight,
-              letterSpacing: 0,
-            ),
-          );
-        },
-      ),
-      TableColumn(
-        key: 'averagePrice',
-        label: 'Avg Price',
-        builder: (value, isDark, isSummary) {
-          return Text(
-            '\$${_formatNumber(value as int)}',
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-              color: isDark
-                  ? AppColors.textPrimaryDark
-                  : AppColors.textPrimaryLight,
-              letterSpacing: 0,
-            ),
-          );
-        },
-      ),
-      TableColumn(
-        key: 'stockStatus',
-        label: 'Stock',
-        builder: (value, isDark, isSummary) {
-          if (isSummary) return const SizedBox();
-          final status = value.toString();
-          Color statusColor = Colors.green;
-          if (status == 'Low Stock') {
-            statusColor = Colors.orange;
-          } else if (status == 'Out of Stock') {
-            statusColor = Colors.red;
-          }
-          return Text(
-            status,
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-              color: statusColor,
-              letterSpacing: 0,
-            ),
-          );
-        },
-      ),
-      const TableColumn(key: 'action', label: ''),
-    ];
+    return columns;
   }
 
   Widget _buildLoading() {
@@ -1176,13 +555,6 @@ class _DashboardTableState extends State<DashboardTable> {
           ),
         ),
       ),
-    );
-  }
-
-  String _formatNumber(int number) {
-    return number.toString().replaceAllMapped(
-      RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
-      (Match m) => '${m[1]},',
     );
   }
 }
