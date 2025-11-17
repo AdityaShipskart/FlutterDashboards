@@ -121,7 +121,7 @@ const Map<String, dynamic> _smcProcurementBreakdown = {
 };
 
 final Map<String, dynamic> _smcSpendTrendChart = {
-  'cardTitle': 'Monthly Spend Trends',
+  'cardTitle': 'Spend Analysis',
   'cardSubtitle': 'Actual vs budgeted procurement spend',
   'thisYearLabel': 'Actual Spend',
   'lastYearLabel': 'Budget',
@@ -271,63 +271,110 @@ const Map<String, dynamic> _vesselPerformanceComparison = {
 };
 
 const Map<String, dynamic> _purchasesByCategoryBar = {
-  'cardTitle': 'Purchases by Category & Ship',
-  'cardSubtitle': 'Top 3 spending categories per vessel type',
-  'maxY': 450000.0,
+  'cardTitle': 'Budgeted vs Actual Purchases',
+  'cardSubtitle': 'Top spending categories across fleet',
+  'maxY': 500000.0,
   'minY': 0.0,
-  'yAxisInterval': 75000.0,
-  'barWidth': 9.0,
-  'barsSpace': 4.0,
+  'yAxisInterval': 100000.0,
+  'barWidth': 10.0,
+  'barsSpace': 6.0,
   'chartData': [
     {
-      'label': 'Container',
+      'label': 'Provisions',
       'values': [
-        {'value': 128000.0, 'color': 0xFFE0E0E0},
-        {'value': 245000.0, 'color': 0xFF10B981},
-        {'value': 368000.0, 'color': 0xFF1379F0},
+        {'value': 148000.0, 'color': 0xFF10B981},
+        {'value': 312000.0, 'color': 0xFF1379F0},
       ],
-      'percentile25': 128000.0,
-      'percentile50': 245000.0,
-      'percentile75': 368000.0,
+      'percentile25': 148000.0,
+      'percentile75': 312000.0,
+      'tooltip': [
+        {'label': 'Actual', 'value': '\$148K'},
+        {'label': 'Budgeted', 'value': '\$312K'},
+      ],
     },
     {
-      'label': 'Tanker',
+      'label': 'IMPA',
       'values': [
-        {'value': 98000.0, 'color': 0xFFE0E0E0},
-        {'value': 186000.0, 'color': 0xFF10B981},
-        {'value': 298000.0, 'color': 0xFF1379F0},
+        {'value': 112000.0, 'color': 0xFF10B981},
+        {'value': 265000.0, 'color': 0xFF1379F0},
       ],
-      'percentile25': 98000.0,
-      'percentile50': 186000.0,
-      'percentile75': 298000.0,
+      'percentile25': 112000.0,
+      'percentile75': 265000.0,
+      'tooltip': [
+        {'label': 'Actual', 'value': '\$112K'},
+        {'label': 'Budgeted', 'value': '\$265K'},
+      ],
     },
     {
-      'label': 'Bulk',
+      'label': 'Services',
       'values': [
-        {'value': 142000.0, 'color': 0xFFE0E0E0},
-        {'value': 268000.0, 'color': 0xFF10B981},
+        {'value': 195000.0, 'color': 0xFF10B981},
         {'value': 398000.0, 'color': 0xFF1379F0},
       ],
-      'percentile25': 142000.0,
-      'percentile50': 268000.0,
+      'percentile25': 195000.0,
       'percentile75': 398000.0,
+      'tooltip': [
+        {'label': 'Actual', 'value': '\$195K'},
+        {'label': 'Budgeted', 'value': '\$398K'},
+      ],
     },
     {
-      'label': 'Other',
+      'label': 'Paints',
       'values': [
-        {'value': 76000.0, 'color': 0xFFE0E0E0},
-        {'value': 152000.0, 'color': 0xFF10B981},
-        {'value': 228000.0, 'color': 0xFF1379F0},
+        {'value': 89000.0, 'color': 0xFF10B981},
+        {'value': 212000.0, 'color': 0xFF1379F0},
       ],
-      'percentile25': 76000.0,
-      'percentile50': 152000.0,
-      'percentile75': 228000.0,
+      'percentile25': 89000.0,
+      'percentile75': 212000.0,
+      'tooltip': [
+        {'label': 'Actual', 'value': '\$89K'},
+        {'label': 'Budgeted', 'value': '\$212K'},
+      ],
+    },
+    {
+      'label': 'Lubes',
+      'values': [
+        {'value': 132000.0, 'color': 0xFF10B981},
+        {'value': 295000.0, 'color': 0xFF1379F0},
+      ],
+      'percentile25': 132000.0,
+      'percentile75': 295000.0,
+      'tooltip': [
+        {'label': 'Actual', 'value': '\$132K'},
+        {'label': 'Budgeted', 'value': '\$295K'},
+      ],
+    },
+    {
+      'label': 'Bond Store',
+      'values': [
+        {'value': 68000.0, 'color': 0xFF10B981},
+        {'value': 168000.0, 'color': 0xFF1379F0},
+      ],
+      'percentile25': 68000.0,
+      'percentile75': 168000.0,
+      'tooltip': [
+        {'label': 'Actual', 'value': '\$68K'},
+        {'label': 'Budgeted', 'value': '\$168K'},
+      ],
+    },
+    {
+      'label': 'Chemicals',
+      'values': [
+        {'value': 95000.0, 'color': 0xFF10B981},
+        {'value': 232000.0, 'color': 0xFF1379F0},
+      ],
+      'percentile25': 95000.0,
+      'percentile75': 232000.0,
+      'tooltip': [
+        {'label': 'Actual', 'value': '\$95K'},
+        {'label': 'Budgeted', 'value': '\$232K'},
+      ],
     },
   ],
+  // Legend now perfectly matches the 3 bars in every category
   'legendData': [
-    {'label': 'Parts', 'color': '0xFFE0E0E0'},
-    {'label': 'Fuel', 'color': '0xFF10B981'},
-    {'label': 'Services', 'color': '0xFF1379F0'},
+    {'label': 'Budgeted', 'color': '0xFFE0E0E0'}, // First bar (gray)
+    {'label': 'Actual', 'color': '0xFF10B981'}, // Second bar (green)
   ],
 };
 
@@ -653,18 +700,18 @@ class SMCDashboard extends StatelessWidget {
               child: DashboardCardContainer(cards: _smcCards),
             ),
 
-            DashboardGridCol(
-              xs: 12,
-              md: 6,
-              lg: 4,
-              child: DashboardLeadingPort(data: _smcPerformanceMetrics[3]),
-            ),
-
             // Procurement Breakdown
             DashboardGridCol(
               xs: 12,
               md: 4,
               child: DashboardRecentData(data: _smcProcurementBreakdown),
+            ),
+
+            DashboardGridCol(
+              xs: 12,
+              md: 6,
+              lg: 4,
+              child: DashboardLeadingPort(data: _smcPerformanceMetrics[3]),
             ),
 
             // Purchases by Category & Ship
@@ -673,6 +720,7 @@ class SMCDashboard extends StatelessWidget {
               md: 8,
               child: DashboardBarChart(data: _purchasesByCategoryBar),
             ),
+
             // Spend Trend Line Chart
             DashboardGridCol(
               xs: 12,
