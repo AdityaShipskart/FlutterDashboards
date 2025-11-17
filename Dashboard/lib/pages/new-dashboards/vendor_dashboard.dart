@@ -33,6 +33,14 @@ const List<Map<String, dynamic>> _vendorCards = [
     'iconBgColor': Color(0xFFFDE0F0),
   },
   {
+    'iconKey': 'orders',
+    'value': '3,847',
+    'label': 'Active Ports',
+    'growth': '+142',
+    'color': Color(0xFFEC4899),
+    'iconBgColor': Color(0xFFFDE0F0),
+  },
+  {
     'iconKey': 'users',
     'value': '268',
     'label': 'Active Clients',
@@ -47,6 +55,22 @@ const List<Map<String, dynamic>> _vendorCards = [
     'growth': '+12.6%',
     'color': Color(0xFF10B981),
     'iconBgColor': Color(0xFFD1FAE5),
+  },
+  {
+    'iconKey': 'profit',
+    'value': '94.8%',
+    'label': 'Quotation',
+    'growth': '+2.4%',
+    'color': Color(0xFF0EA5E9),
+    'iconBgColor': Color(0xFFE0F2FE),
+  },
+  {
+    'iconKey': 'orders',
+    'value': '3,847',
+    'label': 'Pending RFQs',
+    'growth': '+142',
+    'color': Color(0xFFEC4899),
+    'iconBgColor': Color(0xFFFDE0F0),
   },
   {
     'iconKey': 'profit',
@@ -369,6 +393,40 @@ const List<Map<String, dynamic>> _vendorPerformanceMetrics = [
       },
     ],
   },
+  {
+    'title': 'Quick wins',
+    'subtitle': 'on time quick actions',
+    'switch-options': ['pending_rfqs', 'upcoming_deliveries'],
+    'columns': {'first': 'Recent Status', 'second': 'Order Value'},
+    'pending_rfqs': [
+      {
+        'portName': 'Smart Fuel Monitor',
+        'purchaseValue': '1,420',
+        'percentageChange': 32.1,
+        'trend': 'up',
+      },
+      {
+        'portName': 'Engine Spare Parts',
+        'purchaseValue': '860',
+        'percentageChange': 24.3,
+        'trend': 'up',
+      },
+    ],
+    'upcoming_deliveries': [
+      {
+        'portName': 'Navigation Equipment',
+        'purchaseValue': '980',
+        'percentageChange': 18.7,
+        'trend': 'up',
+      },
+      {
+        'portName': 'Safety Gear Set',
+        'purchaseValue': '580',
+        'percentageChange': 15.4,
+        'trend': 'up',
+      },
+    ],
+  },
 ];
 
 const Map<String, dynamic> _vendorTableData = {
@@ -594,6 +652,13 @@ class VendorDashboard extends StatelessWidget {
               xs: 12,
               md: 4,
               child: DashboardRecentData(data: _vendorSalesBreakdown),
+            ),
+
+            DashboardGridCol(
+              xs: 12,
+              md: 6,
+              lg: 4,
+              child: DashboardLeadingPort(data: _vendorPerformanceMetrics[3]),
             ),
 
             // Revenue Trend Line Chart
