@@ -38,6 +38,11 @@ class DashboardBarChart extends StatefulWidget {
         'percentile25': 150000.0,
         'percentile50': 250000.0,
         'percentile75': 350000.0,
+        'tooltip': [
+          {'label': '25th', 'value': '150K'},
+          {'label': '50th', 'value': '250K'},
+          {'label': '75th', 'value': '350K'},
+        ],
       },
       {
         'label': 'Feb',
@@ -49,6 +54,11 @@ class DashboardBarChart extends StatefulWidget {
         'percentile25': 180000.0,
         'percentile50': 280000.0,
         'percentile75': 380000.0,
+        'tooltip': [
+          {'label': '25th', 'value': '180K'},
+          {'label': '50th', 'value': '280K'},
+          {'label': '75th', 'value': '380K'},
+        ],
       },
       {
         'label': 'Mar',
@@ -60,6 +70,11 @@ class DashboardBarChart extends StatefulWidget {
         'percentile25': 120000.0,
         'percentile50': 220000.0,
         'percentile75': 320000.0,
+        'tooltip': [
+          {'label': '25th', 'value': '120K'},
+          {'label': '50th', 'value': '220K'},
+          {'label': '75th', 'value': '320K'},
+        ],
       },
     ],
     'legendData': [
@@ -330,7 +345,6 @@ class _DashboardBarChartState extends State<DashboardBarChart> {
                                   });
                                 },
                             touchTooltipData: BarTouchTooltipData(
-                             
                               getTooltipItem:
                                   (group, groupIndex, rod, rodIndex) {
                                     // Hide default tooltip
@@ -506,12 +520,46 @@ class _DashboardBarChartState extends State<DashboardBarChart> {
 
   // Build tooltip items for CustomChartTooltip widget
   // Prepares data items to display in the tooltip
+  // Now supports dynamic tooltip data from JSON
   List<TooltipDataItem> _buildTooltipItems(bool isDark) {
     if (touchedGroupIndex < 0 || touchedGroupIndex >= chartData.length) {
       return [];
     }
 
     final data = chartData[touchedGroupIndex];
+
+    // Check if dynamic tooltip data is provided in JSON
+    if (data.containsKey('tooltip') && data['tooltip'] is List) {
+      final tooltipData = data['tooltip'] as List;
+      return tooltipData.asMap().entries.map((entry) {
+        final index = entry.key;
+        final item = entry.value as Map<String, dynamic>;
+
+        // Get color from legend or values array, with fallback colors
+        Color itemColor;
+        if (legendData.isNotEmpty && index < legendData.length) {
+          itemColor = Color(int.parse(legendData[index]['color'] as String));
+        } else if (data['values'] != null &&
+            index < (data['values'] as List).length) {
+          itemColor = Color((data['values'][index]['color'] as int));
+        } else {
+          // Fallback colors
+          itemColor = index == 0
+              ? (isDark ? _grey300Dark : _grey300Light)
+              : index == 1
+              ? const Color(0xFF4CAF50)
+              : _primary;
+        }
+
+        return TooltipDataItem(
+          color: itemColor,
+          label: item['label'] as String? ?? '',
+          value: item['value'] as String? ?? '',
+        );
+      }).toList();
+    }
+
+    // Fallback to old behavior if no tooltip data in JSON
     final percentile25 = (data['percentile25'] as num).toDouble();
     final percentile50 = (data['percentile50'] as num).toDouble();
     final percentile75 = (data['percentile75'] as num).toDouble();
