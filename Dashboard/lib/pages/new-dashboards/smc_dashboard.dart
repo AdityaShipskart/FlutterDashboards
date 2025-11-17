@@ -386,6 +386,40 @@ const List<Map<String, dynamic>> _smcPerformanceMetrics = [
       },
     ],
   },
+  {
+    'title': 'Highlighted Products',
+    'subtitle': 'take a quick actions',
+    'switch-options': ['pending_requisitions', 'upcoming_deliveries'],
+    'columns': {'first': 'Recent Status', 'second': 'Order Value'},
+    'pending_requisitions': [
+      {
+        'portName': 'Smart Fuel Monitor',
+        'purchaseValue': '1,420',
+        'percentageChange': 32.1,
+        'trend': 'up',
+      },
+      {
+        'portName': 'Engine Spare Parts',
+        'purchaseValue': '860',
+        'percentageChange': 24.3,
+        'trend': 'up',
+      },
+    ],
+    'upcoming_deliveries': [
+      {
+        'portName': 'Navigation Equipment',
+        'purchaseValue': '980',
+        'percentageChange': 18.7,
+        'trend': 'up',
+      },
+      {
+        'portName': 'Safety Gear Set',
+        'purchaseValue': '580',
+        'percentageChange': 15.4,
+        'trend': 'up',
+      },
+    ],
+  },
 ];
 
 const Map<String, dynamic> _smcTableData = {
@@ -619,12 +653,13 @@ class SMCDashboard extends StatelessWidget {
               child: DashboardCardContainer(cards: _smcCards),
             ),
 
-            // DashboardGridCol(
-            //   xs: 12,
-            //   md: 6,
-            //   lg: 4,
-            //   child: DashboardLeadingPort(data: _smcPerformanceMetrics[3]),
-            // ),
+            DashboardGridCol(
+              xs: 12,
+              md: 6,
+              lg: 4,
+              child: DashboardLeadingPort(data: _smcPerformanceMetrics[3]),
+            ),
+
             // Procurement Breakdown
             DashboardGridCol(
               xs: 12,
@@ -632,6 +667,12 @@ class SMCDashboard extends StatelessWidget {
               child: DashboardRecentData(data: _smcProcurementBreakdown),
             ),
 
+            // Purchases by Category & Ship
+            DashboardGridCol(
+              xs: 12,
+              md: 8,
+              child: DashboardBarChart(data: _purchasesByCategoryBar),
+            ),
             // Spend Trend Line Chart
             DashboardGridCol(
               xs: 12,
@@ -667,12 +708,6 @@ class SMCDashboard extends StatelessWidget {
               child: MultiAnalyticsOveriview(
                 data: _vesselPerformanceComparison,
               ),
-            ),
-
-            // Purchases by Category & Ship
-            DashboardGridCol(
-              xs: 12,
-              child: DashboardBarChart(data: _purchasesByCategoryBar),
             ),
 
             // Performance Metrics Cards
