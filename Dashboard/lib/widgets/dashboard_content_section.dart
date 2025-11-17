@@ -27,6 +27,10 @@ class DashboardContentSection extends StatelessWidget {
           //   fontWeight: FontWeight.bold,
           //   color: isDark ? Colors.white : Colors.black,
           // ),
+          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+            fontWeight: FontWeight.bold,
+            color: isDark ? Colors.white : Colors.black,
+          ),
           textAlign: TextAlign.left,
         ),
         const SizedBox(height: 8),

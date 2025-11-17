@@ -245,47 +245,50 @@ class _DashboardTableState extends State<DashboardTable> {
             final isSelected = tab == _selectedTableType;
             return Padding(
               padding: const EdgeInsets.only(right: 8.0),
-              child: InkWell(
-                onTap: () {
-                  setState(() {
-                    _selectedTableType = tab;
-                  });
-                },
-                borderRadius: BorderRadius.circular(8.0),
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16.0,
-                    vertical: 8.0,
-                  ),
-                  decoration: BoxDecoration(
-                    color: isSelected
-                        ? const Color(0xFF1379F0)
-                        : (isDark
-                              ? const Color(0xFFB5B7C8)
-                              : const Color(0xFFF4F4F4)),
-                    borderRadius: BorderRadius.circular(8.0),
-                    border: Border.all(
+              child: Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  onTap: () {
+                    setState(() {
+                      _selectedTableType = tab;
+                    });
+                  },
+                  borderRadius: BorderRadius.circular(8.0),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16.0,
+                      vertical: 8.0,
+                    ),
+                    decoration: BoxDecoration(
                       color: isSelected
                           ? const Color(0xFF1379F0)
                           : (isDark
-                                ? const Color(0xFF363843)
-                                : const Color(0xFFE0E0E0)),
-                      width: 1,
-                    ),
-                  ),
-                  child: Text(
-                    tab,
-                    style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: isSelected
-                          ? FontWeight.w600
-                          : FontWeight.w500,
-                      color: isSelected
-                          ? Colors.white
-                          : (isDark
                                 ? const Color(0xFFB5B7C8)
-                                : const Color(0xFF757575)),
-                      letterSpacing: 0,
+                                : const Color(0xFFF4F4F4)),
+                      borderRadius: BorderRadius.circular(8.0),
+                      border: Border.all(
+                        color: isSelected
+                            ? const Color(0xFF1379F0)
+                            : (isDark
+                                  ? const Color(0xFF363843)
+                                  : const Color(0xFFE0E0E0)),
+                        width: 1,
+                      ),
+                    ),
+                    child: Text(
+                      tab,
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: isSelected
+                            ? FontWeight.w600
+                            : FontWeight.w500,
+                        color: isSelected
+                            ? Colors.white
+                            : (isDark
+                                  ? const Color(0xFFB5B7C8)
+                                  : const Color(0xFF757575)),
+                        letterSpacing: 0,
+                      ),
                     ),
                   ),
                 ),

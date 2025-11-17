@@ -164,6 +164,11 @@ class _DashboardPieChartState extends State<DashboardPieChart> {
                         //   fontWeight: FontWeight.bold,
                         //   color: isDark ? Colors.white : Colors.black,
                         // ),
+                        style: Theme.of(context).textTheme.titleMedium
+                            ?.copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: isDark ? Colors.white : Colors.black,
+                            ),
                       ),
                       const SizedBox(height: 4.0),
                       Text(

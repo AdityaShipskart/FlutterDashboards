@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import '../models/line_dataset.dart';
 // import 'package:get/utils.dart';
 // import 'package:shipskart_ui/src/components/dashboard_widgets/models/line_dataset.dart';
 
@@ -84,6 +85,9 @@ class _RevenueGeneratedCardState extends State<RevenueGeneratedCard> {
   // Each dataset represents one line on the chart.
 
   // Comment
+  // List<LineDataset> datasets = [];
+
+  // Custom LineDataset from JSON structure in controller
   List<LineDataset> datasets = [];
   List<String> labels = [];
 
@@ -370,10 +374,11 @@ class _RevenueGeneratedCardState extends State<RevenueGeneratedCard> {
                     children: [
                       Text(
                         cardTitle, // Dynamic from API
-                        style: context.textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: isDark ? Colors.white : Colors.black,
-                        ),
+                        style: Theme.of(context).textTheme.titleMedium
+                            ?.copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: isDark ? Colors.white : Colors.black,
+                            ),
                       ),
                       const SizedBox(height: 4.0),
                       Text(

@@ -209,10 +209,10 @@ class _DashboardRecentDataState extends State<DashboardRecentData> {
         children: [
           Text(
             'Highlights',
-            // style: context.textTheme.titleMedium?.copyWith(
-            //             fontWeight: FontWeight.bold,
-            //             color: isDark ? Colors.white : Colors.black,
-            //           ),
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+              fontWeight: FontWeight.bold,
+              color: isDark ? Colors.white : Colors.black,
+            ),
           ),
           Icon(
             Icons.more_vert,

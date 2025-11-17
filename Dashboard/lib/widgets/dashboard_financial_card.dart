@@ -189,10 +189,10 @@ class _DashboardFinancialCardState extends State<DashboardFinancialCard> {
                   children: [
                     Text(
                       cardTitle, // Dynamic from API
-                      // style: context.textTheme.titleMedium?.copyWith(
-                      //   fontWeight: FontWeight.bold,
-                      //   color: isDark ? Colors.white : Colors.black,
-                      // ),
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: isDark ? Colors.white : Colors.black,
+                      ),
                     ),
                     const SizedBox(height: 4.0),
                     Text(
