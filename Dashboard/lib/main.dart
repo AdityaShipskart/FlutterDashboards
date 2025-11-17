@@ -1,4 +1,5 @@
-import 'package:flutte_design_application/pages/dashboard_hub.dart';
+// import 'package:flutte_design_application/pages/dashboard_hub.dart';
+import 'package:flutte_design_application/pages/new-dashboards/vendor_dashboard.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -53,7 +54,7 @@ class MyAppState extends State<MyApp> {
         useMaterial3: true,
       ),
       themeMode: _themeMode,
-      home: const DashboardHub(),
+      home: const VendorDashboard(),
     );
   }
 }

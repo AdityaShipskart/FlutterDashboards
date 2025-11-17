@@ -371,7 +371,7 @@ class _DashboardcombobarChartState extends State<DashboardcombobarChart> {
                                         });
                                       },
                                   touchTooltipData: LineTouchTooltipData(
-                                    tooltipBgColor: Colors.transparent,
+                                   
                                     getTooltipItems:
                                         (List<LineBarSpot> touchedSpots) {
                                           // Return list of nulls to hide default fl_chart tooltip

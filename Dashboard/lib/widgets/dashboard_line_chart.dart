@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
-import '../../models/line_dataset.dart';
+// import 'package:get/utils.dart';
+// import 'package:shipskart_ui/src/components/dashboard_widgets/models/line_dataset.dart';
 
 class RevenueGeneratedCard extends StatefulWidget {
   final Map<String, dynamic>? chartData;
@@ -80,7 +81,9 @@ class _RevenueGeneratedCardState extends State<RevenueGeneratedCard> {
   // DYNAMIC DATASETS - Supports N number of lines
   // ============================================
   // This list can contain 2, 3, 4, or more datasets
-  // Each dataset represents one line on the chart
+  // Each dataset represents one line on the chart.
+
+  // Comment
   List<LineDataset> datasets = [];
   List<String> labels = [];
 
@@ -341,7 +344,8 @@ class _RevenueGeneratedCardState extends State<RevenueGeneratedCard> {
       color: Colors.transparent,
       child: Container(
         width: double.infinity,
-        padding: const EdgeInsets.all(24.0),
+        margin: const EdgeInsets.all(10.0),
+        padding: const EdgeInsets.all(15.0),
         decoration: BoxDecoration(
           color: isDark ? const Color(0xFF1A1A1A) : Colors.white,
           borderRadius: BorderRadius.circular(12.0),
@@ -366,15 +370,9 @@ class _RevenueGeneratedCardState extends State<RevenueGeneratedCard> {
                     children: [
                       Text(
                         cardTitle, // Dynamic from API
-                        style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.w600,
-                          fontFamily: 'Inter',
-                          height: 22 / 22,
-                          letterSpacing: 1.4,
-                          color: isDark
-                              ? const Color(0xFFFFFFFF)
-                              : const Color(0xFF212121),
+                        style: context.textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: isDark ? Colors.white : Colors.black,
                         ),
                       ),
                       const SizedBox(height: 4.0),
@@ -633,8 +631,6 @@ class _RevenueGeneratedCardState extends State<RevenueGeneratedCard> {
                             }).toList(),
                             lineTouchData: LineTouchData(
                               touchTooltipData: LineTouchTooltipData(
-                                tooltipBgColor: const Color(0xFF2C2D30),
-                                tooltipRoundedRadius: 4.0,
                                 tooltipPadding: const EdgeInsets.symmetric(
                                   horizontal: 10,
                                   vertical: 7,

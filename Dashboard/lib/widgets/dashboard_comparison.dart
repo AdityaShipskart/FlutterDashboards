@@ -398,8 +398,7 @@ class _MultiAnalyticsOveriviewState extends State<MultiAnalyticsOveriview> {
               lineTouchData: LineTouchData(
                 enabled: true,
                 touchTooltipData: LineTouchTooltipData(
-                  tooltipBgColor: const Color(0xFF393B40),
-                  tooltipRoundedRadius: 8.0,
+                
                   tooltipPadding: const EdgeInsets.symmetric(
                     horizontal: 12.0,
                     vertical: 12.0,

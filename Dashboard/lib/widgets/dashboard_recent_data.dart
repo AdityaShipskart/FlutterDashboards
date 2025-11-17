@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+// import 'package:get/utils.dart';
+// import 'package:shipskart_ui/shipskart_ui.dart';
 
 class DashboardRecentData extends StatefulWidget {
   final Map<String, dynamic>? data;
@@ -139,10 +141,20 @@ class _DashboardRecentDataState extends State<DashboardRecentData> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Container(
+      margin: const EdgeInsets.all(10.0),
+      padding: const EdgeInsets.all(15.0),
       decoration: BoxDecoration(
-        color: isDark ? _darkSurface : Colors.white,
-        borderRadius: BorderRadius.circular(_radiusLarge),
-        border: Border.all(color: isDark ? _darkBorder : _lightBorder),
+        // color: context.colorPalette.surface,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: isDark
+                ? Colors.black.withOpacity(0.3)
+                : Colors.grey.withOpacity(0.1),
+            blurRadius: 8,
+            offset: const Offset(0, 0.2),
+          ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -191,17 +203,16 @@ class _DashboardRecentDataState extends State<DashboardRecentData> {
 
   Widget _buildHeader(bool isDark) {
     return Padding(
-      padding: const EdgeInsets.all(_spacingLg),
+      padding: EdgeInsetsGeometry.all(10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
             'Highlights',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-              color: isDark ? _textPrimaryDark : _textPrimaryLight,
-            ),
+            // style: context.textTheme.titleMedium?.copyWith(
+            //             fontWeight: FontWeight.bold,
+            //             color: isDark ? Colors.white : Colors.black,
+            //           ),
           ),
           Icon(
             Icons.more_vert,
