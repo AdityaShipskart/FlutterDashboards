@@ -619,12 +619,12 @@ class SMCDashboard extends StatelessWidget {
               child: DashboardCardContainer(cards: _smcCards),
             ),
 
-            DashboardGridCol(
-              xs: 12,
-              md: 6,
-              lg: 4,
-              child: DashboardLeadingPort(data: _smcPerformanceMetrics[3]),
-            ),
+            // DashboardGridCol(
+            //   xs: 12,
+            //   md: 6,
+            //   lg: 4,
+            //   child: DashboardLeadingPort(data: _smcPerformanceMetrics[3]),
+            // ),
             // Procurement Breakdown
             DashboardGridCol(
               xs: 12,
