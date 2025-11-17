@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+// import 'package:get/get_utils/src/extensions/export.dart';
 
 class DashboardContentSection extends StatelessWidget {
   final Map<String, dynamic>? content;
@@ -22,10 +23,13 @@ class DashboardContentSection extends StatelessWidget {
       children: [
         Text(
           effectiveContent["greeting"] ?? 'Hello, User',
-          style: TextStyle(
-            fontSize: 28,
-            fontWeight: FontWeight.w700,
-            color: isDark ? const Color(0xFFF9FAFB) : const Color(0xFF111827),
+          // style: context.textTheme.titleMedium?.copyWith(
+          //   fontWeight: FontWeight.bold,
+          //   color: isDark ? Colors.white : Colors.black,
+          // ),
+          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+            fontWeight: FontWeight.bold,
+            color: isDark ? Colors.white : Colors.black,
           ),
           textAlign: TextAlign.left,
         ),

@@ -85,13 +85,14 @@ class _DashboardCardContainerState extends State<DashboardCardContainer> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Container(
+      margin: EdgeInsets.all(10),
       width: 1000,
       height: 500,
       decoration: BoxDecoration(
         // color: DashboardCardContainer._getBackgroundColor(isDark),
         borderRadius: const BorderRadius.all(Radius.circular(16)),
       ),
-      padding: const EdgeInsets.all(24),
+   
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -105,12 +106,7 @@ class _DashboardCardContainerState extends State<DashboardCardContainer> {
             ),
           ),
 
-          // Divider
-          Container(
-            height: 1,
-            margin: const EdgeInsets.symmetric(vertical: 14),
-            color: DashboardCardContainer._getBorderColor(isDark),
-          ),
+         
 
           // Cards Section (responsive widths)
           Expanded(

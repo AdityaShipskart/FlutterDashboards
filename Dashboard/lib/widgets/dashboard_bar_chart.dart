@@ -330,7 +330,7 @@ class _DashboardBarChartState extends State<DashboardBarChart> {
                                   });
                                 },
                             touchTooltipData: BarTouchTooltipData(
-                              tooltipBgColor: Colors.transparent,
+                             
                               getTooltipItem:
                                   (group, groupIndex, rod, rodIndex) {
                                     // Hide default tooltip

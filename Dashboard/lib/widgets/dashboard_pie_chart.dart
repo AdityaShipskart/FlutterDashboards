@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fl_chart/fl_chart.dart';
+// import 'package:get/utils.dart';
 import 'common/custom_tooltip.dart';
 
 class DashboardPieChart extends StatefulWidget {
@@ -131,7 +132,9 @@ class _DashboardPieChartState extends State<DashboardPieChart> {
 
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(24.0),
+      margin: const EdgeInsets.all(10.0),
+      padding: const EdgeInsets.all(15.0),
+
       decoration: BoxDecoration(
         color: isDark ? const Color(0xFF1A1A1A) : Colors.white,
         borderRadius: BorderRadius.circular(12.0),
@@ -157,16 +160,19 @@ class _DashboardPieChartState extends State<DashboardPieChart> {
                     children: [
                       Text(
                         cardTitle, // Dynamic from API
-                        style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.w600,
-                          fontFamily: 'Inter',
-                          height: 22 / 22,
-                          letterSpacing: 1.4,
-                          color: isDark
-                              ? const Color(0xFFFFFFFF)
-                              : const Color(0xFF212121),
-                        ),
+                        style: Theme.of(context).textTheme.titleMedium
+                            ?.copyWith(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 16,
+                              color: isDark
+                                  ? const Color(
+                                      0xFFF9FAFB,
+                                    ) // Formal white for dark theme
+                                  : const Color(
+                                      0xFF1F2937,
+                                    ), // Formal dark gray for light theme
+                              letterSpacing: 0.15,
+                            ),
                       ),
                       const SizedBox(height: 4.0),
                       Text(
@@ -175,11 +181,15 @@ class _DashboardPieChartState extends State<DashboardPieChart> {
                           fontSize: 14,
                           fontWeight: FontWeight.w400,
                           fontFamily: 'Inter',
-                          height: 22 / 14,
+                          height: 20 / 14,
                           letterSpacing: 0.25,
                           color: isDark
-                              ? const Color(0xFFB5B7C8)
-                              : const Color(0xFF757575),
+                              ? const Color(
+                                  0xFF9CA3AF,
+                                ) // Formal gray for dark theme
+                              : const Color(
+                                  0xFF6B7280,
+                                ), // Formal gray for light theme
                         ),
                       ),
                     ],
@@ -195,10 +205,7 @@ class _DashboardPieChartState extends State<DashboardPieChart> {
                 ),
               ],
             ),
-            const SizedBox(height: 32.0),
-            const SizedBox(
-              height: 40,
-            ), // Additional space between title and chart
+            const SizedBox(height: 48.0),
             // Donut Chart with center text (wrapped in outer Stack for external tooltip)
             Center(
               child: Stack(
@@ -280,12 +287,17 @@ class _DashboardPieChartState extends State<DashboardPieChart> {
                                 child: Text(
                                   totalLeads, // Dynamic from API
                                   style: TextStyle(
-                                    fontSize: 28, // Reduced from 36
+                                    fontSize: 24,
                                     fontWeight: FontWeight.w700,
                                     color: isDark
-                                        ? const Color(0xFFFFFFFF)
-                                        : const Color(0xFF212121),
+                                        ? const Color(
+                                            0xFFF9FAFB,
+                                          ) // Formal white for dark theme
+                                        : const Color(
+                                            0xFF1F2937,
+                                          ), // Formal dark gray for light theme
                                     height: 1.0,
+                                    letterSpacing: 0.15,
                                   ),
                                 ),
                               ),
@@ -310,50 +322,75 @@ class _DashboardPieChartState extends State<DashboardPieChart> {
                 ],
               ),
             ),
-            const SizedBox(height: 32.0),
+            const SizedBox(height: 40),
+            // Compact Legend with grid layout for maximum data display
+            Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  // Calculate optimal grid layout based on available width
+                  final availableWidth = constraints.maxWidth;
 
-            const SizedBox(height: 58),
-            // Legend with flex layout (horizontal items, each with column structure)
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: legendItems.map((item) {
-                return Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        // Label on top
-                        Text(
-                          item.label, // Dynamic from API
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w400,
-                            fontFamily: 'Inter',
-                            height: 19 / 12,
-                            letterSpacing: 0.4,
-                            color: isDark
-                                ? const Color(0xFF808290)
-                                : const Color(0xFF8E9198),
-                          ),
+                  // Fixed grid layout: exactly 3 items per row for consistent display
+                  final crossAxisCount = 3;
+
+                  // Calculate item width for consistent sizing
+                  final spacing = 8.0;
+                  final totalSpacing = (crossAxisCount - 1) * spacing;
+                  final itemWidth =
+                      (availableWidth - totalSpacing) / crossAxisCount;
+
+                  return Wrap(
+                    spacing: spacing,
+                    runSpacing: 8,
+                    children: legendItems.map((item) {
+                      return SizedBox(
+                        width: itemWidth,
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            // Compact color indicator
+                            Container(
+                              width: 12,
+                              height: 12,
+                              decoration: BoxDecoration(
+                                color: item.color,
+                                borderRadius: BorderRadius.circular(2),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: item.color.withValues(alpha: 0.4),
+                                    blurRadius: 1,
+                                    offset: const Offset(0, 0.5),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(width: 6),
+                            // Compact label
+                            Expanded(
+                              child: Text(
+                                item.label,
+                                style: TextStyle(
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.w500,
+                                  fontFamily: 'Inter',
+                                  height: 16 / 11,
+                                  letterSpacing: 0.2,
+                                  color: isDark
+                                      ? const Color(0xFFE5E7EB)
+                                      : const Color(0xFF374151),
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                              ),
+                            ),
+                          ],
                         ),
-                        const SizedBox(height: 6),
-                        // Color bar below (full width within this flex item)
-                        Container(
-                          width: double.infinity,
-                          height: 4,
-                          decoration: BoxDecoration(
-                            color: item.color,
-                            borderRadius: BorderRadius.circular(2),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              }).toList(),
+                      );
+                    }).toList(),
+                  );
+                },
+              ),
             ),
           ],
         ),

@@ -216,7 +216,7 @@ class _MultiAnalyticsOveriviewState extends State<MultiAnalyticsOveriview> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        _buildLegendItem('On-time', const Color(0xFF5B8FF7), false),
+        _buildLegendItem('Approval', const Color(0xFF5B8FF7), false),
         const SizedBox(width: 24.0),
         _buildLegendItem('Delayed', const Color(0xFF10B981), true),
       ],
@@ -398,8 +398,6 @@ class _MultiAnalyticsOveriviewState extends State<MultiAnalyticsOveriview> {
               lineTouchData: LineTouchData(
                 enabled: true,
                 touchTooltipData: LineTouchTooltipData(
-                  tooltipBgColor: const Color(0xFF393B40),
-                  tooltipRoundedRadius: 8.0,
                   tooltipPadding: const EdgeInsets.symmetric(
                     horizontal: 12.0,
                     vertical: 12.0,
@@ -462,7 +460,7 @@ class _MultiAnalyticsOveriviewState extends State<MultiAnalyticsOveriview> {
                                 ),
                                 TextSpan(
                                   text:
-                                      'On-time  ${_formatTooltipValue(actualSpot.y)}\n',
+                                      'Approved  ${_formatTooltipValue(actualSpot.y)}\n',
                                   style: const TextStyle(
                                     fontSize: 11,
                                     fontWeight: FontWeight.w400,

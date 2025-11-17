@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+// import 'package:shipskart_ui/shipskart_ui.dart';
 
 class DashboardCard extends StatelessWidget {
   final String iconKey;
@@ -28,18 +29,25 @@ class DashboardCard extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Container(
-      constraints: const BoxConstraints(minHeight: 120, maxHeight: 150),
+      constraints: const BoxConstraints(minHeight: 120, maxHeight: 160),
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: _getCardColor(isDark),
+        // color: context.colorPalette.surface,
         borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: isDark
+                ? Colors.black.withOpacity(0.3)
+                : Colors.grey.withOpacity(0.1),
+            blurRadius: 8,
+            offset: const Offset(0, 0.2),
+          ),
+        ],
       ),
       child: Stack(
         children: [
           // Background Image
           Positioned(
-            top: -10,
-            left: -10,
             child: Image.asset(
               'assets/backgrounds/card-bg.png',
               width: 200,

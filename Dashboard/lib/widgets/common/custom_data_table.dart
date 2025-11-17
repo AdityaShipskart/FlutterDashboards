@@ -29,6 +29,9 @@ class CustomDataTable extends StatelessWidget {
   final Function(Map<String, dynamic>)? onRowAction;
   final double minWidth;
   final bool expandToAvailableWidth;
+  final List<dynamic>? switchOptions;
+  final String? selectedSwitchOption;
+  final Function(String)? onSwitchChanged;
 
   const CustomDataTable({
     super.key,
@@ -39,6 +42,9 @@ class CustomDataTable extends StatelessWidget {
     this.onRowAction,
     this.minWidth = 900,
     this.expandToAvailableWidth = true,
+    this.switchOptions,
+    this.selectedSwitchOption,
+    this.onSwitchChanged,
   });
 
   // Inline constants - no external dependencies
@@ -125,6 +131,90 @@ class CustomDataTable extends StatelessWidget {
     );
   }
 
+  Widget _buildSwitchOptions(bool isDark) {
+    if (switchOptions == null || switchOptions!.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
+    return Container(
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              color: isDark ? const Color(0xFF374151) : const Color(0xFFF3F4F6),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: switchOptions!.asMap().entries.map((entry) {
+                final option = entry.value.toString();
+                final isSelected = selectedSwitchOption == option;
+
+                return GestureDetector(
+                  onTap: () {
+                    if (onSwitchChanged != null) {
+                      onSwitchChanged!(option);
+                    }
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
+                    ),
+                    decoration: BoxDecoration(
+                      color: isSelected
+                          ? (isDark
+                                ? const Color(0xFF6366F1)
+                                : const Color(0xFF6366F1))
+                          : Colors.transparent,
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                    child: Text(
+                      _formatOptionLabel(option),
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: isSelected
+                            ? FontWeight.w600
+                            : FontWeight.w500,
+                        color: isSelected
+                            ? Colors.white
+                            : (isDark
+                                  ? const Color(0xFFF9FAFB)
+                                  : const Color(0xFF374151)),
+                      ),
+                    ),
+                  ),
+                );
+              }).toList(),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  String _formatOptionLabel(String option) {
+    switch (option) {
+      case 'newly_added':
+        return 'Newly Added';
+      case 'pending':
+        return 'Pending';
+      case 'custom':
+        return 'Custom';
+      default:
+        return option
+            .replaceAll('_', ' ')
+            .split(' ')
+            .map(
+              (word) => word.isNotEmpty
+                  ? word[0].toUpperCase() + word.substring(1)
+                  : word,
+            )
+            .join(' ');
+    }
+  }
+
   Widget _buildHeader(bool isDark) {
     return Padding(
       padding: const EdgeInsets.only(bottom: _spacingLg),
@@ -154,6 +244,12 @@ class CustomDataTable extends StatelessWidget {
                     color: isDark ? _textSecondaryDark : _textSecondaryLight,
                   ),
                 ),
+              ],
+
+              // Switch options right after subtitle
+              if (switchOptions != null && switchOptions!.isNotEmpty) ...[
+                const SizedBox(height: 12),
+                _buildSwitchOptions(isDark),
               ],
             ],
           );
