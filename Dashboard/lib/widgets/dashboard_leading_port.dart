@@ -173,8 +173,8 @@ class _DashboardLeadingPortState extends State<DashboardLeadingPort> {
       subtitle: subTitle,
       columns: columns,
       dataRows: dataRows,
-      minWidth: widget.minWidth,
-      expandToAvailableWidth: widget.expandToAvailableWidth,
+      minWidth: 440, // Reduced from 900 to make columns more compact
+      expandToAvailableWidth: false, // Don't expand to fill all available space
       switchOptions: dataLevelSwitchOptions,
       selectedSwitchOption: selectedSwitchOption,
       onSwitchChanged:

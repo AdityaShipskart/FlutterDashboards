@@ -10,6 +10,7 @@ import '../../widgets/dashboard_combobar_chart.dart';
 import '../../widgets/dashboard_comparison.dart';
 import '../../widgets/dashboard_bar_chart.dart';
 import '../../widgets/dashboard_leading_port.dart';
+import '../../widgets/dashboard_quick_wins.dart';
 import '../../widgets/dashboard_table.dart';
 
 /// SMC (Ship Management Company) Dashboard
@@ -436,34 +437,46 @@ const List<Map<String, dynamic>> _smcPerformanceMetrics = [
   {
     'title': 'Highlighted Products',
     'subtitle': 'take a quick actions',
-    'switch-options': ['pending_requisitions', 'upcoming_deliveries'],
+    'switch-options': ['Pending Requisitions', 'Upcoming Deliveries'],
     'columns': {'first': 'Recent Status', 'second': 'Order Value'},
-    'pending_requisitions': [
+    'Pending Requisitions': [
       {
         'portName': 'Smart Fuel Monitor',
-        'purchaseValue': '1,420',
+        'purchaseValue': '\$1,420',
         'percentageChange': 32.1,
         'trend': 'up',
+        'priority': 'HIGH PRIORITY',
+        'daysLeft': 2,
+        'status': 'Awaiting Approval',
       },
       {
         'portName': 'Engine Spare Parts',
-        'purchaseValue': '860',
+        'purchaseValue': '\$860',
         'percentageChange': 24.3,
         'trend': 'up',
+        'priority': 'MEDIUM PRIORITY',
+        'daysLeft': 5,
+        'status': 'Under Review',
       },
     ],
-    'upcoming_deliveries': [
+    'Upcoming Deliveries': [
       {
         'portName': 'Navigation Equipment',
-        'purchaseValue': '980',
+        'purchaseValue': '\$980',
         'percentageChange': 18.7,
         'trend': 'up',
+        'priority': 'HIGH PRIORITY',
+        'daysLeft': 1,
+        'status': 'Scheduled',
       },
       {
         'portName': 'Safety Gear Set',
-        'purchaseValue': '580',
+        'purchaseValue': '\$580',
         'percentageChange': 15.4,
         'trend': 'up',
+        'priority': 'MEDIUM PRIORITY',
+        'daysLeft': 3,
+        'status': 'In Transit',
       },
     ],
   },
@@ -711,7 +724,7 @@ class SMCDashboard extends StatelessWidget {
               xs: 12,
               md: 6,
               lg: 4,
-              child: DashboardLeadingPort(data: _smcPerformanceMetrics[3]),
+              child: DashboardQuickWins(data: _smcPerformanceMetrics[3]),
             ),
 
             // Purchases by Category & Ship

@@ -2,14 +2,12 @@ import 'package:flutter/material.dart';
 // import 'package:get/utils.dart';
 import '../../widgets/dashboard_grid.dart';
 import '../../widgets/dashboard_card_container.dart';
-import '../../widgets/dashboard_recent_data.dart';
 import '../../widgets/dashboard_line_chart.dart';
 import '../../widgets/dashboard_pie_chart.dart';
-import '../../widgets/dashboard_financial_card.dart';
-import '../../widgets/dashboard_combobar_chart.dart';
 import '../../widgets/dashboard_comparison.dart';
 import '../../widgets/dashboard_bar_chart.dart';
 import '../../widgets/dashboard_leading_port.dart';
+import '../../widgets/dashboard_quick_wins.dart';
 import '../../widgets/dashboard_table.dart';
 
 const List<Map<String, dynamic>> _catalogueCards = [
@@ -479,105 +477,66 @@ const List<Map<String, dynamic>> _catalogueInsights = [
   {
     'title': 'Recent Activity',
     'subtitle': 'Latest Catalogue Updates',
-    'switch-options': ['newly_added', 'pending', 'custom'],
+    'switch-options': ['Newly Added', 'Pending', 'Custom'],
     'columns': {'first': 'Product Name', 'second': 'Order Value'},
-    'newly_added': [
+    'Newly Added': [
       {
         'portName': 'Smart Fuel Monitor',
-        'purchaseValue': '1,420',
+        'purchaseValue': '\$1,420',
         'percentageChange': 32.1,
         'trend': 'up',
-      },
-      {
-        'portName': 'Smart Fuel Monitor',
-        'purchaseValue': '1,420',
-        'percentageChange': 32.1,
-        'trend': 'up',
+        'priority': 'HIGH PRIORITY',
+        'daysLeft': 1,
+        'status': 'Recently Added',
       },
       {
         'portName': 'Eco-Friendly Cleaner',
-        'purchaseValue': '986',
+        'purchaseValue': '\$986',
         'percentageChange': 28.4,
         'trend': 'up',
-      },
-      {
-        'portName': 'Smart Fuel Monitor',
-        'purchaseValue': '1,420',
-        'percentageChange': 32.1,
-        'trend': 'up',
-      },
-      {
-        'portName': 'Digital Compass Pro',
-        'purchaseValue': '742',
-        'percentageChange': 45.7,
-        'trend': 'up',
+        'priority': 'MEDIUM PRIORITY',
+        'daysLeft': 2,
+        'status': 'Awaiting Approval',
       },
     ],
-    'pending': [
+    'Pending': [
       {
         'portName': 'Navigation System Upgrade',
-        'purchaseValue': '3,124',
+        'purchaseValue': '\$3,124',
         'percentageChange': 15.8,
         'trend': 'up',
+        'priority': 'HIGH PRIORITY',
+        'daysLeft': 3,
+        'status': 'Under Review',
       },
       {
         'portName': 'Marine Radio Kit',
-        'purchaseValue': '1,876',
+        'purchaseValue': '\$1,876',
         'percentageChange': 8.2,
         'trend': 'up',
-      },
-      {
-        'portName': 'Emergency Beacon',
-        'purchaseValue': '1,542',
-        'percentageChange': 12.4,
-        'trend': 'up',
-      },
-
-      {
-        'portName': 'Marine Radio Kit',
-        'purchaseValue': '1,876',
-        'percentageChange': 8.2,
-        'trend': 'up',
-      },
-
-      {
-        'portName': 'Marine Radio Kit',
-        'purchaseValue': '1,876',
-        'percentageChange': 8.2,
-        'trend': 'up',
+        'priority': 'MEDIUM PRIORITY',
+        'daysLeft': 5,
+        'status': 'Documentation Pending',
       },
     ],
-    'custom': [
+    'Custom': [
       {
         'portName': 'Custom Navigation Integration',
-        'purchaseValue': '4,280',
+        'purchaseValue': '\$4,280',
         'percentageChange': 38.9,
         'trend': 'up',
+        'priority': 'HIGH PRIORITY',
+        'daysLeft': 2,
+        'status': 'Specification Required',
       },
       {
         'portName': 'Modified Safety System',
-        'purchaseValue': '3,640',
+        'purchaseValue': '\$3,640',
         'percentageChange': 42.3,
         'trend': 'up',
-      },
-      {
-        'portName': 'Specialized Engine Parts',
-        'purchaseValue': '2,890',
-        'percentageChange': 35.6,
-        'trend': 'up',
-      },
-
-      {
-        'portName': 'Specialized Engine Parts',
-        'purchaseValue': '2,890',
-        'percentageChange': 35.6,
-        'trend': 'up',
-      },
-      {
-        'portName': 'Specialized Engine Parts',
-        'purchaseValue': '2,890',
-        'percentageChange': 35.6,
-        'trend': 'up',
+        'priority': 'MEDIUM PRIORITY',
+        'daysLeft': 4,
+        'status': 'Design Review',
       },
     ],
   },
@@ -847,7 +806,7 @@ class CatalogueDashboard extends StatelessWidget {
               xs: 12,
               md: 6,
               lg: 4,
-              child: DashboardLeadingPort(data: _catalogueInsights[3]),
+              child: DashboardQuickWins(data: _catalogueInsights[3]),
             ),
 
             // Catalogue Growth Line Chart
