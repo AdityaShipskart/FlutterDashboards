@@ -283,6 +283,14 @@ const Map<String, dynamic> _categoryRevenueBar = {
   'yAxisInterval': 50000.0,
   'barWidth': 10.0,
   'barsSpace': 5.0,
+  'yAxisLabels': [
+    {'value': 0.0, 'label': '0K'},
+    {'value': 50000.0, 'label': '50K'},
+    {'value': 100000.0, 'label': '100K'},
+    {'value': 150000.0, 'label': '150K'},
+    {'value': 200000.0, 'label': '200K'},
+    {'value': 250000.0, 'label': '250K'},
+  ],
   'chartData': [
     {
       'label': 'Marine Parts',
@@ -686,7 +694,7 @@ class VendorDashboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+    // final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Container(
       decoration: BoxDecoration(
