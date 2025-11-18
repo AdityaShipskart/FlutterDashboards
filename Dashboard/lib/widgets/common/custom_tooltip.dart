@@ -73,7 +73,7 @@ class CustomChartTooltip extends StatelessWidget {
     double shadowOffsetY = 3,
   }) {
     return BoxDecoration(
-      color: backgroundColor ?? AppColors.grey800Dark,
+      color: backgroundColor ?? AppColors.grey400Dark,
       borderRadius: BorderRadius.circular(
         borderRadius ?? AppConstants.radiusSmall + 2,
       ),

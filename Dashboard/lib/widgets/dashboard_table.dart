@@ -100,8 +100,8 @@ class _DashboardTableState extends State<DashboardTable> {
           Padding(
             padding: EdgeInsets.fromLTRB(
               AppSpacing.xxl,
-              AppSpacing.xxl,
-              AppSpacing.xxl,
+              AppSpacing.xl,
+              AppSpacing.xl,
               AppSpacing.md,
             ),
             child: Column(
@@ -110,7 +110,7 @@ class _DashboardTableState extends State<DashboardTable> {
                 Text(
                   tableData['title'] as String,
                   style: AppTextStyles.b16(isDark: isDark).copyWith(
-                    fontSize: 18,
+                    fontSize: 22,
                     fontWeight: FontWeight.w600,
                     letterSpacing: 0,
                   ),
@@ -132,7 +132,7 @@ class _DashboardTableState extends State<DashboardTable> {
 
           // Table
           Padding(
-            padding: EdgeInsets.all(AppSpacing.xxl),
+            padding: EdgeInsets.all(AppSpacing.md),
             child: CustomDataTable(
               title: '',
               subtitle: '',

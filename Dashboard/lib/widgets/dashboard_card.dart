@@ -42,10 +42,12 @@ class DashboardCard extends StatelessWidget {
         children: [
           // Background Image
           Positioned(
+            top: 10,
+            left: 60,
             child: Image.asset(
               'assets/backgrounds/card-bg.png',
-              width: 200,
-              height: 200,
+              width: 160,
+              height: 160,
               fit: BoxFit.cover,
               errorBuilder: (context, error, stackTrace) =>
                   const SizedBox.shrink(),
@@ -73,10 +75,10 @@ class DashboardCard extends StatelessWidget {
             children: [
               // Icon Container
               Expanded(
-                flex: 3,
+                flex: 2,
                 child: Container(
-                  width: 60,
-                  height: 60,
+                  width: 40,
+                  height: 40,
                   decoration: BoxDecoration(
                     color: iconBgColor,
                     borderRadius: BorderRadius.circular(
@@ -91,9 +93,9 @@ class DashboardCard extends StatelessWidget {
 
               // Value and Label
               Expanded(
-                flex: 5,
+                flex: 4,
                 child: Padding(
-                  padding: AppSpacing.paddingSM,
+                  padding: AppSpacing.paddingXS,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.end,
@@ -104,7 +106,7 @@ class DashboardCard extends StatelessWidget {
                           child: Text(
                             value,
                             style: AppTextStyles.h30(isDark: isDark).copyWith(
-                              fontWeight: FontWeight.w700,
+                              fontWeight: FontWeight.w500,
                               height: 1.0,
                               letterSpacing: -0.5,
                             ),
@@ -114,7 +116,7 @@ class DashboardCard extends StatelessWidget {
 
                       Text(
                         label,
-                        style: AppTextStyles.b14(isDark: isDark).copyWith(
+                        style: AppTextStyles.b13Medium(isDark: isDark).copyWith(
                           color: AppColors.getTextSecondary(isDark),
                           fontWeight: FontWeight.w500,
                         ),
@@ -144,7 +146,7 @@ class DashboardCard extends StatelessWidget {
     };
 
     final icon = iconMap[key] ?? Icons.circle;
-    return Icon(icon, size: AppConstants.iconSizeLarge - 4, color: color);
+    return Icon(icon, size: AppConstants.iconSizeMedium, color: color);
   }
 
   // Inline percentage chip builder - no external dependencies

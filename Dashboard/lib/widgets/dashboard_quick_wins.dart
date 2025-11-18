@@ -352,7 +352,7 @@ class _DashboardQuickWinsState extends State<DashboardQuickWins> {
         (item['percentage'] ?? item['percentageChange'] ?? 0.0) as num;
     final trend = item['trend'] ?? 'neutral';
     final priority = (item['priority'] ?? 'MEDIUM').toString().toUpperCase();
-    final daysLeft = item['daysLeft'] ?? 0;
+    // final status = item['status'] ?? ' ';
     final colorValue = item['color'] as int?;
     final indicatorColor = colorValue != null
         ? Color(colorValue)
@@ -417,7 +417,7 @@ class _DashboardQuickWinsState extends State<DashboardQuickWins> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              _buildDaysLeft(isDark, daysLeft),
+              _buildStatusIndicator(isDark, item['status'] ?? ' '),
               _buildActionButton(isDark),
             ],
           ),
@@ -498,12 +498,12 @@ class _DashboardQuickWinsState extends State<DashboardQuickWins> {
     return Row(
       children: [
         // Value label
-        Text(
-          'Order Value: ',
-          style: AppTextStyles.b12(
-            isDark: isDark,
-          ).copyWith(color: AppColors.getTextSecondary(isDark)),
-        ),
+        // Text(
+        //   'Order Value: ',
+        //   style: AppTextStyles.b12(
+        //     isDark: isDark,
+        //   ).copyWith(color: AppColors.getTextSecondary(isDark)),
+        // ),
 
         // Value amount
         Text(
@@ -541,7 +541,7 @@ class _DashboardQuickWinsState extends State<DashboardQuickWins> {
   }
 
   /// Build days left indicator
-  Widget _buildDaysLeft(bool isDark, int daysLeft) {
+  Widget _buildStatusIndicator(bool isDark, String status) {
     return Row(
       children: [
         Icon(
@@ -551,7 +551,7 @@ class _DashboardQuickWinsState extends State<DashboardQuickWins> {
         ),
         SizedBox(width: AppSpacing.xs),
         Text(
-          '$daysLeft ${daysLeft == 1 ? 'day' : 'days'} left',
+          '$status ',
           style: AppTextStyles.b12(
             isDark: isDark,
           ).copyWith(color: AppColors.getTextSecondary(isDark)),
