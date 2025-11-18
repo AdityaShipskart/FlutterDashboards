@@ -740,26 +740,26 @@ class VendorDashboard extends StatelessWidget {
               child: DashboardPieChart(data: _clientTypePieData),
             ),
 
-            // Average Order Value Card
-            DashboardGridCol(
-              xs: 12,
-              md: 4,
-              child: DashboardFinancialCard(data: _avgOrderValueCard),
-            ),
-
-            // Order Fulfillment
-            DashboardGridCol(
-              xs: 12,
-              md: 6,
-              child: DashboardcombobarChart(data: _orderFulfillmentCombo),
-            ),
-
             // Delivery Performance Comparison
             DashboardGridCol(
               xs: 12,
               child: MultiAnalyticsOveriview(
                 data: _deliveryPerformanceComparison,
               ),
+            ),
+
+            // Order Fulfillment
+            DashboardGridCol(
+              xs: 12,
+              md: 8,
+              child: DashboardcombobarChart(data: _orderFulfillmentCombo),
+            ),
+
+            // Average Order Value Card
+            DashboardGridCol(
+              xs: 12,
+              md: 4,
+              child: DashboardFinancialCard(data: _avgOrderValueCard),
             ),
 
             // Revenue by Category Bar Chart
@@ -789,10 +789,10 @@ class VendorDashboard extends StatelessWidget {
             ),
 
             // Multi-Tab Table (RFQs, Quotes, Orders, Deliveries, etc.)
-            DashboardGridCol(
-              xs: 12,
-              child: DashboardTable(data: _vendorTableData),
-            ),
+            // DashboardGridCol(
+            //   xs: 12,
+            //   child: DashboardTable(data: _vendorTableData),
+            // ),
           ],
         ),
       ),
