@@ -2,28 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'common/custom_data_table.dart';
-
-// Local standalone constants to avoid external dependencies
-class AppColors {
-  static const Color textPrimaryDark = Color(0xFFFFFFFF);
-  static const Color textPrimaryLight = Color(0xFF212121);
-  static const Color textSecondaryDark = Color(0xFFB5B7C8);
-  static const Color textSecondaryLight = Color(0xFF757575);
-  static const Color darkSurface = Color(0xFF1A1A1A);
-  static const Color lightBorder = Color(0xFFE0E0E0);
-  static const Color darkBorder = Color(0xFF363843);
-  static const Color grey600Dark = Color(0xFF808290);
-  static const Color grey600Light = Color(0xFF8E9198);
-}
-
-class AppConstants {
-  static const double radiusLarge = 12.0;
-}
-
-class AppSpacing {
-  static const double xxl = 32.0;
-  static const double md = 16.0;
-}
+import '../const/constant.dart';
 
 class DashboardTable extends StatefulWidget {
   final String? jsonFilePath;
@@ -110,41 +89,37 @@ class _DashboardTableState extends State<DashboardTable> {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF1A1A1A) : Colors.white,
-        borderRadius: BorderRadius.circular(12.0),
-        border: Border.all(
-          color: isDark ? const Color(0xFF363843) : const Color(0xFFE0E0E0),
-        ),
+        color: AppColors.getCard(isDark),
+        borderRadius: BorderRadius.circular(AppConstants.radiusLarge),
+        border: Border.all(color: AppColors.getGreyScale(200, isDark)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Header with title and subtitle
           Padding(
-            padding: const EdgeInsets.fromLTRB(32.0, 32.0, 32.0, 16.0),
+            padding: EdgeInsets.fromLTRB(
+              AppSpacing.xxl,
+              AppSpacing.xxl,
+              AppSpacing.xxl,
+              AppSpacing.md,
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   tableData['title'] as String,
-                  style: TextStyle(
+                  style: AppTextStyles.b16(isDark: isDark).copyWith(
                     fontSize: 18,
                     fontWeight: FontWeight.w600,
-                    color: isDark
-                        ? const Color(0xFFFFFFFF)
-                        : const Color(0xFF212121),
                     letterSpacing: 0,
                   ),
                 ),
-                const SizedBox(height: 4),
+                SizedBox(height: AppSpacing.xs),
                 Text(
                   tableData['subtitle'] as String,
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                    color: isDark
-                        ? const Color(0xFFB5B7C8)
-                        : const Color(0xFF757575),
+                  style: AppTextStyles.b14(isDark: isDark).copyWith(
+                    color: AppColors.getTextSecondary(isDark),
                     letterSpacing: 0,
                   ),
                 ),
@@ -157,7 +132,7 @@ class _DashboardTableState extends State<DashboardTable> {
 
           // Table
           Padding(
-            padding: const EdgeInsets.all(32.0),
+            padding: EdgeInsets.all(AppSpacing.xxl),
             child: CustomDataTable(
               title: '',
               subtitle: '',
@@ -189,14 +164,14 @@ class _DashboardTableState extends State<DashboardTable> {
     }
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 32.0),
+      padding: EdgeInsets.symmetric(horizontal: AppSpacing.xxl),
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Row(
           children: tabs.map((tab) {
             final isSelected = tab == _selectedTableType;
             return Padding(
-              padding: const EdgeInsets.only(right: 8.0),
+              padding: EdgeInsets.only(right: AppSpacing.sm),
               child: Material(
                 color: Colors.transparent,
                 child: InkWell(
@@ -205,42 +180,42 @@ class _DashboardTableState extends State<DashboardTable> {
                       _selectedTableType = tab;
                     });
                   },
-                  borderRadius: BorderRadius.circular(8.0),
+                  borderRadius: BorderRadius.circular(
+                    AppConstants.radiusMedium,
+                  ),
                   child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16.0,
-                      vertical: 8.0,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: AppSpacing.md,
+                      vertical: AppSpacing.sm,
                     ),
                     decoration: BoxDecoration(
                       color: isSelected
-                          ? const Color(0xFF1379F0)
-                          : (isDark
-                                ? const Color(0xFF363843)
-                                : const Color(0xFFF4F4F4)),
-                      borderRadius: BorderRadius.circular(8.0),
+                          ? AppColors.primary
+                          : AppColors.getGreyScale(100, isDark),
+                      borderRadius: BorderRadius.circular(
+                        AppConstants.radiusMedium,
+                      ),
                       border: Border.all(
                         color: isSelected
-                            ? const Color(0xFF1379F0)
-                            : (isDark
-                                  ? const Color(0xFF363843)
-                                  : const Color(0xFFE0E0E0)),
+                            ? AppColors.primary
+                            : AppColors.getGreyScale(200, isDark),
                         width: 1,
                       ),
                     ),
                     child: Text(
                       tab,
-                      style: TextStyle(
-                        fontSize: 13,
-                        fontWeight: isSelected
-                            ? FontWeight.w600
-                            : FontWeight.w500,
-                        color: isSelected
-                            ? Colors.white
-                            : (isDark
-                                  ? const Color(0xFFB5B7C8)
-                                  : const Color(0xFF757575)),
-                        letterSpacing: 0,
-                      ),
+                      style:
+                          AppTextStyles.b13(
+                            isDark: isSelected ? true : isDark,
+                          ).copyWith(
+                            fontWeight: isSelected
+                                ? FontWeight.w600
+                                : FontWeight.w500,
+                            color: isSelected
+                                ? Colors.white
+                                : AppColors.getTextSecondary(isDark),
+                            letterSpacing: 0,
+                          ),
                     ),
                   ),
                 ),
@@ -303,14 +278,9 @@ class _DashboardTableState extends State<DashboardTable> {
               if (isSummary) return const SizedBox();
               return Text(
                 value.toString(),
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                  color: isDark
-                      ? AppColors.textPrimaryDark
-                      : AppColors.textPrimaryLight,
-                  letterSpacing: 0,
-                ),
+                style: AppTextStyles.b14(
+                  isDark: isDark,
+                ).copyWith(fontWeight: FontWeight.w600, letterSpacing: 0),
               );
             },
           ),
@@ -324,14 +294,9 @@ class _DashboardTableState extends State<DashboardTable> {
               if (isSummary) return const SizedBox();
               return Text(
                 value.toString(),
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                  color: isDark
-                      ? AppColors.textPrimaryDark
-                      : AppColors.textPrimaryLight,
-                  letterSpacing: 0,
-                ),
+                style: AppTextStyles.b14Medium(
+                  isDark: isDark,
+                ).copyWith(letterSpacing: 0),
               );
             },
           ),
@@ -352,32 +317,28 @@ class _DashboardTableState extends State<DashboardTable> {
                 children: [
                   Expanded(
                     child: ClipRRect(
-                      borderRadius: BorderRadius.circular(4),
+                      borderRadius: BorderRadius.circular(
+                        AppConstants.radiusSmall,
+                      ),
                       child: LinearProgressIndicator(
                         value: percent / 100,
-                        backgroundColor: isDark
-                            ? const Color(0xFF363843)
-                            : const Color(0xFFE0E0E0),
+                        backgroundColor: AppColors.getGreyScale(200, isDark),
                         valueColor: AlwaysStoppedAnimation<Color>(
                           percent < 50
-                              ? const Color(0xFFEF4444)
+                              ? AppColors.error
                               : percent < 75
-                              ? const Color(0xFFF59E0B)
-                              : const Color(0xFF10B981),
+                              ? AppColors.warning
+                              : AppColors.success,
                         ),
                       ),
                     ),
                   ),
-                  const SizedBox(width: 8),
+                  SizedBox(width: AppSpacing.sm),
                   Text(
                     '$percent%',
-                    style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w500,
-                      color: isDark
-                          ? AppColors.textSecondaryDark
-                          : AppColors.textSecondaryLight,
-                    ),
+                    style: AppTextStyles.b13Medium(
+                      isDark: isDark,
+                    ).copyWith(color: AppColors.getTextSecondary(isDark)),
                   ),
                 ],
               );
@@ -393,29 +354,26 @@ class _DashboardTableState extends State<DashboardTable> {
               if (isSummary) return const SizedBox();
               final fields = value is List ? value : [];
               return Wrap(
-                spacing: 4,
-                runSpacing: 4,
+                spacing: AppSpacing.xs,
+                runSpacing: AppSpacing.xs,
                 children:
                     fields.take(2).map((field) {
                       return Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 4,
+                        padding: EdgeInsets.symmetric(
+                          horizontal: AppSpacing.sm,
+                          vertical: AppSpacing.xs,
                         ),
                         decoration: BoxDecoration(
-                          color: isDark
-                              ? const Color(0xFF363843)
-                              : const Color(0xFFF4F4F4),
-                          borderRadius: BorderRadius.circular(4),
+                          color: AppColors.getGreyScale(100, isDark),
+                          borderRadius: BorderRadius.circular(
+                            AppConstants.radiusSmall,
+                          ),
                         ),
                         child: Text(
                           field.toString(),
-                          style: TextStyle(
-                            fontSize: 12,
+                          style: AppTextStyles.b12(isDark: isDark).copyWith(
                             fontWeight: FontWeight.w500,
-                            color: isDark
-                                ? AppColors.textSecondaryDark
-                                : AppColors.textSecondaryLight,
+                            color: AppColors.getTextSecondary(isDark),
                           ),
                         ),
                       );
@@ -423,19 +381,19 @@ class _DashboardTableState extends State<DashboardTable> {
                       fields.length > 2
                           ? [
                               Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 8,
-                                  vertical: 4,
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: AppSpacing.sm,
+                                  vertical: AppSpacing.xs,
                                 ),
                                 child: Text(
                                   '+${fields.length - 2}',
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w500,
-                                    color: isDark
-                                        ? AppColors.textSecondaryDark
-                                        : AppColors.textSecondaryLight,
-                                  ),
+                                  style: AppTextStyles.b12(isDark: isDark)
+                                      .copyWith(
+                                        fontWeight: FontWeight.w500,
+                                        color: AppColors.getTextSecondary(
+                                          isDark,
+                                        ),
+                                      ),
                                 ),
                               ),
                             ]
@@ -460,38 +418,38 @@ class _DashboardTableState extends State<DashboardTable> {
 
               switch (status) {
                 case 'Urgent':
-                  bgColor = const Color(0xFFEF4444).withValues(alpha: 0.1);
-                  textColor = const Color(0xFFEF4444);
+                  bgColor = AppColors.error.withValues(alpha: 0.1);
+                  textColor = AppColors.error;
                   break;
                 case 'Needs Review':
-                  bgColor = const Color(0xFFF59E0B).withValues(alpha: 0.1);
-                  textColor = const Color(0xFFF59E0B);
+                  bgColor = AppColors.warning.withValues(alpha: 0.1);
+                  textColor = AppColors.warning;
                   break;
                 case 'In Progress':
-                  bgColor = const Color(0xFF3B82F6).withValues(alpha: 0.1);
-                  textColor = const Color(0xFF3B82F6);
+                  bgColor = AppColors.info.withValues(alpha: 0.1);
+                  textColor = AppColors.info;
                   break;
                 default:
-                  bgColor = const Color(0xFF10B981).withValues(alpha: 0.1);
-                  textColor = const Color(0xFF10B981);
+                  bgColor = AppColors.success.withValues(alpha: 0.1);
+                  textColor = AppColors.success;
               }
 
               return Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 6,
+                padding: EdgeInsets.symmetric(
+                  horizontal: AppSpacing.ml,
+                  vertical: AppSpacing.sd,
                 ),
                 decoration: BoxDecoration(
                   color: bgColor,
-                  borderRadius: BorderRadius.circular(6),
+                  borderRadius: BorderRadius.circular(
+                    AppConstants.radiusSmall + 2,
+                  ),
                 ),
                 child: Text(
                   status,
-                  style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600,
-                    color: textColor,
-                  ),
+                  style: AppTextStyles.b13(
+                    isDark: isDark,
+                  ).copyWith(fontWeight: FontWeight.w600, color: textColor),
                 ),
               );
             },
@@ -508,11 +466,11 @@ class _DashboardTableState extends State<DashboardTable> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(AppConstants.radiusLarge),
-        border: Border.all(color: AppColors.lightBorder),
+        border: Border.all(color: AppColors.grey200Light),
       ),
-      child: const Padding(
+      child: Padding(
         padding: EdgeInsets.all(AppSpacing.xxl),
-        child: Center(child: CircularProgressIndicator()),
+        child: const Center(child: CircularProgressIndicator()),
       ),
     );
   }
@@ -520,36 +478,30 @@ class _DashboardTableState extends State<DashboardTable> {
   Widget _buildError(bool isDark) {
     return Container(
       decoration: BoxDecoration(
-        color: isDark ? AppColors.darkSurface : Colors.white,
+        color: AppColors.getCard(isDark),
         borderRadius: BorderRadius.circular(AppConstants.radiusLarge),
-        border: Border.all(
-          color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
-        ),
+        border: Border.all(color: AppColors.getGreyScale(200, isDark)),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(AppSpacing.xxl),
+        padding: EdgeInsets.all(AppSpacing.xxl),
         child: Center(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               Icon(
                 Icons.error_outline,
-                size: 48,
-                color: isDark ? AppColors.grey600Dark : AppColors.grey600Light,
+                size: AppConstants.iconSizeXLarge,
+                color: AppColors.getTextSecondary(isDark),
               ),
-              const SizedBox(height: AppSpacing.md),
+              SizedBox(height: AppSpacing.md),
               Text(
                 _errorMessage ?? 'Failed to load data',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w400,
-                  color: isDark
-                      ? AppColors.textSecondaryDark
-                      : AppColors.textSecondaryLight,
-                ),
+                style: AppTextStyles.b14(
+                  isDark: isDark,
+                ).copyWith(color: AppColors.getTextSecondary(isDark)),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: AppSpacing.md),
+              SizedBox(height: AppSpacing.md),
               ElevatedButton(onPressed: _loadData, child: const Text('Retry')),
             ],
           ),

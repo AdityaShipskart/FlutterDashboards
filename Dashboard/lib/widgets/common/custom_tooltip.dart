@@ -18,6 +18,7 @@
 // ```
 
 import 'package:flutter/material.dart';
+import '../../const/constant.dart';
 
 /// Custom tooltip widget for chart hover interactions
 /// Displays data in a consistent, visually appealing format
@@ -63,20 +64,19 @@ class CustomChartTooltip extends StatelessWidget {
     this.rightPadding = 0,
   });
 
-  // Inline constants - no external dependencies
-  static const double _tooltipIconSize = 8.0;
-
   // Inline tooltip decoration method
   static BoxDecoration _tooltipDecoration({
     Color? backgroundColor,
-    double borderRadius = 6,
+    double? borderRadius,
     Color? shadowColor,
     double shadowBlur = 10,
     double shadowOffsetY = 3,
   }) {
     return BoxDecoration(
-      color: backgroundColor ?? const Color(0xFF2D3748),
-      borderRadius: BorderRadius.circular(borderRadius),
+      color: backgroundColor ?? AppColors.grey800Dark,
+      borderRadius: BorderRadius.circular(
+        borderRadius ?? AppConstants.radiusSmall + 2,
+      ),
       boxShadow: [
         BoxShadow(
           color: shadowColor ?? Colors.black.withValues(alpha: 0.3),
@@ -167,7 +167,10 @@ class CustomChartTooltip extends StatelessWidget {
       left: tooltipLeft,
       top: tooltipTop,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        padding: EdgeInsets.symmetric(
+          horizontal: AppSpacing.ml,
+          vertical: AppSpacing.sm + 2,
+        ),
         decoration: _tooltipDecoration(),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -177,13 +180,11 @@ class CustomChartTooltip extends StatelessWidget {
             if (headerText != null) ...[
               Text(
                 headerText!,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                ),
+                style: AppTextStyles.b12(
+                  isDark: true,
+                ).copyWith(fontWeight: FontWeight.w600),
               ),
-              const SizedBox(height: 8),
+              SizedBox(height: AppSpacing.sm),
             ],
 
             // Tooltip data items
@@ -192,7 +193,7 @@ class CustomChartTooltip extends StatelessWidget {
               final item = entry.value;
               return Padding(
                 padding: EdgeInsets.only(
-                  bottom: index < items.length - 1 ? 4 : 0,
+                  bottom: index < items.length - 1 ? AppSpacing.xs : 0,
                 ),
                 child: _buildTooltipRow(
                   color: item.color,
@@ -217,11 +218,11 @@ class CustomChartTooltip extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         // Colored dot indicator
-        _tooltipIndicator(color: color, size: _tooltipIconSize),
-        const SizedBox(width: 8),
+        _tooltipIndicator(color: color, size: AppConstants.iconSizeSmall - 6),
+        SizedBox(width: AppSpacing.sm),
         // Label text
         Text(label, style: _tooltipSecondaryTextStyle()),
-        const SizedBox(width: 12),
+        SizedBox(width: AppSpacing.ml),
         // Value text
         Text(value, style: _tooltipTextStyle()),
       ],

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'common/custom_data_table.dart';
+import '../const/constant.dart';
 
 // Example data for when no data is provided
 const Map<String, dynamic> _exampleData = {
@@ -63,10 +64,6 @@ class _DashboardLeadingPortState extends State<DashboardLeadingPort> {
     }
   }
 
-  // Inline color constants - no external dependencies
-  static const Color _textPrimaryDark = Color(0xFFF9FAFB);
-  static const Color _textPrimaryLight = Color(0xFF111827);
-
   Widget _buildPercentageChange(dynamic value, bool isDark, bool isSummary) {
     if (value == null) return const SizedBox.shrink();
 
@@ -79,25 +76,27 @@ class _DashboardLeadingPortState extends State<DashboardLeadingPort> {
       children: [
         Text(
           value['purchaseValue'] ?? '',
-          style: TextStyle(
-            fontSize: 14,
+          style: AppTextStyles.b14(isDark: isDark).copyWith(
             fontWeight: FontWeight.w500,
-            color: isDark ? _textPrimaryDark : _textPrimaryLight,
+            color: AppColors.getTextPrimary(isDark),
           ),
         ),
-        const SizedBox(width: 12),
+        SizedBox(width: AppSpacing.ml),
         Icon(
           isPositive ? Icons.arrow_upward : Icons.arrow_downward,
-          size: 14,
-          color: isPositive ? Colors.green : Colors.red,
+          size: AppConstants.iconSizeSmall - 2,
+          color: isPositive
+              ? (isDark ? AppColors.successActiveDark : AppColors.success)
+              : (isDark ? AppColors.errorActiveDark : AppColors.error),
         ),
-        const SizedBox(width: 4),
+        SizedBox(width: AppSpacing.xs),
         Text(
           '${percentageChange.toStringAsFixed(1)}%',
-          style: TextStyle(
-            fontSize: 14,
+          style: AppTextStyles.b14(isDark: isDark).copyWith(
             fontWeight: FontWeight.w500,
-            color: isPositive ? Colors.green : Colors.red,
+            color: isPositive
+                ? (isDark ? AppColors.successActiveDark : AppColors.success)
+                : (isDark ? AppColors.errorActiveDark : AppColors.error),
           ),
         ),
       ],
@@ -153,10 +152,9 @@ class _DashboardLeadingPortState extends State<DashboardLeadingPort> {
             children: [
               Text(
                 value?.toString() ?? '',
-                style: TextStyle(
-                  fontSize: 14,
+                style: AppTextStyles.b14(isDark: isDark).copyWith(
                   fontWeight: FontWeight.w500,
-                  color: isDark ? _textPrimaryDark : _textPrimaryLight,
+                  color: AppColors.getTextPrimary(isDark),
                 ),
               ),
             ],

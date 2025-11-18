@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../const/constant.dart';
 // import 'package:get/utils.dart';
 // import 'package:shipskart_ui/shipskart_ui.dart';
 
@@ -63,38 +64,6 @@ class _DashboardRecentDataState extends State<DashboardRecentData> {
   bool _isLoading = true;
   Map<String, dynamic>? _data;
 
-  // Inline constants - no external dependencies
-  static const double _spacingXs = 4.0;
-  static const double _spacingXxs = 2.0;
-  static const double _spacingSm = 8.0;
-  static const double _spacingMd = 16.0;
-  static const double _spacingLg = 24.0;
-  static const double _spacingXl = 32.0;
-  static const double _spacingXxl = 48.0;
-  static const double _spacingMl = 12.0;
-  static const double _radiusLarge = 12.0;
-  static const double _radiusMedium = 8.0;
-  static const double _radiusXLarge = 16.0;
-  static const double _iconSizeMedium = 24.0;
-
-  static const Color _darkSurface = Color(0xFF1A1A1A);
-  static const Color _darkBorder = Color(0xFF363843);
-  static const Color _darkDivider = Color(0xFF363843);
-  static const Color _lightBorder = Color(0xFFE0E0E0);
-  static const Color _lightDivider = Color(0xFFE0E0E0);
-  static const Color _textPrimaryDark = Color(0xFFFFFFFF);
-  static const Color _textPrimaryLight = Color(0xFF212121);
-  static const Color _textSecondaryDark = Color(0xFFB5B7C8);
-  static const Color _textSecondaryLight = Color(0xFF757575);
-  static const Color _grey600Dark = Color(0xFF808290);
-  static const Color _grey600Light = Color(0xFF8E9198);
-  static const Color _success = Color(0xFF10B981);
-  static const Color _successSoft = Color(0xFFD1FAE5);
-  static const Color _successSoftDark = Color(0xFF064E3B);
-  static const Color _error = Color(0xFFEF4444);
-  static const Color _errorSoft = Color(0xFFFEE2E2);
-  static const Color _errorSoftDark = Color(0xFF7F1D1D);
-
   @override
   void initState() {
     super.initState();
@@ -141,16 +110,14 @@ class _DashboardRecentDataState extends State<DashboardRecentData> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Container(
-      margin: const EdgeInsets.all(10.0),
-      padding: const EdgeInsets.all(15.0),
+      margin: EdgeInsets.all(AppSpacing.sm),
+      padding: EdgeInsets.all(AppSpacing.md),
       decoration: BoxDecoration(
-        // color: context.colorPalette.surface,
-        borderRadius: BorderRadius.circular(16),
+        color: AppColors.getCard(isDark),
+        borderRadius: BorderRadius.circular(AppConstants.radiusXLarge),
         boxShadow: [
           BoxShadow(
-            color: isDark
-                ? Colors.black.withOpacity(0.3)
-                : Colors.grey.withOpacity(0.1),
+            color: AppColors.shadowLight,
             blurRadius: 8,
             offset: const Offset(0, 0.2),
           ),
@@ -163,7 +130,7 @@ class _DashboardRecentDataState extends State<DashboardRecentData> {
           _buildHeader(isDark),
 
           // Divider
-          Divider(height: 1, color: isDark ? _darkDivider : _lightDivider),
+          Divider(height: 1, color: AppColors.getGreyScale(200, isDark)),
 
           // Content
           _isLoading
@@ -171,7 +138,7 @@ class _DashboardRecentDataState extends State<DashboardRecentData> {
               : _data == null
               ? _buildError()
               : Padding(
-                  padding: const EdgeInsets.all(_spacingLg),
+                  padding: EdgeInsets.all(AppSpacing.lg),
                   child: LayoutBuilder(
                     builder: (context, constraints) {
                       final isSmallScreen = constraints.maxWidth < 600;
@@ -182,12 +149,12 @@ class _DashboardRecentDataState extends State<DashboardRecentData> {
                           // Total Value Section
                           _buildTotalValue(isDark),
 
-                          const SizedBox(height: _spacingLg),
+                          SizedBox(height: AppSpacing.lg),
 
                           // Product Breakdown Bar
                           _buildProductBreakdown(isDark),
 
-                          const SizedBox(height: _spacingXl),
+                          SizedBox(height: AppSpacing.xl),
 
                           // Channel Performance
                           _buildChannelPerformance(isDark, isSmallScreen),
@@ -203,21 +170,15 @@ class _DashboardRecentDataState extends State<DashboardRecentData> {
 
   Widget _buildHeader(bool isDark) {
     return Padding(
-      padding: EdgeInsetsGeometry.all(10),
+      padding: EdgeInsets.all(AppSpacing.sm),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            'Highlights',
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(
-              fontWeight: FontWeight.bold,
-              color: isDark ? Colors.white : Colors.black,
-            ),
-          ),
+          Text('Highlights', style: AuroraTheme.cardTitleStyle(isDark)),
           Icon(
             Icons.more_vert,
-            size: _iconSizeMedium,
-            color: isDark ? _grey600Dark : _grey600Light,
+            size: AppConstants.iconSizeMedium,
+            color: AppColors.getTextSecondary(isDark),
           ),
         ],
       ),
@@ -225,16 +186,16 @@ class _DashboardRecentDataState extends State<DashboardRecentData> {
   }
 
   Widget _buildLoading() {
-    return const Padding(
-      padding: EdgeInsets.all(_spacingXxl),
-      child: Center(child: CircularProgressIndicator()),
+    return Padding(
+      padding: EdgeInsets.all(AppSpacing.xxxl),
+      child: const Center(child: CircularProgressIndicator()),
     );
   }
 
   Widget _buildError() {
-    return const Padding(
-      padding: EdgeInsets.all(_spacingXxl),
-      child: Center(child: Text('Failed to load data')),
+    return Padding(
+      padding: EdgeInsets.all(AppSpacing.xxxl),
+      child: const Center(child: Text('Failed to load data')),
     );
   }
 
@@ -254,43 +215,38 @@ class _DashboardRecentDataState extends State<DashboardRecentData> {
       children: [
         Text(
           title,
-          style: TextStyle(
-            fontSize: 14,
-            color: isDark ? _textSecondaryDark : _textSecondaryLight,
-          ),
+          style: AppTextStyles.b14(
+            isDark: isDark,
+          ).copyWith(color: AppColors.getTextSecondary(isDark)),
         ),
-        const SizedBox(height: _spacingXs),
+        SizedBox(height: AppSpacing.xs),
         Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             Text(
               displayValue,
-              style: TextStyle(
-                fontSize: 32,
+              style: AppTextStyles.h30(isDark: isDark).copyWith(
                 fontWeight: FontWeight.w700,
-                color: isDark ? _textPrimaryDark : _textPrimaryLight,
+                fontSize: 32,
                 height: 1.2,
               ),
             ),
-            const SizedBox(width: _spacingMl),
+            SizedBox(width: AppSpacing.ml),
             Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: _spacingSm,
-                vertical: _spacingXs,
+              padding: EdgeInsets.symmetric(
+                horizontal: AppSpacing.sm,
+                vertical: AppSpacing.xs,
               ),
-              decoration: BoxDecoration(
-                color: isPositive
-                    ? (isDark ? _successSoftDark : _successSoft)
-                    : (isDark ? _errorSoftDark : _errorSoft),
-                borderRadius: BorderRadius.circular(_radiusMedium),
+              decoration: AuroraTheme.percentageContainerDecoration(
+                isPositive: isPositive,
+                isDark: isDark,
               ),
               child: Text(
                 '${isPositive ? '+' : '-'}${percentageChange.toStringAsFixed(1)}%',
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                  color: isPositive ? _success : _error,
-                ),
+                style: AuroraTheme.percentageTextStyle(
+                  isPositive: isPositive,
+                  isDark: isDark,
+                ).copyWith(fontSize: 12, fontWeight: FontWeight.w600),
               ),
             ),
           ],
@@ -311,10 +267,10 @@ class _DashboardRecentDataState extends State<DashboardRecentData> {
         Container(
           height: 8,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(_radiusXLarge),
+            borderRadius: BorderRadius.circular(AppConstants.radiusXLarge),
           ),
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(_radiusXLarge),
+            borderRadius: BorderRadius.circular(AppConstants.radiusXLarge),
             child: Row(
               children: products.map((product) {
                 return Expanded(
@@ -326,12 +282,12 @@ class _DashboardRecentDataState extends State<DashboardRecentData> {
           ),
         ),
 
-        const SizedBox(height: _spacingMd),
+        SizedBox(height: AppSpacing.md),
 
         // Legend
         Wrap(
-          spacing: _spacingLg,
-          runSpacing: _spacingSm,
+          spacing: AppSpacing.lg,
+          runSpacing: AppSpacing.sm,
           children: products.map((product) {
             return _buildLegendItem(
               product['name'] as String,
@@ -353,13 +309,12 @@ class _DashboardRecentDataState extends State<DashboardRecentData> {
           height: 8,
           decoration: BoxDecoration(color: color, shape: BoxShape.circle),
         ),
-        const SizedBox(width: _spacingXs),
+        SizedBox(width: AppSpacing.xs),
         Text(
           label,
-          style: TextStyle(
-            fontSize: 14,
-            color: isDark ? _textSecondaryDark : _textSecondaryLight,
-          ),
+          style: AppTextStyles.b14(
+            isDark: isDark,
+          ).copyWith(color: AppColors.getTextSecondary(isDark)),
         ),
       ],
     );
@@ -384,7 +339,7 @@ class _DashboardRecentDataState extends State<DashboardRecentData> {
         );
 
         return Padding(
-          padding: const EdgeInsets.only(bottom: _spacingMd),
+          padding: EdgeInsets.only(bottom: AppSpacing.md),
           child: _buildChannelRow(channel, isDark),
         );
       }).toList(),
@@ -443,36 +398,30 @@ class _DashboardRecentDataState extends State<DashboardRecentData> {
           height: 26,
           child: Icon(
             channel.icon,
-            size: _iconSizeMedium,
-            color: isDark ? _grey600Dark : _grey600Light,
+            size: AppConstants.iconSizeMedium,
+            color: AppColors.getTextSecondary(isDark),
           ),
         ),
 
-        const SizedBox(width: _spacingXxs),
+        SizedBox(width: AppSpacing.xxs),
 
         // Label
         Expanded(
           child: Text(
             channel.label,
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-              color: isDark ? _textPrimaryDark : _textPrimaryLight,
-            ),
+            style: AppTextStyles.b14Medium(isDark: isDark),
           ),
         ),
 
         // Value
         Text(
           channel.value,
-          style: TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w600,
-            color: isDark ? _textPrimaryDark : _textPrimaryLight,
-          ),
+          style: AppTextStyles.b14(
+            isDark: isDark,
+          ).copyWith(fontWeight: FontWeight.w600),
         ),
 
-        const SizedBox(width: _spacingMd),
+        SizedBox(width: AppSpacing.md),
 
         // Change Indicator
         Row(
@@ -481,15 +430,13 @@ class _DashboardRecentDataState extends State<DashboardRecentData> {
             Icon(
               channel.isPositive ? Icons.arrow_upward : Icons.arrow_downward,
               size: 14,
-              color: channel.isPositive ? _success : _error,
+              color: channel.isPositive ? AppColors.success : AppColors.error,
             ),
-            // const SizedBox(width: _spacingXxs),
             Text(
               '${channel.change.toStringAsFixed(1)}%',
-              style: TextStyle(
-                fontSize: 14,
+              style: AppTextStyles.b14(isDark: isDark).copyWith(
                 fontWeight: FontWeight.w600,
-                color: channel.isPositive ? _success : _error,
+                color: channel.isPositive ? AppColors.success : AppColors.error,
               ),
             ),
           ],

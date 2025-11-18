@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../const/constant.dart';
 // import 'package:shipskart_ui/shipskart_ui.dart';
 
 class DashboardCard extends StatelessWidget {
@@ -19,26 +20,19 @@ class DashboardCard extends StatelessWidget {
     this.iconBgColor = const Color(0xFFEBF5FF), // Default example bg color
   });
 
-  // Inline color getter - no external dependencies
-  static Color _getCardColor(bool isDark) {
-    return isDark ? const Color(0xFF1F2937) : Colors.white;
-  }
-
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Container(
       constraints: const BoxConstraints(minHeight: 120, maxHeight: 160),
-      padding: const EdgeInsets.all(14),
+      padding: AppSpacing.paddingMD,
       decoration: BoxDecoration(
-        // color: context.colorPalette.surface,
-        borderRadius: BorderRadius.circular(16),
+        color: AppColors.getCard(isDark),
+        borderRadius: BorderRadius.circular(AppConstants.radiusLarge),
         boxShadow: [
           BoxShadow(
-            color: isDark
-                ? Colors.black.withOpacity(0.3)
-                : Colors.grey.withOpacity(0.1),
+            color: isDark ? AppColors.shadowDark : AppColors.shadowLight,
             blurRadius: 8,
             offset: const Offset(0, 0.2),
           ),
@@ -85,19 +79,21 @@ class DashboardCard extends StatelessWidget {
                   height: 60,
                   decoration: BoxDecoration(
                     color: iconBgColor,
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(
+                      AppConstants.radiusMedium,
+                    ),
                   ),
                   child: Center(child: _buildIcon(iconKey, color)),
                 ),
               ),
 
-              const SizedBox(width: 12),
+              SizedBox(width: AppSpacing.ml),
 
               // Value and Label
               Expanded(
                 flex: 5,
                 child: Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: AppSpacing.paddingSM,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.end,
@@ -107,12 +103,8 @@ class DashboardCard extends StatelessWidget {
                           fit: BoxFit.scaleDown,
                           child: Text(
                             value,
-                            style: TextStyle(
-                              fontSize: 28,
+                            style: AppTextStyles.h30(isDark: isDark).copyWith(
                               fontWeight: FontWeight.w700,
-                              color: isDark
-                                  ? const Color(0xFFF9FAFB)
-                                  : const Color(0xFF111827),
                               height: 1.0,
                               letterSpacing: -0.5,
                             ),
@@ -122,11 +114,8 @@ class DashboardCard extends StatelessWidget {
 
                       Text(
                         label,
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: isDark
-                              ? const Color(0xFF9CA3AF)
-                              : const Color(0xFF6B7280),
+                        style: AppTextStyles.b14(isDark: isDark).copyWith(
+                          color: AppColors.getTextSecondary(isDark),
                           fontWeight: FontWeight.w500,
                         ),
                         maxLines: 2,
@@ -155,50 +144,42 @@ class DashboardCard extends StatelessWidget {
     };
 
     final icon = iconMap[key] ?? Icons.circle;
-    return Icon(icon, size: 28, color: color);
+    return Icon(icon, size: AppConstants.iconSizeLarge - 4, color: color);
   }
 
   // Inline percentage chip builder - no external dependencies
   Widget _buildPercentageChip(double percentage, bool isDark) {
     final isPositive = percentage >= 0;
 
-    // Inline colors
-    const successLight = Color(0xFF10B981);
-    const successDark = Color(0xFF34D399);
-    const successSoftLight = Color(0xFFD1FAE5);
-    const successSoftDark = Color(0xFF064E3B);
-    const errorLight = Color(0xFFEF4444);
-    const errorDark = Color(0xFFF87171);
-    const errorSoftLight = Color(0xFFFEE2E2);
-    const errorSoftDark = Color(0xFF7F1D1D);
-
     final color = isPositive
-        ? (isDark ? successDark : successLight)
-        : (isDark ? errorDark : errorLight);
+        ? (isDark ? AppColors.successActiveDark : AppColors.success)
+        : (isDark ? AppColors.errorActiveDark : AppColors.error);
 
     final bgColor = isPositive
-        ? (isDark ? successSoftDark : successSoftLight)
-        : (isDark ? errorSoftDark : errorSoftLight);
+        ? (isDark ? AppColors.successSoftDark : AppColors.successSoft)
+        : (isDark ? AppColors.errorSoftDark : AppColors.errorSoft);
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      padding: EdgeInsets.symmetric(
+        horizontal: AppSpacing.sm,
+        vertical: AppSpacing.xs,
+      ),
       decoration: BoxDecoration(
         color: bgColor,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppConstants.radiusLarge),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(
             isPositive ? Icons.arrow_upward : Icons.arrow_downward,
-            size: 12,
+            size: AppConstants.iconSizeSmall - 4,
             color: color,
           ),
-          const SizedBox(width: 4),
+          SizedBox(width: AppSpacing.xs),
           Text(
             '${percentage.abs().toStringAsFixed(1)}%',
-            style: TextStyle(
-              fontSize: 12,
+            style: AppTextStyles.b12(isDark: isDark).copyWith(
               fontWeight: FontWeight.w600,
               color: color,
               letterSpacing: 0,
