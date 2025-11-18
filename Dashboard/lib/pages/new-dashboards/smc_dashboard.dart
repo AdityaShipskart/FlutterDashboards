@@ -272,110 +272,123 @@ const Map<String, dynamic> _vesselPerformanceComparison = {
 };
 
 const Map<String, dynamic> _purchasesByCategoryBar = {
-  'cardTitle': 'Budgeted vs Actual Purchases',
-  'cardSubtitle': 'Top spending categories across fleet',
-  'maxY': 500000.0,
+  'cardTitle': 'Spend by Vessel & Category',
+  'cardSubtitle': 'Stacked vessel spend profile across key categories',
+  'maxY': 1100000.0,
   'minY': 0.0,
-  'yAxisInterval': 100000.0,
-  'barWidth': 10.0,
-  'barsSpace': 6.0,
+  'yAxisInterval': 200000.0,
+  'barWidth': 12.0,
+  'barsSpace': 8.0,
   'chartData': [
     {
-      'label': 'Provisions',
+      'label': 'MV Pacific Star',
       'values': [
-        {'value': 148000.0, 'color': 0xFF10B981},
-        {'value': 312000.0, 'color': 0xFF1379F0},
+        {'value': 280000.0, 'color': 0xFF1379F0},
+        {'value': 320000.0, 'color': 0xFFF97316},
+        {'value': 260000.0, 'color': 0xFF10B981},
+        {'value': 140000.0, 'color': 0xFF7C3AED},
       ],
-      'percentile25': 148000.0,
-      'percentile75': 312000.0,
+      'percentile25': 140000.0,
+      'percentile75': 1000000.0,
       'tooltip': [
-        {'label': 'Actual', 'value': '\$148K'},
-        {'label': 'Budgeted', 'value': '\$312K'},
+        {'label': 'Provisions', 'value': '\$280K'},
+        {'label': 'Deck', 'value': '\$320K'},
+        {'label': 'Engine', 'value': '\$260K'},
+        {'label': 'Bond Store', 'value': '\$140K'},
       ],
     },
     {
-      'label': 'IMPA',
+      'label': 'MV Atlantic Crown',
       'values': [
-        {'value': 112000.0, 'color': 0xFF10B981},
-        {'value': 265000.0, 'color': 0xFF1379F0},
+        {'value': 260000.0, 'color': 0xFF1379F0},
+        {'value': 300000.0, 'color': 0xFFF97316},
+        {'value': 240000.0, 'color': 0xFF10B981},
+        {'value': 130000.0, 'color': 0xFF7C3AED},
       ],
-      'percentile25': 112000.0,
-      'percentile75': 265000.0,
+      'percentile25': 130000.0,
+      'percentile75': 930000.0,
       'tooltip': [
-        {'label': 'Actual', 'value': '\$112K'},
-        {'label': 'Budgeted', 'value': '\$265K'},
+        {'label': 'Provisions', 'value': '\$260K'},
+        {'label': 'Deck', 'value': '\$300K'},
+        {'label': 'Engine', 'value': '\$240K'},
+        {'label': 'Bond Store', 'value': '\$130K'},
       ],
     },
     {
-      'label': 'Services',
+      'label': 'MV Nordic Wave',
       'values': [
-        {'value': 195000.0, 'color': 0xFF10B981},
-        {'value': 398000.0, 'color': 0xFF1379F0},
+        {'value': 240000.0, 'color': 0xFF1379F0},
+        {'value': 280000.0, 'color': 0xFFF97316},
+        {'value': 220000.0, 'color': 0xFF10B981},
+        {'value': 120000.0, 'color': 0xFF7C3AED},
       ],
-      'percentile25': 195000.0,
-      'percentile75': 398000.0,
+      'percentile25': 120000.0,
+      'percentile75': 860000.0,
       'tooltip': [
-        {'label': 'Actual', 'value': '\$195K'},
-        {'label': 'Budgeted', 'value': '\$398K'},
+        {'label': 'Provisions', 'value': '\$240K'},
+        {'label': 'Deck', 'value': '\$280K'},
+        {'label': 'Engine', 'value': '\$220K'},
+        {'label': 'Bond Store', 'value': '\$120K'},
       ],
     },
     {
-      'label': 'Paints',
+      'label': 'MV Southern Cross',
       'values': [
-        {'value': 89000.0, 'color': 0xFF10B981},
-        {'value': 212000.0, 'color': 0xFF1379F0},
+        {'value': 220000.0, 'color': 0xFF1379F0},
+        {'value': 260000.0, 'color': 0xFFF97316},
+        {'value': 200000.0, 'color': 0xFF10B981},
+        {'value': 110000.0, 'color': 0xFF7C3AED},
       ],
-      'percentile25': 89000.0,
-      'percentile75': 212000.0,
+      'percentile25': 110000.0,
+      'percentile75': 790000.0,
       'tooltip': [
-        {'label': 'Actual', 'value': '\$89K'},
-        {'label': 'Budgeted', 'value': '\$212K'},
+        {'label': 'Provisions', 'value': '\$220K'},
+        {'label': 'Deck', 'value': '\$260K'},
+        {'label': 'Engine', 'value': '\$200K'},
+        {'label': 'Bond Store', 'value': '\$110K'},
       ],
     },
     {
-      'label': 'Lubes',
+      'label': 'MV Eastern Star',
       'values': [
-        {'value': 132000.0, 'color': 0xFF10B981},
-        {'value': 295000.0, 'color': 0xFF1379F0},
+        {'value': 205000.0, 'color': 0xFF1379F0},
+        {'value': 240000.0, 'color': 0xFFF97316},
+        {'value': 185000.0, 'color': 0xFF10B981},
+        {'value': 100000.0, 'color': 0xFF7C3AED},
       ],
-      'percentile25': 132000.0,
-      'percentile75': 295000.0,
+      'percentile25': 100000.0,
+      'percentile75': 730000.0,
       'tooltip': [
-        {'label': 'Actual', 'value': '\$132K'},
-        {'label': 'Budgeted', 'value': '\$295K'},
+        {'label': 'Provisions', 'value': '\$205K'},
+        {'label': 'Deck', 'value': '\$240K'},
+        {'label': 'Engine', 'value': '\$185K'},
+        {'label': 'Bond Store', 'value': '\$100K'},
       ],
     },
     {
-      'label': 'Bond Store',
+      'label': 'MV Ocean Spirit',
       'values': [
-        {'value': 68000.0, 'color': 0xFF10B981},
-        {'value': 168000.0, 'color': 0xFF1379F0},
+        {'value': 190000.0, 'color': 0xFF1379F0},
+        {'value': 220000.0, 'color': 0xFFF97316},
+        {'value': 170000.0, 'color': 0xFF10B981},
+        {'value': 90000.0, 'color': 0xFF7C3AED},
       ],
-      'percentile25': 68000.0,
-      'percentile75': 168000.0,
+      'percentile25': 90000.0,
+      'percentile75': 670000.0,
       'tooltip': [
-        {'label': 'Actual', 'value': '\$68K'},
-        {'label': 'Budgeted', 'value': '\$168K'},
-      ],
-    },
-    {
-      'label': 'Chemicals',
-      'values': [
-        {'value': 95000.0, 'color': 0xFF10B981},
-        {'value': 232000.0, 'color': 0xFF1379F0},
-      ],
-      'percentile25': 95000.0,
-      'percentile75': 232000.0,
-      'tooltip': [
-        {'label': 'Actual', 'value': '\$95K'},
-        {'label': 'Budgeted', 'value': '\$232K'},
+        {'label': 'Provisions', 'value': '\$190K'},
+        {'label': 'Deck', 'value': '\$220K'},
+        {'label': 'Engine', 'value': '\$170K'},
+        {'label': 'Bond Store', 'value': '\$90K'},
       ],
     },
   ],
-  // Legend now perfectly matches the 3 bars in every category
+  // Legend now mirrors the stacked category colors per vessel
   'legendData': [
-    {'label': 'Budgeted', 'color': '0xFFE0E0E0'}, // First bar (gray)
-    {'label': 'Actual', 'color': '0xFF10B981'}, // Second bar (green)
+    {'label': 'Provisions', 'color': '0xFF1379F0'},
+    {'label': 'Deck', 'color': '0xFFF97316'},
+    {'label': 'Engine', 'color': '0xFF10B981'},
+    {'label': 'Bond Store', 'color': '0xFF7C3AED'},
   ],
 };
 
@@ -695,8 +708,6 @@ class SMCDashboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
     return Container(
       decoration: BoxDecoration(
         // color: context.theme.colorScheme.background,
