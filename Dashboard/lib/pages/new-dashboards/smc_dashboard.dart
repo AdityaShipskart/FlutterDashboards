@@ -430,8 +430,9 @@ const Map<String, dynamic> _purchasesByCategoryBar = {
 
 const List<Map<String, dynamic>> _smcPerformanceMetrics = [
   {
-    'title': 'Top Vendors by Spend',
+    'title': 'Top Vendors',
     'subtitle': 'Highest procurement value',
+    'columns': {'first': 'Vendors name', 'second': 'Volume'},
     'ports': [
       {
         'portName': 'Marine Tech Supply',
@@ -450,6 +451,7 @@ const List<Map<String, dynamic>> _smcPerformanceMetrics = [
   {
     'title': 'Top Spending Vessels',
     'subtitle': 'Highest procurement by vessel',
+    'columns': {'first': 'Vessel name', 'second': 'Spending Value'},
     'ports': [
       {
         'portName': 'MV Pacific Star',
@@ -466,17 +468,18 @@ const List<Map<String, dynamic>> _smcPerformanceMetrics = [
     ],
   },
   {
-    'title': 'Cost Saving Opportunities',
+    'title': 'Cost Saving Ports',
     'subtitle': 'Identified savings potential',
+    'columns': {'first': 'Ports name', 'second': 'Volume'},
     'ports': [
       {
-        'portName': 'Bulk Ordering',
+        'portName': 'Mumbai',
         'purchaseValue': '\$284K',
         'percentageChange': 16.2,
         'trend': 'up',
       },
       {
-        'portName': 'Contract Negotiation',
+        'portName': 'Kochi',
         'purchaseValue': '\$196K',
         'percentageChange': 11.4,
         'trend': 'up',
@@ -484,248 +487,288 @@ const List<Map<String, dynamic>> _smcPerformanceMetrics = [
     ],
   },
   {
-    'title': 'Highlighted Products',
+    'title': 'Quick Actions',
     'subtitle': 'take a quick actions',
     'switch-options': ['Pending Requisitions', 'Upcoming Deliveries'],
     'columns': {'first': 'Recent Status', 'second': 'Order Value'},
     'Pending Requisitions': [
       {
-        'portName': 'Smart Fuel Monitor',
-        'purchaseValue': '\$1,420',
+        'portName': 'MV Atlantic Crown | Provisions',
+        'purchaseValue': 'value: \$1,420',
         'percentageChange': 32.1,
         'trend': 'up',
         'priority': 'HIGH PRIORITY',
         'daysLeft': 2,
-        'status': 'Awaiting Approval',
+        'status': 'Awaiting Manager Approval',
       },
       {
-        'portName': 'Engine Spare Parts',
-        'purchaseValue': '\$860',
+        'portName': 'MV Pacific Star | Spare Parts',
+        'purchaseValue': 'value: \$860',
         'percentageChange': 24.3,
         'trend': 'up',
         'priority': 'MEDIUM PRIORITY',
         'daysLeft': 5,
-        'status': 'Under Review',
+        'status': 'Awaiting SMC Approval',
+      },
+
+      {
+        'portName': 'MV Horizon Pearl | Fuel',
+        'purchaseValue': 'value: \$860',
+        'percentageChange': 24.3,
+        'trend': 'up',
+        'priority': 'MEDIUM PRIORITY',
+        'daysLeft': 5,
+        'status': 'Awaiting SMC Approval',
+      },
+
+      {
+        'portName': 'MV Sea Crest | Electrical',
+        'purchaseValue': 'value: \$860',
+        'percentageChange': 24.3,
+        'trend': 'up',
+        'priority': 'MEDIUM PRIORITY',
+        'daysLeft': 5,
+        'status': 'Awaiting Vendor Response',
       },
     ],
     'Upcoming Deliveries': [
       {
-        'portName': 'Navigation Equipment',
-        'purchaseValue': '\$980',
+        'portName': 'MV Pacific Star | Fujairah',
+        'purchaseValue': 'value: \$980',
         'percentageChange': 18.7,
         'trend': 'up',
         'priority': 'HIGH PRIORITY',
         'daysLeft': 1,
-        'status': 'Scheduled',
+        'status': ' Out for Delivery',
       },
       {
-        'portName': 'Safety Gear Set',
-        'purchaseValue': '\$580',
+        'portName': 'MV Atlantic Crown | Mumbai',
+        'purchaseValue': 'value: \$580',
         'percentageChange': 15.4,
         'trend': 'up',
         'priority': 'MEDIUM PRIORITY',
         'daysLeft': 3,
-        'status': 'In Transit',
+        'status': 'Preparing Dispatch',
+      },
+
+      {
+        'portName': 'Gulf Paints & Coatings | Kochi',
+        'purchaseValue': 'value: \$580',
+        'percentageChange': 15.4,
+        'trend': 'up',
+        'priority': 'MEDIUM PRIORITY',
+        'daysLeft': 3,
+        'status': 'Confirmed',
+      },
+
+      {
+        'portName': 'MV Atlantic Crown | Mumbai',
+        'purchaseValue': 'value: \$580',
+        'percentageChange': 15.4,
+        'trend': 'up',
+        'priority': 'MEDIUM PRIORITY',
+        'daysLeft': 3,
+        'status': 'Preparing Dispatch',
       },
     ],
   },
 ];
 
-const Map<String, dynamic> _smcTableData = {
-  'header': {
-    'title': 'Pending Requisitions',
-    'subtitle': 'Active purchase requests awaiting approval',
-  },
-  'rfqs': [
-    {
-      'rank': 1,
-      'rfqId': 'REQ-8421',
-      'title': 'Engine Spare Parts',
-      'supplier': 'MV Pacific Star',
-      'estimatedValue': 142000,
-      'percentageChange': 0.0,
-      'responsesReceived': 3,
-      'daysRemaining': 5,
-    },
-    {
-      'rank': 2,
-      'rfqId': 'REQ-8398',
-      'title': 'Navigation Equipment',
-      'supplier': 'MV Atlantic Crown',
-      'estimatedValue': 86000,
-      'percentageChange': 0.0,
-      'responsesReceived': 2,
-      'daysRemaining': 7,
-    },
-    {
-      'rank': 3,
-      'rfqId': 'REQ-8372',
-      'title': 'Safety Equipment',
-      'supplier': 'MV Nordic Wave',
-      'estimatedValue': 58000,
-      'percentageChange': 0.0,
-      'responsesReceived': 4,
-      'daysRemaining': 3,
-    },
-    {
-      'rank': 4,
-      'rfqId': 'REQ-8361',
-      'title': 'Electrical Supplies',
-      'supplier': 'MV Southern Cross',
-      'estimatedValue': 42000,
-      'percentageChange': 0.0,
-      'responsesReceived': 2,
-      'daysRemaining': 6,
-    },
-    {
-      'rank': 5,
-      'rfqId': 'REQ-8348',
-      'title': 'Deck Equipment',
-      'supplier': 'MV Eastern Star',
-      'estimatedValue': 38000,
-      'percentageChange': 0.0,
-      'responsesReceived': 3,
-      'daysRemaining': 4,
-    },
-  ],
-  'pendingQuotes': {
-    'header': {
-      'title': 'Quote Comparison',
-      'subtitle': 'Comparing vendor quotes',
-    },
-    'quotes': [
-      {
-        'rank': 1,
-        'quoteId': 'QT-7284',
-        'customer': 'Marine Tech Supply',
-        'quoteValue': 128000,
-        'percentageChange': -8.2,
-        'daysInReview': 2,
-        'expiresInDays': 12,
-        'status': 'Under Review',
-      },
-      {
-        'rank': 2,
-        'quoteId': 'QT-7261',
-        'customer': 'Global Ship Parts',
-        'quoteValue': 136000,
-        'percentageChange': -2.4,
-        'daysInReview': 3,
-        'expiresInDays': 10,
-        'status': 'Under Review',
-      },
-    ],
-  },
-  'activeOrders': {
-    'header': {
-      'title': 'Active Purchase Orders',
-      'subtitle': 'In-transit and processing',
-    },
-    'orders': [
-      {
-        'rank': 1,
-        'orderId': 'PO-6842',
-        'customer': 'Marine Tech Supply',
-        'orderValue': 284000,
-        'percentageChange': 0.0,
-        'progressPercentage': 65,
-        'deliveryStatus': 'In Transit',
-        'expectedDelivery': '2025-02-18',
-      },
-      {
-        'rank': 2,
-        'orderId': 'PO-6821',
-        'customer': 'Global Ship Parts',
-        'orderValue': 196000,
-        'percentageChange': 0.0,
-        'progressPercentage': 82,
-        'deliveryStatus': 'Processing',
-        'expectedDelivery': '2025-02-12',
-      },
-    ],
-  },
-  'completedDeliveries': {
-    'header': {'title': 'Recent Deliveries', 'subtitle': 'Last 7 days'},
-    'deliveries': [
-      {
-        'rank': 1,
-        'deliveryId': 'DEL-5928',
-        'customer': 'Marine Tech Supply',
-        'deliveryValue': 142000,
-        'percentageChange': 0.0,
-        'deliveryDate': '2025-01-28',
-        'rating': 4.8,
-        'onTime': true,
-      },
-      {
-        'rank': 2,
-        'deliveryId': 'DEL-5912',
-        'customer': 'Ocean Supplies Ltd',
-        'deliveryValue': 98000,
-        'percentageChange': 0.0,
-        'deliveryDate': '2025-01-26',
-        'rating': 4.6,
-        'onTime': true,
-      },
-    ],
-  },
-  'customerMetrics': {
-    'header': {
-      'title': 'Vessel Performance',
-      'subtitle': 'Fleet efficiency metrics',
-    },
-    'customers': [
-      {
-        'rank': 1,
-        'customerName': 'MV Pacific Star',
-        'region': 'Container',
-        'totalOrders': 142,
-        'percentageChange': 12.3,
-        'totalValue': 468000,
-        'averageOrderValue': 3296,
-        'satisfactionScore': 4.7,
-      },
-      {
-        'rank': 2,
-        'customerName': 'MV Atlantic Crown',
-        'region': 'Tanker',
-        'totalOrders': 128,
-        'percentageChange': 9.8,
-        'totalValue': 442000,
-        'averageOrderValue': 3453,
-        'satisfactionScore': 4.6,
-      },
-    ],
-  },
-  'productPerformance': {
-    'header': {
-      'title': 'Category Performance',
-      'subtitle': 'Top procurement categories',
-    },
-    'products': [
-      {
-        'rank': 1,
-        'productName': 'Engine Spare Parts',
-        'category': 'Machinery',
-        'unitsSold': 842,
-        'percentageChange': 8.4,
-        'revenue': 3268000,
-        'averagePrice': 3882,
-        'stockStatus': 'In Stock',
-      },
-      {
-        'rank': 2,
-        'productName': 'Fuel & Lubricants',
-        'category': 'Consumables',
-        'unitsSold': 1247,
-        'percentageChange': 6.7,
-        'revenue': 2408000,
-        'averagePrice': 1931,
-        'stockStatus': 'In Stock',
-      },
-    ],
-  },
-};
+// const Map<String, dynamic> _smcTableData = {
+//   'header': {
+//     'title': 'Pending Requisitions',
+//     'subtitle': 'Active purchase requests awaiting approval',
+//   },
+//   'rfqs': [
+//     {
+//       'rank': 1,
+//       'rfqId': 'REQ-8421',
+//       'title': 'Engine Spare Parts',
+//       'supplier': 'MV Pacific Star',
+//       'estimatedValue': 142000,
+//       'percentageChange': 0.0,
+//       'responsesReceived': 3,
+//       'daysRemaining': 5,
+//     },
+//     {
+//       'rank': 2,
+//       'rfqId': 'REQ-8398',
+//       'title': 'Navigation Equipment',
+//       'supplier': 'MV Atlantic Crown',
+//       'estimatedValue': 86000,
+//       'percentageChange': 0.0,
+//       'responsesReceived': 2,
+//       'daysRemaining': 7,
+//     },
+//     {
+//       'rank': 3,
+//       'rfqId': 'REQ-8372',
+//       'title': 'Safety Equipment',
+//       'supplier': 'MV Nordic Wave',
+//       'estimatedValue': 58000,
+//       'percentageChange': 0.0,
+//       'responsesReceived': 4,
+//       'daysRemaining': 3,
+//     },
+//     {
+//       'rank': 4,
+//       'rfqId': 'REQ-8361',
+//       'title': 'Electrical Supplies',
+//       'supplier': 'MV Southern Cross',
+//       'estimatedValue': 42000,
+//       'percentageChange': 0.0,
+//       'responsesReceived': 2,
+//       'daysRemaining': 6,
+//     },
+//     {
+//       'rank': 5,
+//       'rfqId': 'REQ-8348',
+//       'title': 'Deck Equipment',
+//       'supplier': 'MV Eastern Star',
+//       'estimatedValue': 38000,
+//       'percentageChange': 0.0,
+//       'responsesReceived': 3,
+//       'daysRemaining': 4,
+//     },
+//   ],
+//   'pendingQuotes': {
+//     'header': {
+//       'title': 'Quote Comparison',
+//       'subtitle': 'Comparing vendor quotes',
+//     },
+//     'quotes': [
+//       {
+//         'rank': 1,
+//         'quoteId': 'QT-7284',
+//         'customer': 'Marine Tech Supply',
+//         'quoteValue': 128000,
+//         'percentageChange': -8.2,
+//         'daysInReview': 2,
+//         'expiresInDays': 12,
+//         'status': 'Under Review',
+//       },
+//       {
+//         'rank': 2,
+//         'quoteId': 'QT-7261',
+//         'customer': 'Global Ship Parts',
+//         'quoteValue': 136000,
+//         'percentageChange': -2.4,
+//         'daysInReview': 3,
+//         'expiresInDays': 10,
+//         'status': 'Under Review',
+//       },
+//     ],
+//   },
+//   'activeOrders': {
+//     'header': {
+//       'title': 'Active Purchase Orders',
+//       'subtitle': 'In-transit and processing',
+//     },
+//     'orders': [
+//       {
+//         'rank': 1,
+//         'orderId': 'PO-6842',
+//         'customer': 'Marine Tech Supply',
+//         'orderValue': 284000,
+//         'percentageChange': 0.0,
+//         'progressPercentage': 65,
+//         'deliveryStatus': 'In Transit',
+//         'expectedDelivery': '2025-02-18',
+//       },
+//       {
+//         'rank': 2,
+//         'orderId': 'PO-6821',
+//         'customer': 'Global Ship Parts',
+//         'orderValue': 196000,
+//         'percentageChange': 0.0,
+//         'progressPercentage': 82,
+//         'deliveryStatus': 'Processing',
+//         'expectedDelivery': '2025-02-12',
+//       },
+//     ],
+//   },
+//   'completedDeliveries': {
+//     'header': {'title': 'Recent Deliveries', 'subtitle': 'Last 7 days'},
+//     'deliveries': [
+//       {
+//         'rank': 1,
+//         'deliveryId': 'DEL-5928',
+//         'customer': 'Marine Tech Supply',
+//         'deliveryValue': 142000,
+//         'percentageChange': 0.0,
+//         'deliveryDate': '2025-01-28',
+//         'rating': 4.8,
+//         'onTime': true,
+//       },
+//       {
+//         'rank': 2,
+//         'deliveryId': 'DEL-5912',
+//         'customer': 'Ocean Supplies Ltd',
+//         'deliveryValue': 98000,
+//         'percentageChange': 0.0,
+//         'deliveryDate': '2025-01-26',
+//         'rating': 4.6,
+//         'onTime': true,
+//       },
+//     ],
+//   },
+//   'customerMetrics': {
+//     'header': {
+//       'title': 'Vessel Performance',
+//       'subtitle': 'Fleet efficiency metrics',
+//     },
+//     'customers': [
+//       {
+//         'rank': 1,
+//         'customerName': 'MV Pacific Star',
+//         'region': 'Container',
+//         'totalOrders': 142,
+//         'percentageChange': 12.3,
+//         'totalValue': 468000,
+//         'averageOrderValue': 3296,
+//         'satisfactionScore': 4.7,
+//       },
+//       {
+//         'rank': 2,
+//         'customerName': 'MV Atlantic Crown',
+//         'region': 'Tanker',
+//         'totalOrders': 128,
+//         'percentageChange': 9.8,
+//         'totalValue': 442000,
+//         'averageOrderValue': 3453,
+//         'satisfactionScore': 4.6,
+//       },
+//     ],
+//   },
+//   'productPerformance': {
+//     'header': {
+//       'title': 'Category Performance',
+//       'subtitle': 'Top procurement categories',
+//     },
+//     'products': [
+//       {
+//         'rank': 1,
+//         'productName': 'Engine Spare Parts',
+//         'category': 'Machinery',
+//         'unitsSold': 842,
+//         'percentageChange': 8.4,
+//         'revenue': 3268000,
+//         'averagePrice': 3882,
+//         'stockStatus': 'In Stock',
+//       },
+//       {
+//         'rank': 2,
+//         'productName': 'Fuel & Lubricants',
+//         'category': 'Consumables',
+//         'unitsSold': 1247,
+//         'percentageChange': 6.7,
+//         'revenue': 2408000,
+//         'averagePrice': 1931,
+//         'stockStatus': 'In Stock',
+//       },
+//     ],
+//   },
+// };
 
 /// SMC Dashboard - Production Ready
 ///
@@ -802,22 +845,6 @@ class SMCDashboard extends StatelessWidget {
               child: DashboardFinancialCard(data: _budgetUtilizationCard),
             ),
 
-            // Procurement Efficiency
-            DashboardGridCol(
-              xs: 12,
-              md: 6,
-              child: DashboardcombobarChart(data: _procurementEfficiencyCombo),
-            ),
-
-            // Vessel Performance Comparison
-            DashboardGridCol(
-              xs: 12,
-              md: 6,
-              child: MultiAnalyticsOveriview(
-                data: _vesselPerformanceComparison,
-              ),
-            ),
-
             // Performance Metrics Cards
             DashboardGridCol(
               xs: 12,
@@ -836,6 +863,22 @@ class SMCDashboard extends StatelessWidget {
               md: 6,
               lg: 4,
               child: DashboardLeadingPort(data: _smcPerformanceMetrics[2]),
+            ),
+
+            // Procurement Efficiency
+            DashboardGridCol(
+              xs: 12,
+              md: 6,
+              child: DashboardcombobarChart(data: _procurementEfficiencyCombo),
+            ),
+
+            // Vessel Performance Comparison
+            DashboardGridCol(
+              xs: 12,
+              md: 6,
+              child: MultiAnalyticsOveriview(
+                data: _vesselPerformanceComparison,
+              ),
             ),
 
             // Multi-Tab Table (Requisitions, Quotes, Orders, etc.)
