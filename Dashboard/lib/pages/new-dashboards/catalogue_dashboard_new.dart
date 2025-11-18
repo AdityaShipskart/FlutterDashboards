@@ -62,51 +62,51 @@ const List<Map<String, dynamic>> _catalogueCards = [
   },
 ];
 
-const Map<String, dynamic> _catalogueProductBreakdown = {
-  'salesHighlights': {
-    'title': 'Products by Category',
-    'totalValue': 18462,
-    'currency': '',
-    'percentageChange': 4.6,
-    'isPositive': true,
-    'products': [
-      {'name': 'Marine Equipment', 'percentage': 32, 'color': 0xFF6366F1},
-      {'name': 'Electronics', 'percentage': 26, 'color': 0xFFEC4899},
-      {'name': 'Safety & PPE', 'percentage': 22, 'color': 0xFF10B981},
-      {'name': 'Other', 'percentage': 20, 'color': 0xFF0EA5E9},
-    ],
-    'channels': [
-      {
-        'icon': 'anchor_outlined',
-        'name': 'Marine Equipment',
-        'value': 5908,
-        'percentageChange': 5.2,
-        'isPositive': true,
-      },
-      {
-        'icon': 'devices_outlined',
-        'name': 'Electronics',
-        'value': 4800,
-        'percentageChange': 4.8,
-        'isPositive': true,
-      },
-      {
-        'icon': 'shield_outlined',
-        'name': 'Safety & PPE',
-        'value': 4062,
-        'percentageChange': 3.6,
-        'isPositive': true,
-      },
-      {
-        'icon': 'inventory_outlined',
-        'name': 'Other Categories',
-        'value': 3692,
-        'percentageChange': 4.1,
-        'isPositive': true,
-      },
-    ],
-  },
-};
+// const Map<String, dynamic> _catalogueProductBreakdown = {
+//   'salesHighlights': {
+//     'title': 'Products by Category',
+//     'totalValue': 18462,
+//     'currency': '',
+//     'percentageChange': 4.6,
+//     'isPositive': true,
+//     'products': [
+//       {'name': 'Marine Equipment', 'percentage': 32, 'color': 0xFF6366F1},
+//       {'name': 'Electronics', 'percentage': 26, 'color': 0xFFEC4899},
+//       {'name': 'Safety & PPE', 'percentage': 22, 'color': 0xFF10B981},
+//       {'name': 'Other', 'percentage': 20, 'color': 0xFF0EA5E9},
+//     ],
+//     'channels': [
+//       {
+//         'icon': 'anchor_outlined',
+//         'name': 'Marine Equipment',
+//         'value': 5908,
+//         'percentageChange': 5.2,
+//         'isPositive': true,
+//       },
+//       {
+//         'icon': 'devices_outlined',
+//         'name': 'Electronics',
+//         'value': 4800,
+//         'percentageChange': 4.8,
+//         'isPositive': true,
+//       },
+//       {
+//         'icon': 'shield_outlined',
+//         'name': 'Safety & PPE',
+//         'value': 4062,
+//         'percentageChange': 3.6,
+//         'isPositive': true,
+//       },
+//       {
+//         'icon': 'inventory_outlined',
+//         'name': 'Other Categories',
+//         'value': 3692,
+//         'percentageChange': 4.1,
+//         'isPositive': true,
+//       },
+//     ],
+//   },
+// };
 
 final Map<String, dynamic> _catalogueGrowthChart = {
   'cardTitle': 'Catalogue Growth',
@@ -254,63 +254,63 @@ const Map<String, dynamic> _statusPieData = {
   ],
 };
 
-const Map<String, dynamic> _catalogueUtilizationCard = {
-  'cardTitle': 'Catalogue Utilization',
-  'cardSubtitle': 'Products with orders (last 30 days)',
-  'mainValue': '92.4%',
-  'percentageChange': '+3.8%',
-  'isPositiveChange': true,
-  'changeLabel': 'vs previous month',
-  'barData': [
-    {'x': 0, 'y': 72},
-    {'x': 1, 'y': 76},
-    {'x': 2, 'y': 78},
-    {'x': 3, 'y': 81},
-    {'x': 4, 'y': 83},
-    {'x': 5, 'y': 85},
-    {'x': 6, 'y': 87},
-    {'x': 7, 'y': 89},
-    {'x': 8, 'y': 91},
-    {'x': 9, 'y': 92},
-  ],
-  'labels': [
-    'Week 1',
-    'Week 2',
-    'Week 3',
-    'Week 4',
-    'Week 5',
-    'Week 6',
-    'Week 7',
-    'Week 8',
-    'Week 9',
-    'Week 10',
-  ],
-  'chartConfig': {'minX': 0, 'maxX': 9, 'minY': 65, 'maxY': 100},
-};
+// const Map<String, dynamic> _catalogueUtilizationCard = {
+//   'cardTitle': 'Catalogue Utilization',
+//   'cardSubtitle': 'Products with orders (last 30 days)',
+//   'mainValue': '92.4%',
+//   'percentageChange': '+3.8%',
+//   'isPositiveChange': true,
+//   'changeLabel': 'vs previous month',
+//   'barData': [
+//     {'x': 0, 'y': 72},
+//     {'x': 1, 'y': 76},
+//     {'x': 2, 'y': 78},
+//     {'x': 3, 'y': 81},
+//     {'x': 4, 'y': 83},
+//     {'x': 5, 'y': 85},
+//     {'x': 6, 'y': 87},
+//     {'x': 7, 'y': 89},
+//     {'x': 8, 'y': 91},
+//     {'x': 9, 'y': 92},
+//   ],
+//   'labels': [
+//     'Week 1',
+//     'Week 2',
+//     'Week 3',
+//     'Week 4',
+//     'Week 5',
+//     'Week 6',
+//     'Week 7',
+//     'Week 8',
+//     'Week 9',
+//     'Week 10',
+//   ],
+//   'chartConfig': {'minX': 0, 'maxX': 9, 'minY': 65, 'maxY': 100},
+// };
 
-const Map<String, dynamic> _categoryPerformanceCombo = {
-  'cardTitle': 'Category Performance',
-  'cardSubtitle': 'Active vs low-performing categories',
-  'minY': 0.0,
-  'maxY': 160.0,
-  'gridInterval': 30.0,
-  'yAxisLabels': [
-    {'value': 0, 'label': '0'},
-    {'value': 30, 'label': '30'},
-    {'value': 60, 'label': '60'},
-    {'value': 90, 'label': '90'},
-    {'value': 120, 'label': '120'},
-    {'value': 150, 'label': '150'},
-  ],
-  'chartData': [
-    {'month': 'Jan', 'wins': 128.0, 'losses': 18.0, 'winRate': 87.7},
-    {'month': 'Feb', 'wins': 132.0, 'losses': 16.0, 'winRate': 89.2},
-    {'month': 'Mar', 'wins': 138.0, 'losses': 14.0, 'winRate': 90.8},
-    {'month': 'Apr', 'wins': 142.0, 'losses': 12.0, 'winRate': 92.2},
-    {'month': 'May', 'wins': 146.0, 'losses': 10.0, 'winRate': 93.6},
-    {'month': 'Jun', 'wins': 148.0, 'losses': 8.0, 'winRate': 94.9},
-  ],
-};
+// const Map<String, dynamic> _categoryPerformanceCombo = {
+//   'cardTitle': 'Category Performance',
+//   'cardSubtitle': 'Active vs low-performing categories',
+//   'minY': 0.0,
+//   'maxY': 160.0,
+//   'gridInterval': 30.0,
+//   'yAxisLabels': [
+//     {'value': 0, 'label': '0'},
+//     {'value': 30, 'label': '30'},
+//     {'value': 60, 'label': '60'},
+//     {'value': 90, 'label': '90'},
+//     {'value': 120, 'label': '120'},
+//     {'value': 150, 'label': '150'},
+//   ],
+//   'chartData': [
+//     {'month': 'Jan', 'wins': 128.0, 'losses': 18.0, 'winRate': 87.7},
+//     {'month': 'Feb', 'wins': 132.0, 'losses': 16.0, 'winRate': 89.2},
+//     {'month': 'Mar', 'wins': 138.0, 'losses': 14.0, 'winRate': 90.8},
+//     {'month': 'Apr', 'wins': 142.0, 'losses': 12.0, 'winRate': 92.2},
+//     {'month': 'May', 'wins': 146.0, 'losses': 10.0, 'winRate': 93.6},
+//     {'month': 'Jun', 'wins': 148.0, 'losses': 8.0, 'winRate': 94.9},
+//   ],
+// };
 
 const Map<String, dynamic> _customRequirementsComparison = {
   'tabs': [
@@ -789,7 +789,7 @@ class CatalogueDashboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+    // final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Container(
       decoration: BoxDecoration(

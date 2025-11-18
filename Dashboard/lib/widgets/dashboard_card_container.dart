@@ -51,13 +51,13 @@ class DashboardCardContainer extends StatefulWidget {
   ];
 
   // Inline color getter - no external dependencies
-  static Color _getBackgroundColor(bool isDark) {
-    return isDark ? const Color(0xFF374151) : const Color(0xFFFCFCFD);
-  }
+  // static Color _getBackgroundColor(bool isDark) {
+  //   return isDark ? const Color(0xFF374151) : const Color(0xFFFCFCFD);
+  // }
 
-  static Color _getBorderColor(bool isDark) {
-    return isDark ? const Color(0xFF4B5563) : const Color(0xFFE5E7EB);
-  }
+  // static Color _getBorderColor(bool isDark) {
+  //   return isDark ? const Color(0xFF4B5563) : const Color(0xFFE5E7EB);
+  // }
 
   @override
   State<DashboardCardContainer> createState() => _DashboardCardContainerState();
@@ -82,7 +82,7 @@ class _DashboardCardContainerState extends State<DashboardCardContainer> {
   }
 
   Widget _buildDashboardContent(List<Map<String, dynamic>> cards) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+    // final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Container(
       margin: EdgeInsets.all(10),
@@ -92,7 +92,7 @@ class _DashboardCardContainerState extends State<DashboardCardContainer> {
         // color: DashboardCardContainer._getBackgroundColor(isDark),
         borderRadius: const BorderRadius.all(Radius.circular(16)),
       ),
-   
+
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -105,8 +105,6 @@ class _DashboardCardContainerState extends State<DashboardCardContainer> {
                   : null, // Will use default example data in DashboardContentSection
             ),
           ),
-
-         
 
           // Cards Section (responsive widths)
           Expanded(

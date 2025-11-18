@@ -279,6 +279,14 @@ const Map<String, dynamic> _purchasesByCategoryBar = {
   'yAxisInterval': 200000.0,
   'barWidth': 12.0,
   'barsSpace': 8.0,
+  'yAxisLabels': [
+    {'value': 0.0, 'label': '0K'},
+    {'value': 200000.0, 'label': '200K'},
+    {'value': 400000.0, 'label': '400K'},
+    {'value': 600000.0, 'label': '600K'},
+    {'value': 800000.0, 'label': '800K'},
+    {'value': 1000000.0, 'label': '1M'},
+  ],
   'chartData': [
     {
       'label': 'MV Pacific Star',

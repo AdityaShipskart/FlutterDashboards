@@ -28,6 +28,14 @@ class DashboardBarChart extends StatefulWidget {
     'yAxisInterval': 100000.0,
     'barWidth': 8.0,
     'barsSpace': 3.0,
+    'yAxisLabels': [
+      {'value': 0.0, 'label': '0K'},
+      {'value': 100000.0, 'label': '100K'},
+      {'value': 200000.0, 'label': '200K'},
+      {'value': 300000.0, 'label': '300K'},
+      {'value': 400000.0, 'label': '400K'},
+      {'value': 500000.0, 'label': '500K'},
+    ],
     'chartData': [
       {
         'label': 'Jan',
@@ -108,6 +116,7 @@ class _DashboardBarChartState extends State<DashboardBarChart> {
   double yAxisInterval = 100000;
   double barWidth = 8;
   double barsSpace = 3;
+  List<Map<String, dynamic>> yAxisLabels = [];
 
   // Loading state
   bool isLoading = true;
@@ -166,6 +175,9 @@ class _DashboardBarChartState extends State<DashboardBarChart> {
         yAxisInterval = (data['yAxisInterval'] as num?)?.toDouble() ?? 100000;
         barWidth = (data['barWidth'] as num?)?.toDouble() ?? 16;
         barsSpace = (data['barsSpace'] as num?)?.toDouble() ?? 4;
+        yAxisLabels = List<Map<String, dynamic>>.from(
+          data['yAxisLabels'] ?? [],
+        );
 
         isLoading = false;
       });
@@ -328,9 +340,13 @@ class _DashboardBarChartState extends State<DashboardBarChart> {
                                 show: true,
                                 rightTitles: AxisTitles(
                                   sideTitles: SideTitles(
-                                    showTitles: true,
+                                    showTitles: yAxisLabels.isNotEmpty,
                                     reservedSize: 50,
                                     getTitlesWidget: (value, meta) {
+                                      if (yAxisLabels.isEmpty) {
+                                        return const Text('');
+                                      }
+
                                       final textStyle =
                                           AppTextStyles.b11(
                                             isDark: isDark,
@@ -339,23 +355,19 @@ class _DashboardBarChartState extends State<DashboardBarChart> {
                                               isDark,
                                             ),
                                           );
-                                      if (value == 0) {
-                                        return Text('0k', style: textStyle);
-                                      }
-                                      if (value == 100000) {
-                                        return Text('100k', style: textStyle);
-                                      }
-                                      if (value == 200000) {
-                                        return Text('200k', style: textStyle);
-                                      }
-                                      if (value == 300000) {
-                                        return Text('300k', style: textStyle);
-                                      }
-                                      if (value == 400000) {
-                                        return Text('400k', style: textStyle);
-                                      }
-                                      if (value == 500000) {
-                                        return Text('500k', style: textStyle);
+
+                                      // Find matching label from yAxisLabels
+                                      for (final labelData in yAxisLabels) {
+                                        final labelValue =
+                                            (labelData['value'] as num?)
+                                                ?.toDouble();
+                                        if (labelValue != null &&
+                                            labelValue == value) {
+                                          return Text(
+                                            labelData['label'] as String? ?? '',
+                                            style: textStyle,
+                                          );
+                                        }
                                       }
                                       return const Text('');
                                     },
@@ -494,7 +506,7 @@ class _DashboardBarChartState extends State<DashboardBarChart> {
 
   // Build tooltip items for CustomChartTooltip widget
   // Prepares data items to display in the tooltip
-  // Now supports dynamic tooltip data from JSON
+  // Labels always match legendData for consistency
   List<TooltipDataItem> _buildTooltipItems(bool isDark) {
     if (touchedGroupIndex < 0 || touchedGroupIndex >= chartData.length) {
       return [];
@@ -509,10 +521,13 @@ class _DashboardBarChartState extends State<DashboardBarChart> {
         final index = entry.key;
         final item = entry.value as Map<String, dynamic>;
 
-        // Get color from legend or values array, with fallback colors
+        // Get color from legendData
         Color itemColor;
         if (legendData.isNotEmpty && index < legendData.length) {
-          itemColor = Color(int.parse(legendData[index]['color'] as String));
+          final colorValue = legendData[index]['color'];
+          itemColor = colorValue is int
+              ? Color(colorValue)
+              : Color(int.parse(colorValue as String));
         } else if (data['values'] != null &&
             index < (data['values'] as List).length) {
           itemColor = Color((data['values'][index]['color'] as int));
@@ -525,49 +540,61 @@ class _DashboardBarChartState extends State<DashboardBarChart> {
               : AppColors.primary;
         }
 
+        // Use label from legendData if available, otherwise from tooltip
+        final label = (legendData.isNotEmpty && index < legendData.length)
+            ? legendData[index]['label'] as String
+            : item['label'] as String? ?? '';
+
         return TooltipDataItem(
           color: itemColor,
-          label: item['label'] as String? ?? '',
+          label: label,
           value: item['value'] as String? ?? '',
         );
       }).toList();
     }
 
-    // Fallback to old behavior if no tooltip data in JSON
-    final percentile25 = (data['percentile25'] as num).toDouble();
-    final percentile50 = (data['percentile50'] as num).toDouble();
-    final percentile75 = (data['percentile75'] as num).toDouble();
+    // Fallback: Use legendData labels with calculated values
+    if (legendData.isNotEmpty) {
+      final values = data['values'] as List? ?? [];
+      return legendData.asMap().entries.map((entry) {
+        final index = entry.key;
+        final legend = entry.value;
 
-    // Get colors from legend
-    final color25 = legendData.isNotEmpty && legendData.isNotEmpty
-        ? Color(int.parse(legendData[0]['color'] as String))
-        : AppColors.getGreyScale(300, isDark);
-    final color50 = legendData.isNotEmpty && legendData.length > 1
-        ? Color(int.parse(legendData[1]['color'] as String))
-        : const Color(0xFF4CAF50);
-    final color75 = legendData.isNotEmpty && legendData.length > 2
-        ? Color(int.parse(legendData[2]['color'] as String))
-        : AppColors.primary;
+        // Get color from legendData
+        final colorValue = legend['color'];
+        final color = colorValue is int
+            ? Color(colorValue)
+            : Color(int.parse(colorValue as String));
 
-    return [
-      // 25th percentile
-      TooltipDataItem(
-        color: color25,
-        label: '25th',
-        value: '${(percentile25 / 1000).toStringAsFixed(1)}K',
-      ),
-      // 50th percentile
-      TooltipDataItem(
-        color: color50,
-        label: '50th',
-        value: '${(percentile50 / 1000).toStringAsFixed(1)}K',
-      ),
-      // 75th percentile
-      TooltipDataItem(
-        color: color75,
-        label: '75th',
-        value: '${(percentile75 / 1000).toStringAsFixed(1)}K',
-      ),
-    ];
+        // Get value from values array
+        String value = '0';
+        if (index < values.length) {
+          final valueData = values[index] as Map<String, dynamic>;
+          final numValue = (valueData['value'] as num?)?.toDouble() ?? 0;
+          value = '${(numValue / 1000).toStringAsFixed(1)}K';
+        }
+
+        return TooltipDataItem(
+          color: color,
+          label: legend['label'] as String,
+          value: value,
+        );
+      }).toList();
+    }
+
+    // Final fallback using values array
+    final values = data['values'] as List? ?? [];
+    return values.asMap().entries.map((entry) {
+      final index = entry.key;
+      final valueData = entry.value as Map<String, dynamic>;
+      final numValue = (valueData['value'] as num?)?.toDouble() ?? 0;
+      final colorInt = valueData['color'] as int? ?? 4278239141;
+
+      return TooltipDataItem(
+        color: Color(colorInt),
+        label: 'Item ${index + 1}',
+        value: '${(numValue / 1000).toStringAsFixed(1)}K',
+      );
+    }).toList();
   }
 }
