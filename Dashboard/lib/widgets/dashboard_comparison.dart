@@ -39,6 +39,10 @@ class MultiAnalyticsOveriview extends StatefulWidget {
           60000,
         ],
         'maxY': 80000,
+        'legend': [
+          {'label': 'Approval', 'color': '0xFF5B8FF7', 'isDashed': false},
+          {'label': 'Delayed', 'color': '0xFF10B981', 'isDashed': true},
+        ],
       },
     ],
   };
@@ -189,12 +193,26 @@ class _MultiAnalyticsOveriviewState extends State<MultiAnalyticsOveriview> {
   }
 
   Widget _buildLegend() {
+    if (tabsData.isEmpty) return const SizedBox.shrink();
+
+    final currentTab = tabsData[selectedTabIndex];
+    final legendData = currentTab['legend'] as List<dynamic>?;
+
+    if (legendData == null || legendData.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        _buildLegendItem('Approval', const Color(0xFF5B8FF7), false),
-        SizedBox(width: AppSpacing.lg),
-        _buildLegendItem('Delayed', const Color(0xFF10B981), true),
+        for (int i = 0; i < legendData.length; i++) ...[
+          _buildLegendItem(
+            legendData[i]['label'] as String,
+            Color(int.parse(legendData[i]['color'] as String)),
+            legendData[i]['isDashed'] as bool,
+          ),
+          if (i < legendData.length - 1) SizedBox(width: AppSpacing.lg),
+        ],
       ],
     );
   }
@@ -239,6 +257,15 @@ class _MultiAnalyticsOveriviewState extends State<MultiAnalyticsOveriview> {
       (currentTab['delayedOrder'] as List).map((e) => (e as num).toDouble()),
     );
     final maxY = (currentTab['maxY'] as num).toDouble();
+
+    // Get colors from legend data
+    final legendData = currentTab['legend'] as List<dynamic>?;
+    final approvalColor = legendData != null && legendData.isNotEmpty
+        ? Color(int.parse(legendData[0]['color'] as String))
+        : const Color(0xFF5B8FF7);
+    final delayedColor = legendData != null && legendData.length > 1
+        ? Color(int.parse(legendData[1]['color'] as String))
+        : const Color(0xFF10B981);
 
     return AnimatedSwitcher(
       duration: AppAnimations.normal,
@@ -330,7 +357,7 @@ class _MultiAnalyticsOveriviewState extends State<MultiAnalyticsOveriview> {
                   curveSmoothness: 0.3,
                   preventCurveOverShooting: true,
                   preventCurveOvershootingThreshold: 10,
-                  color: const Color(0xFF5B8FF7),
+                  color: approvalColor,
                   barWidth: 2.5,
                   isStrokeCapRound: true,
                   dotData: const FlDotData(show: false),
@@ -338,10 +365,10 @@ class _MultiAnalyticsOveriviewState extends State<MultiAnalyticsOveriview> {
                     show: true,
                     gradient: LinearGradient(
                       colors: [
-                        const Color(0xFF5B8FF7).withValues(alpha: 0.25),
-                        const Color(0xFF5B8FF7).withValues(alpha: 0.12),
-                        const Color(0xFF5B8FF7).withValues(alpha: 0.05),
-                        const Color(0xFF5B8FF7).withValues(alpha: 0.01),
+                        approvalColor.withValues(alpha: 0.25),
+                        approvalColor.withValues(alpha: 0.12),
+                        approvalColor.withValues(alpha: 0.05),
+                        approvalColor.withValues(alpha: 0.01),
                       ],
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
@@ -358,7 +385,7 @@ class _MultiAnalyticsOveriviewState extends State<MultiAnalyticsOveriview> {
                   curveSmoothness: 0.3,
                   preventCurveOverShooting: true,
                   preventCurveOvershootingThreshold: 10,
-                  color: const Color(0xFF10B981),
+                  color: delayedColor,
                   barWidth: 2.5,
                   isStrokeCapRound: true,
                   dashArray: [6, 4],
@@ -417,11 +444,9 @@ class _MultiAnalyticsOveriviewState extends State<MultiAnalyticsOveriview> {
                               if (actualSpot != null) ...[
                                 TextSpan(
                                   text: '● ',
-                                  style: AppTextStyles.b10(isDark: true)
-                                      .copyWith(
-                                        color: const Color(0xFF5B8FF7),
-                                        height: 1.8,
-                                      ),
+                                  style: AppTextStyles.b10(
+                                    isDark: true,
+                                  ).copyWith(color: approvalColor, height: 1.8),
                                 ),
                                 TextSpan(
                                   text:
@@ -435,11 +460,9 @@ class _MultiAnalyticsOveriviewState extends State<MultiAnalyticsOveriview> {
                               if (projectedSpot != null) ...[
                                 TextSpan(
                                   text: '● ',
-                                  style: AppTextStyles.b10(isDark: true)
-                                      .copyWith(
-                                        color: const Color(0xFF10B981),
-                                        height: 1.8,
-                                      ),
+                                  style: AppTextStyles.b10(
+                                    isDark: true,
+                                  ).copyWith(color: delayedColor, height: 1.8),
                                 ),
                                 TextSpan(
                                   text:

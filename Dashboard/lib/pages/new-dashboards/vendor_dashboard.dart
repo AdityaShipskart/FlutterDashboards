@@ -261,18 +261,15 @@ const Map<String, dynamic> _orderFulfillmentCombo = {
 const Map<String, dynamic> _deliveryPerformanceComparison = {
   'tabs': [
     {
-      'label': 'Delivery Performance',
-      'subtitle': 'On-time vs delayed deliveries',
-      'onTimeOrder': [268, 284, 296, 312, 328, 342],
-      'delayedOrder': [18, 16, 14, 12, 10, 8],
+      'label': 'Win Rate',
+      'subtitle': 'RFQs submitted vs purchase orders',
+      'onTimeOrder': [282, 321, 248, 225, 248, 300],
+      'delayedOrder': [120, 190, 80, 140, 150, 143],
       'maxY': 360,
-    },
-    {
-      'label': 'Quote Conversion',
-      'subtitle': 'RFQ to order conversion rate',
-      'onTimeOrder': [142, 156, 168, 178, 192, 206],
-      'delayedOrder': [68, 64, 58, 54, 48, 42],
-      'maxY': 220,
+      'legend': [
+        {'label': 'Purchase Orders', 'color': '0xFF5B8FF7', 'isDashed': false},
+        {'label': 'RFQs Submitted', 'color': '0xFF10B981', 'isDashed': true},
+      ],
     },
   ],
 };
