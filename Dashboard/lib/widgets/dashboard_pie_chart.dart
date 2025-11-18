@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:fl_chart/fl_chart.dart';
 // import 'package:get/utils.dart';
 import 'common/custom_tooltip.dart';
+import '../const/constant.dart';
 
 class DashboardPieChart extends StatefulWidget {
   final String? jsonFilePath;
@@ -120,7 +121,7 @@ class _DashboardPieChartState extends State<DashboardPieChart> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Error: $errorMessage'),
-          backgroundColor: const Color(0xFFEF4444),
+          backgroundColor: AppColors.error,
         ),
       );
     }
@@ -132,15 +133,15 @@ class _DashboardPieChartState extends State<DashboardPieChart> {
 
     return Container(
       width: double.infinity,
-      margin: const EdgeInsets.all(10.0),
-      padding: const EdgeInsets.all(15.0),
+      margin: EdgeInsets.all(AppSpacing.sm),
+      padding: EdgeInsets.all(AppSpacing.md),
 
       decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF1A1A1A) : Colors.white,
-        borderRadius: BorderRadius.circular(12.0),
+        color: AppColors.getCard(isDark),
+        borderRadius: BorderRadius.circular(AppConstants.radiusLarge),
         boxShadow: [
           BoxShadow(
-            color: const Color(0x0F000000),
+            color: AppColors.shadowLight,
             blurRadius: 10,
             offset: const Offset(0, 2),
           ),
@@ -160,37 +161,12 @@ class _DashboardPieChartState extends State<DashboardPieChart> {
                     children: [
                       Text(
                         cardTitle, // Dynamic from API
-                        style: Theme.of(context).textTheme.titleMedium
-                            ?.copyWith(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 16,
-                              color: isDark
-                                  ? const Color(
-                                      0xFFF9FAFB,
-                                    ) // Formal white for dark theme
-                                  : const Color(
-                                      0xFF1F2937,
-                                    ), // Formal dark gray for light theme
-                              letterSpacing: 0.15,
-                            ),
+                        style: AuroraTheme.cardTitleStyle(isDark),
                       ),
-                      const SizedBox(height: 4.0),
+                      SizedBox(height: AppSpacing.xs),
                       Text(
                         cardSubtitle, // Dynamic from API
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
-                          fontFamily: 'Inter',
-                          height: 20 / 14,
-                          letterSpacing: 0.25,
-                          color: isDark
-                              ? const Color(
-                                  0xFF9CA3AF,
-                                ) // Formal gray for dark theme
-                              : const Color(
-                                  0xFF6B7280,
-                                ), // Formal gray for light theme
-                        ),
+                        style: AuroraTheme.cardSubtitleStyle(isDark),
                       ),
                     ],
                   ),
@@ -198,14 +174,12 @@ class _DashboardPieChartState extends State<DashboardPieChart> {
                 // Three dots menu icon
                 Icon(
                   Icons.more_horiz,
-                  color: isDark
-                      ? const Color(0xFFB5B7C8)
-                      : const Color(0xFF757575),
-                  size: 24,
+                  color: AppColors.getTextSecondary(isDark),
+                  size: AppConstants.iconSizeMedium,
                 ),
               ],
             ),
-            const SizedBox(height: 48.0),
+            SizedBox(height: AppSpacing.xxxl + 16),
             // Donut Chart with center text (wrapped in outer Stack for external tooltip)
             Center(
               child: Stack(
@@ -219,7 +193,7 @@ class _DashboardPieChartState extends State<DashboardPieChart> {
                     child: isLoading
                         ? Center(
                             child: CircularProgressIndicator(
-                              color: const Color(0xFF1379F0),
+                              color: AppColors.primary,
                             ),
                           )
                         : Stack(
@@ -286,19 +260,12 @@ class _DashboardPieChartState extends State<DashboardPieChart> {
                               Center(
                                 child: Text(
                                   totalLeads, // Dynamic from API
-                                  style: TextStyle(
-                                    fontSize: 24,
-                                    fontWeight: FontWeight.w700,
-                                    color: isDark
-                                        ? const Color(
-                                            0xFFF9FAFB,
-                                          ) // Formal white for dark theme
-                                        : const Color(
-                                            0xFF1F2937,
-                                          ), // Formal dark gray for light theme
-                                    height: 1.0,
-                                    letterSpacing: 0.15,
-                                  ),
+                                  style: AppTextStyles.h24(isDark: isDark)
+                                      .copyWith(
+                                        fontWeight: FontWeight.w700,
+                                        height: 1.0,
+                                        letterSpacing: 0.15,
+                                      ),
                                 ),
                               ),
                             ],
@@ -322,10 +289,10 @@ class _DashboardPieChartState extends State<DashboardPieChart> {
                 ],
               ),
             ),
-            const SizedBox(height: 40),
+            SizedBox(height: AppSpacing.xxl + 8),
             // Compact Legend with grid layout for maximum data display
             Padding(
-              padding: const EdgeInsets.all(12.0),
+              padding: EdgeInsets.all(AppSpacing.ml),
               child: LayoutBuilder(
                 builder: (context, constraints) {
                   // Calculate optimal grid layout based on available width
@@ -351,11 +318,13 @@ class _DashboardPieChartState extends State<DashboardPieChart> {
                           children: [
                             // Compact color indicator
                             Container(
-                              width: 12,
-                              height: 12,
+                              width: AuroraTheme.legendIconSize,
+                              height: AuroraTheme.legendIconSize,
                               decoration: BoxDecoration(
                                 color: item.color,
-                                borderRadius: BorderRadius.circular(2),
+                                borderRadius: BorderRadius.circular(
+                                  AppConstants.radiusSmall,
+                                ),
                                 boxShadow: [
                                   BoxShadow(
                                     color: item.color.withValues(alpha: 0.4),
@@ -365,21 +334,14 @@ class _DashboardPieChartState extends State<DashboardPieChart> {
                                 ],
                               ),
                             ),
-                            const SizedBox(width: 6),
+                            SizedBox(width: AppSpacing.sd),
                             // Compact label
                             Expanded(
                               child: Text(
                                 item.label,
-                                style: TextStyle(
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.w500,
-                                  fontFamily: 'Inter',
-                                  height: 16 / 11,
-                                  letterSpacing: 0.2,
-                                  color: isDark
-                                      ? const Color(0xFFE5E7EB)
-                                      : const Color(0xFF374151),
-                                ),
+                                style: AppTextStyles.b11Medium(
+                                  isDark: isDark,
+                                ).copyWith(height: 16 / 11, letterSpacing: 0.2),
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
                               ),

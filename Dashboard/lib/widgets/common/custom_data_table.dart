@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../const/constant.dart';
 
 /// Standalone CustomDataTable widget - displays data in a responsive table format
 ///
@@ -47,43 +48,6 @@ class CustomDataTable extends StatelessWidget {
     this.onSwitchChanged,
   });
 
-  // Inline constants - no external dependencies
-  static const double _spacingXs = 4.0;
-  static const double _spacingLg = 16.0;
-  static const double _spacingXl = 20.0;
-  static const double _spacingXxl = 24.0;
-  static const double _radiusLarge = 12.0;
-  static const double _iconSizeMedium = 24.0;
-
-  // Inline colors - no external dependencies
-  static const Color _darkSurface = Color(0xFF1F2937);
-  static const Color _darkBorder = Color(0xFF374151);
-  static const Color _darkDivider = Color(0xFF374151);
-  static const Color _textPrimaryDark = Color(0xFFF9FAFB);
-  static const Color _textSecondaryDark = Color(0xFF9CA3AF);
-  static const Color _textPrimaryLight = Color(0xFF111827);
-  static const Color _textSecondaryLight = Color(0xFF6B7280);
-  static const Color _grey25Light = Color(0xFFFCFCFD);
-  static const Color _grey200Light = Color(0xFFE5E7EB);
-  static const Color _grey200Dark = Color(0xFF374151);
-  static const Color _grey300Dark = Color(0xFF4B5563);
-  static const Color _grey600Dark = Color(0xFF9CA3AF);
-  static const Color _grey600Light = Color(0xFF6B7280);
-  static const Color _grey900Light = Color(0xFF111827);
-  static const Color _lightBorder = Color(0xFFE5E7EB);
-  static const Color _lightDivider = Color(0xFFE5E7EB);
-
-  // Inline responsive breakpoint methods
-  static bool _isMobile(BuildContext context) =>
-      MediaQuery.of(context).size.width < 850;
-
-  static bool _isTablet(BuildContext context) =>
-      MediaQuery.of(context).size.width < 1100 &&
-      MediaQuery.of(context).size.width >= 850;
-
-  static bool _isDesktop(BuildContext context) =>
-      MediaQuery.of(context).size.width >= 1100;
-
   // Example data for when no data is provided
   static final List<TableColumn> _exampleColumns = [
     TableColumn(key: 'name', label: 'Name'),
@@ -106,11 +70,11 @@ class CustomDataTable extends StatelessWidget {
     final effectiveDataRows = dataRows.isEmpty ? _exampleDataRows : dataRows;
 
     return Container(
-      padding: const EdgeInsets.all(_spacingLg),
+      padding: EdgeInsets.all(AppSpacing.md),
       decoration: BoxDecoration(
-        color: isDark ? _darkSurface : Colors.white,
-        borderRadius: BorderRadius.circular(_radiusLarge),
-        border: Border.all(color: isDark ? _darkBorder : _lightBorder),
+        color: AppColors.getCard(isDark),
+        borderRadius: BorderRadius.circular(AppConstants.radiusLarge),
+        border: Border.all(color: AppColors.getGreyScale(200, isDark)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -119,13 +83,13 @@ class CustomDataTable extends StatelessWidget {
           _buildHeader(isDark),
 
           // Divider
-          Divider(height: 1, color: isDark ? _darkDivider : _lightDivider),
+          Divider(height: 1, color: AppColors.getGreyScale(200, isDark)),
 
           // Table Content
           _buildTable(isDark, effectiveColumns, effectiveDataRows),
 
           // Divider
-          Divider(height: 1, color: isDark ? _darkDivider : _lightDivider),
+          Divider(height: 1, color: AppColors.getGreyScale(200, isDark)),
         ],
       ),
     );
@@ -142,8 +106,8 @@ class CustomDataTable extends StatelessWidget {
         children: [
           Container(
             decoration: BoxDecoration(
-              color: isDark ? const Color(0xFF374151) : const Color(0xFFF3F4F6),
-              borderRadius: BorderRadius.circular(8),
+              color: AppColors.getGreyScale(100, isDark),
+              borderRadius: BorderRadius.circular(AppConstants.radiusMedium),
             ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
@@ -158,31 +122,31 @@ class CustomDataTable extends StatelessWidget {
                     }
                   },
                   child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 6,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: AppSpacing.ml,
+                      vertical: AppSpacing.sd,
                     ),
                     decoration: BoxDecoration(
                       color: isSelected
-                          ? (isDark
-                                ? const Color(0xFF6366F1)
-                                : const Color(0xFF6366F1))
+                          ? AppColors.primary
                           : Colors.transparent,
-                      borderRadius: BorderRadius.circular(6),
+                      borderRadius: BorderRadius.circular(
+                        AppConstants.radiusSmall + 2,
+                      ),
                     ),
                     child: Text(
                       _formatOptionLabel(option),
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: isSelected
-                            ? FontWeight.w600
-                            : FontWeight.w500,
-                        color: isSelected
-                            ? Colors.white
-                            : (isDark
-                                  ? const Color(0xFFF9FAFB)
-                                  : const Color(0xFF374151)),
-                      ),
+                      style:
+                          AppTextStyles.b12(
+                            isDark: isSelected ? true : isDark,
+                          ).copyWith(
+                            fontWeight: isSelected
+                                ? FontWeight.w600
+                                : FontWeight.w500,
+                            color: isSelected
+                                ? Colors.white
+                                : AppColors.getTextPrimary(isDark),
+                          ),
                     ),
                   ),
                 );
@@ -217,7 +181,7 @@ class CustomDataTable extends StatelessWidget {
 
   Widget _buildHeader(bool isDark) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: _spacingLg),
+      padding: EdgeInsets.only(bottom: AppSpacing.md),
       child: LayoutBuilder(
         builder: (context, constraints) {
           var commonWidget = Column(
@@ -226,35 +190,31 @@ class CustomDataTable extends StatelessWidget {
               if (title != null && title!.isNotEmpty) ...[
                 Text(
                   title!,
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
-                    color: isDark ? _textPrimaryDark : _textPrimaryLight,
-                  ),
+                  style: AppTextStyles.b16(
+                    isDark: isDark,
+                  ).copyWith(fontSize: 18, fontWeight: FontWeight.w600),
                 ),
               ],
 
               if (subtitle != null && subtitle!.isNotEmpty) ...[
-                const SizedBox(height: _spacingXs),
+                SizedBox(height: AppSpacing.xs),
                 Text(
                   subtitle!,
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                    color: isDark ? _textSecondaryDark : _textSecondaryLight,
-                  ),
+                  style: AppTextStyles.b14(
+                    isDark: isDark,
+                  ).copyWith(color: AppColors.getTextSecondary(isDark)),
                 ),
               ],
 
               // Switch options right after subtitle
               if (switchOptions != null && switchOptions!.isNotEmpty) ...[
-                const SizedBox(height: 12),
+                SizedBox(height: AppSpacing.ml),
                 _buildSwitchOptions(isDark),
               ],
             ],
           );
 
-          if (_isMobile(context)) {
+          if (MediaQuery.of(context).size.width < AppBreakpoints.tablet) {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [commonWidget],
@@ -279,13 +239,12 @@ class CustomDataTable extends StatelessWidget {
     if (cols.isEmpty) {
       return Center(
         child: Padding(
-          padding: const EdgeInsets.all(24.0),
+          padding: EdgeInsets.all(AppSpacing.lg),
           child: Text(
             'No data available',
-            style: TextStyle(
-              color: isDark ? _textSecondaryDark : _textSecondaryLight,
-              fontSize: 14,
-            ),
+            style: AppTextStyles.b14(
+              isDark: isDark,
+            ).copyWith(color: AppColors.getTextSecondary(isDark)),
           ),
         ),
       );
@@ -293,14 +252,17 @@ class CustomDataTable extends StatelessWidget {
 
     return LayoutBuilder(
       builder: (context, constraints) {
-        final isDesktop = _isDesktop(context);
-        final isTablet = _isTablet(context);
+        final screenWidth = MediaQuery.of(context).size.width;
+        final isDesktop = screenWidth >= AppBreakpoints.desktop;
+        final isTablet =
+            screenWidth >= AppBreakpoints.tablet &&
+            screenWidth < AppBreakpoints.desktop;
 
         final columnSpacing = isDesktop
-            ? _spacingXxl
+            ? AppSpacing.xxl
             : isTablet
-            ? _spacingXl
-            : _spacingLg;
+            ? AppSpacing.xl
+            : AppSpacing.md;
 
         final double configuredMinWidth = minWidth;
 
@@ -323,18 +285,18 @@ class CustomDataTable extends StatelessWidget {
             child: ConstrainedBox(
               constraints: BoxConstraints(minWidth: targetWidth),
               child: DataTable(
-                horizontalMargin: _spacingLg,
+                horizontalMargin: AppSpacing.md,
                 columnSpacing: columnSpacing,
                 headingRowHeight: 48,
                 dataRowMinHeight: 60,
                 dataRowMaxHeight: 60,
                 headingRowColor: WidgetStateProperty.all(
-                  isDark ? _grey200Dark : _grey25Light,
+                  AppColors.getGreyScale(25, isDark),
                 ),
                 dividerThickness: 1,
                 border: TableBorder(
                   horizontalInside: BorderSide(
-                    color: isDark ? _grey300Dark : _grey200Light,
+                    color: AppColors.getGreyScale(200, isDark),
                     width: 1,
                   ),
                 ),
@@ -343,12 +305,11 @@ class CustomDataTable extends StatelessWidget {
                       (col) => DataColumn(
                         label: Text(
                           col.label,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 14,
-                            color: isDark ? _grey600Dark : _grey900Light,
-                            letterSpacing: 0,
-                          ),
+                          style: AppTextStyles.b14Medium(isDark: isDark)
+                              .copyWith(
+                                color: AppColors.getTextSecondary(isDark),
+                                letterSpacing: 0,
+                              ),
                         ),
                       ),
                     )
@@ -380,8 +341,8 @@ class CustomDataTable extends StatelessWidget {
             IconButton(
               icon: Icon(
                 Icons.more_horiz,
-                size: _iconSizeMedium,
-                color: isDark ? _grey600Dark : _grey600Light,
+                size: AppConstants.iconSizeMedium,
+                color: AppColors.getTextSecondary(isDark),
               ),
               onPressed: () => onRowAction!(row),
             ),
@@ -393,12 +354,9 @@ class CustomDataTable extends StatelessWidget {
               ? col.builder!(value, isDark, false)
               : Text(
                   value?.toString() ?? '',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    color: isDark ? _textPrimaryDark : _textPrimaryLight,
-                    letterSpacing: 0,
-                  ),
+                  style: AppTextStyles.b14Medium(
+                    isDark: isDark,
+                  ).copyWith(letterSpacing: 0),
                 ),
         );
       }).toList(),

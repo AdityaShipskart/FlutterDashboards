@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fl_chart/fl_chart.dart';
+import '../const/constant.dart';
 
 class MultiAnalyticsOveriview extends StatefulWidget {
   final String? jsonFilePath;
@@ -101,13 +102,13 @@ class _MultiAnalyticsOveriviewState extends State<MultiAnalyticsOveriview> {
 
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(24.0),
+      padding: AuroraTheme.chartPadding(),
       decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF1A1A1A) : Colors.white,
-        borderRadius: BorderRadius.circular(12.0),
+        color: AppColors.getCard(isDark),
+        borderRadius: BorderRadius.circular(AppConstants.radiusLarge),
         boxShadow: [
           BoxShadow(
-            color: const Color(0x0F000000),
+            color: AppColors.shadowLight,
             blurRadius: 10,
             offset: const Offset(0, 2),
           ),
@@ -119,37 +120,30 @@ class _MultiAnalyticsOveriviewState extends State<MultiAnalyticsOveriview> {
           // Header with title and subtitle
           if (!isLoading && tabsData.isNotEmpty) _buildHeader(isDark),
 
-          const SizedBox(height: 32.0),
+          SizedBox(height: AppSpacing.xl),
 
           // Legend
           if (!isLoading && tabsData.isNotEmpty) _buildLegend(),
 
-          const SizedBox(height: 24.0),
+          SizedBox(height: AppSpacing.lg),
 
           // Chart Area
           if (isLoading)
             Center(
               child: Padding(
-                padding: const EdgeInsets.all(48.0),
-                child: CircularProgressIndicator(
-                  color: const Color(0xFF1379F0),
-                ),
+                padding: AppSpacing.paddingXL * 3,
+                child: CircularProgressIndicator(color: AppColors.primary),
               ),
             )
           else if (errorMessage != null)
             Center(
               child: Padding(
-                padding: const EdgeInsets.all(48.0),
+                padding: AppSpacing.paddingXL * 3,
                 child: Text(
                   errorMessage!,
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                    fontFamily: 'Inter',
-                    height: 22 / 14,
-                    letterSpacing: 0.25,
-                    color: const Color(0xFFEF4444),
-                  ),
+                  style: AppTextStyles.b14(
+                    isDark: isDark,
+                  ).copyWith(color: AppColors.error),
                 ),
               ),
             )
@@ -174,30 +168,12 @@ class _MultiAnalyticsOveriviewState extends State<MultiAnalyticsOveriview> {
             children: [
               Text(
                 tab['label'] ?? '',
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.w600,
-                  fontFamily: 'Inter',
-                  height: 22 / 22,
-                  letterSpacing: 1.4,
-                  color: isDark
-                      ? const Color(0xFFFFFFFF)
-                      : const Color(0xFF212121),
-                ),
+                style: AuroraTheme.cardTitleStyle(isDark),
               ),
-              const SizedBox(height: 4.0),
+              SizedBox(height: AppSpacing.xs),
               Text(
                 tab['subtitle'] ?? '',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w400,
-                  fontFamily: 'Inter',
-                  height: 22 / 14,
-                  letterSpacing: 0.25,
-                  color: isDark
-                      ? const Color(0xFFB5B7C8)
-                      : const Color(0xFF757575),
-                ),
+                style: AuroraTheme.cardSubtitleStyle(isDark),
               ),
             ],
           ),
@@ -205,8 +181,8 @@ class _MultiAnalyticsOveriviewState extends State<MultiAnalyticsOveriview> {
         // Three dots menu icon
         Icon(
           Icons.more_horiz,
-          color: isDark ? const Color(0xFFB5B7C8) : const Color(0xFF757575),
-          size: 24,
+          color: AppColors.getTextSecondary(isDark),
+          size: AppConstants.iconSizeMedium,
         ),
       ],
     );
@@ -217,7 +193,7 @@ class _MultiAnalyticsOveriviewState extends State<MultiAnalyticsOveriview> {
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         _buildLegendItem('Approval', const Color(0xFF5B8FF7), false),
-        const SizedBox(width: 24.0),
+        SizedBox(width: AppSpacing.lg),
         _buildLegendItem('Delayed', const Color(0xFF10B981), true),
       ],
     );
@@ -228,26 +204,22 @@ class _MultiAnalyticsOveriviewState extends State<MultiAnalyticsOveriview> {
       mainAxisSize: MainAxisSize.min,
       children: [
         Container(
-          width: 32,
+          width: AppSpacing.xl,
           height: 3,
           decoration: BoxDecoration(
             color: isDashed ? Colors.transparent : color,
-            borderRadius: BorderRadius.circular(2.0),
+            borderRadius: BorderRadius.circular(AppConstants.radiusSmall),
           ),
           child: isDashed
               ? CustomPaint(painter: DashedLinePainter(color: color))
               : null,
         ),
-        const SizedBox(width: 12.0),
+        SizedBox(width: AppSpacing.ml),
         Text(
           label,
-          style: const TextStyle(
-            fontSize: 14,
+          style: AppTextStyles.b14(isDark: false).copyWith(
             fontWeight: FontWeight.w500,
-            fontFamily: 'Inter',
-            height: 22 / 14,
-            letterSpacing: 0.25,
-            color: Color(0xFF676A72),
+            color: AppColors.grey700Light,
           ),
         ),
       ],
@@ -269,7 +241,7 @@ class _MultiAnalyticsOveriviewState extends State<MultiAnalyticsOveriview> {
     final maxY = (currentTab['maxY'] as num).toDouble();
 
     return AnimatedSwitcher(
-      duration: const Duration(milliseconds: 400),
+      duration: AppAnimations.normal,
       switchInCurve: Curves.easeInOut,
       switchOutCurve: Curves.easeInOut,
       transitionBuilder: (Widget child, Animation<double> animation) {
@@ -277,11 +249,15 @@ class _MultiAnalyticsOveriviewState extends State<MultiAnalyticsOveriview> {
       },
       child: SizedBox(
         key: ValueKey(selectedTabIndex),
-        height: 260,
+        height: AuroraTheme.mediumChartHeight,
         child: Padding(
-          padding: const EdgeInsets.only(right: 12.0, top: 16.0, bottom: 8.0),
+          padding: EdgeInsets.only(
+            right: AppSpacing.ml,
+            top: AppSpacing.md,
+            bottom: AppSpacing.sm,
+          ),
           child: LineChart(
-            duration: const Duration(milliseconds: 400),
+            duration: AppAnimations.normal,
             curve: Curves.easeInOut,
             LineChartData(
               gridData: FlGridData(
@@ -289,7 +265,7 @@ class _MultiAnalyticsOveriviewState extends State<MultiAnalyticsOveriview> {
                 drawVerticalLine: false,
                 horizontalInterval: maxY / 4,
                 getDrawingHorizontalLine: (value) {
-                  return const FlLine(color: Color(0xFFEEEEEE), strokeWidth: 1);
+                  return FlLine(color: AppColors.grey200Light, strokeWidth: 1);
                 },
               ),
               titlesData: FlTitlesData(
@@ -313,17 +289,12 @@ class _MultiAnalyticsOveriviewState extends State<MultiAnalyticsOveriview> {
                         return Transform.translate(
                           offset: const Offset(0, 0),
                           child: Padding(
-                            padding: const EdgeInsets.only(right: 8.0),
+                            padding: EdgeInsets.only(right: AppSpacing.sm),
                             child: Text(
                               _formatYAxisLabel(value),
-                              style: const TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w400,
-                                fontFamily: 'Inter',
-                                color: Color(0xFF676A72),
+                              style: AppTextStyles.b12(isDark: false).copyWith(
+                                color: AppColors.grey700Light,
                                 height: 1,
-                                leadingDistribution:
-                                    TextLeadingDistribution.even,
                               ),
                               textAlign: TextAlign.right,
                             ),
@@ -338,9 +309,9 @@ class _MultiAnalyticsOveriviewState extends State<MultiAnalyticsOveriview> {
               ),
               borderData: FlBorderData(
                 show: true,
-                border: const Border(
-                  top: BorderSide(color: Color(0xFFEEEEEE), width: 1),
-                  bottom: BorderSide(color: Color(0xFFEEEEEE), width: 1),
+                border: Border(
+                  top: BorderSide(color: AppColors.grey200Light, width: 1),
+                  bottom: BorderSide(color: AppColors.grey200Light, width: 1),
                   left: BorderSide.none,
                   right: BorderSide.none,
                 ),
@@ -398,11 +369,11 @@ class _MultiAnalyticsOveriviewState extends State<MultiAnalyticsOveriview> {
               lineTouchData: LineTouchData(
                 enabled: true,
                 touchTooltipData: LineTouchTooltipData(
-                  tooltipPadding: const EdgeInsets.symmetric(
-                    horizontal: 12.0,
-                    vertical: 12.0,
+                  tooltipPadding: EdgeInsets.symmetric(
+                    horizontal: AppSpacing.ml,
+                    vertical: AppSpacing.ml,
                   ),
-                  tooltipMargin: 8.0,
+                  tooltipMargin: AppSpacing.sm,
                   fitInsideHorizontally: true,
                   fitInsideVertically: true,
                   maxContentWidth: 200,
@@ -438,60 +409,44 @@ class _MultiAnalyticsOveriviewState extends State<MultiAnalyticsOveriview> {
                               // Date header on the left
                               TextSpan(
                                 text: '$dateLabel\n',
-                                style: const TextStyle(
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.w500,
-                                  fontFamily: 'Inter',
-                                  color: Colors.white,
-                                  height: 1.6,
-                                ),
+                                style: AppTextStyles.b11Medium(
+                                  isDark: true,
+                                ).copyWith(color: Colors.white, height: 1.6),
                               ),
                               // On-time line (label and value on same line)
                               if (actualSpot != null) ...[
-                                const TextSpan(
+                                TextSpan(
                                   text: '● ',
-                                  style: TextStyle(
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.w400,
-                                    fontFamily: 'Inter',
-                                    color: Color(0xFF5B8FF7),
-                                    height: 1.8,
-                                  ),
+                                  style: AppTextStyles.b10(isDark: true)
+                                      .copyWith(
+                                        color: const Color(0xFF5B8FF7),
+                                        height: 1.8,
+                                      ),
                                 ),
                                 TextSpan(
                                   text:
                                       'Approved  ${_formatTooltipValue(actualSpot.y)}\n',
-                                  style: const TextStyle(
-                                    fontSize: 11,
-                                    fontWeight: FontWeight.w400,
-                                    fontFamily: 'Inter',
-                                    color: Colors.white,
-                                    height: 1.8,
-                                  ),
+                                  style: AppTextStyles.b11(
+                                    isDark: true,
+                                  ).copyWith(color: Colors.white, height: 1.8),
                                 ),
                               ],
                               // Delayed line (label and value on same line)
                               if (projectedSpot != null) ...[
-                                const TextSpan(
+                                TextSpan(
                                   text: '● ',
-                                  style: TextStyle(
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.w400,
-                                    fontFamily: 'Inter',
-                                    color: Color(0xFF10B981),
-                                    height: 1.8,
-                                  ),
+                                  style: AppTextStyles.b10(isDark: true)
+                                      .copyWith(
+                                        color: const Color(0xFF10B981),
+                                        height: 1.8,
+                                      ),
                                 ),
                                 TextSpan(
                                   text:
                                       'Delayed  ${_formatTooltipValue(projectedSpot.y)}',
-                                  style: const TextStyle(
-                                    fontSize: 11,
-                                    fontWeight: FontWeight.w400,
-                                    fontFamily: 'Inter',
-                                    color: Colors.white,
-                                    height: 1.8,
-                                  ),
+                                  style: AppTextStyles.b11(
+                                    isDark: true,
+                                  ).copyWith(color: Colors.white, height: 1.8),
                                 ),
                               ],
                             ],

@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:fl_chart/fl_chart.dart';
 // import 'package:get/utils.dart';
 import 'common/custom_tooltip.dart';
+import '../const/constant.dart';
 
 class DashboardFinancialCard extends StatefulWidget {
   final String? jsonFilePath;
@@ -150,7 +151,7 @@ class _DashboardFinancialCardState extends State<DashboardFinancialCard> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Error: $errorMessage'),
-          backgroundColor: const Color(0xFFEF4444),
+          backgroundColor: AppColors.error,
         ),
       );
     }
@@ -162,14 +163,14 @@ class _DashboardFinancialCardState extends State<DashboardFinancialCard> {
 
     return Container(
       width: double.infinity,
-      margin: const EdgeInsets.all(10.0),
-      padding: const EdgeInsets.all(15.0),
+      margin: EdgeInsets.all(AppSpacing.sm),
+      padding: EdgeInsets.all(AppSpacing.md),
       decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF1A1A1A) : Colors.white,
-        borderRadius: BorderRadius.circular(12.0),
+        color: AppColors.getCard(isDark),
+        borderRadius: BorderRadius.circular(AppConstants.radiusLarge),
         boxShadow: [
           BoxShadow(
-            color: const Color(0x0F000000),
+            color: AppColors.shadowLight,
             blurRadius: 10,
             offset: const Offset(0, 2),
           ),
@@ -189,24 +190,12 @@ class _DashboardFinancialCardState extends State<DashboardFinancialCard> {
                   children: [
                     Text(
                       cardTitle, // Dynamic from API
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: isDark ? Colors.white : Colors.black,
-                      ),
+                      style: AuroraTheme.cardTitleStyle(isDark),
                     ),
-                    const SizedBox(height: 4.0),
+                    SizedBox(height: AppSpacing.xs),
                     Text(
                       cardSubtitle, // Dynamic from API
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                        fontFamily: 'Inter',
-                        height: 22 / 14,
-                        letterSpacing: 0.25,
-                        color: isDark
-                            ? const Color(0xFFB5B7C8)
-                            : const Color(0xFF757575),
-                      ),
+                      style: AuroraTheme.cardSubtitleStyle(isDark),
                     ),
                   ],
                 ),
@@ -214,14 +203,12 @@ class _DashboardFinancialCardState extends State<DashboardFinancialCard> {
               // Three dots menu icon
               Icon(
                 Icons.more_horiz,
-                color: isDark
-                    ? const Color(0xFFB5B7C8)
-                    : const Color(0xFF757575),
-                size: 24,
+                color: AppColors.getTextSecondary(isDark),
+                size: AppConstants.iconSizeMedium,
               ),
             ],
           ),
-          const SizedBox(height: 20.0),
+          SizedBox(height: AppSpacing.lg - 4),
 
           // Main value and percentage change
           Row(
@@ -233,66 +220,48 @@ class _DashboardFinancialCardState extends State<DashboardFinancialCard> {
                 style: TextStyle(
                   fontSize: 40,
                   fontWeight: FontWeight.w600,
-                  color: isDark
-                      ? const Color(0xFFFFFFFF)
-                      : const Color(0xFF212121),
+                  color: AppColors.getTextPrimary(isDark),
                   height: 1.0,
                   letterSpacing: -0.5,
                 ),
               ),
-              const SizedBox(width: 16.0),
+              SizedBox(width: AppSpacing.md),
               // Percentage change badge and label in one line
               Padding(
-                padding: const EdgeInsets.only(bottom: 8),
+                padding: EdgeInsets.only(bottom: AppSpacing.sm),
                 child: Row(
                   children: [
                     // Percentage badge - soft orange/peach background for negative
                     Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 4,
+                      padding: EdgeInsets.symmetric(
+                        horizontal: AppSpacing.sm,
+                        vertical: AppSpacing.xs,
                       ),
-                      decoration: BoxDecoration(
-                        color: isPositiveChange
-                            ? (isDark
-                                  ? const Color(0xFF064E3B)
-                                  : const Color(0xFFD1FAE5))
-                            : (isDark
-                                  ? const Color(0xFF7F1D1D)
-                                  : const Color(0xFFFEE2E2)),
-                        borderRadius: BorderRadius.circular(4),
+                      decoration: AuroraTheme.percentageContainerDecoration(
+                        isPositive: isPositiveChange,
+                        isDark: isDark,
                       ),
                       child: Text(
                         percentageChange, // Dynamic from API
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w500,
-                          fontFamily: 'Inter',
-                          height: 19 / 12,
-                          letterSpacing: 0.4,
-                          color: isPositiveChange
-                              ? (isDark
-                                    ? const Color(0xFF34D399)
-                                    : const Color(0xFF10B981))
-                              : (isDark
-                                    ? const Color(0xFFF87171)
-                                    : const Color(0xFFEF4444)),
-                        ),
+                        style:
+                            AuroraTheme.percentageTextStyle(
+                              isPositive: isPositiveChange,
+                              isDark: isDark,
+                            ).copyWith(
+                              fontSize: 12,
+                              height: 19 / 12,
+                              letterSpacing: 0.4,
+                            ),
                       ),
                     ),
-                    const SizedBox(width: 8),
+                    SizedBox(width: AppSpacing.sm),
                     // Change label - grey text
                     Text(
                       changeLabel, // Dynamic from API
-                      style: TextStyle(
+                      style: AuroraTheme.changeLabelStyle(isDark).copyWith(
                         fontSize: 12,
-                        fontWeight: FontWeight.w400,
-                        fontFamily: 'Inter',
                         height: 19 / 12,
                         letterSpacing: 0.4,
-                        color: isDark
-                            ? const Color(0xFFB5B7C8)
-                            : const Color(0xFF757575),
                       ),
                     ),
                   ],
@@ -300,7 +269,7 @@ class _DashboardFinancialCardState extends State<DashboardFinancialCard> {
               ),
             ],
           ),
-          const SizedBox(height: 20.0),
+          SizedBox(height: AppSpacing.lg - 4),
 
           // Bar Chart with custom tooltip
           SizedBox(
@@ -308,9 +277,7 @@ class _DashboardFinancialCardState extends State<DashboardFinancialCard> {
                 290, // Increased from 120 to better utilize the taller container
             child: isLoading
                 ? Center(
-                    child: CircularProgressIndicator(
-                      color: const Color(0xFF1379F0),
-                    ),
+                    child: CircularProgressIndicator(color: AppColors.primary),
                   )
                 : Stack(
                     clipBehavior: Clip.none, // Allow tooltip to overflow
@@ -362,10 +329,14 @@ class _DashboardFinancialCardState extends State<DashboardFinancialCard> {
                                 return BarChartRodData(
                                   toY: rod.toY,
                                   width: 8,
-                                  color: const Color(0xFF1379F0),
+                                  color: AppColors.primary,
                                   borderRadius: BorderRadius.horizontal(
-                                    left: const Radius.circular(4),
-                                    right: const Radius.circular(4),
+                                    left: Radius.circular(
+                                      AppConstants.radiusSmall,
+                                    ),
+                                    right: Radius.circular(
+                                      AppConstants.radiusSmall,
+                                    ),
                                   ),
                                 );
                               }).toList(),
@@ -407,7 +378,7 @@ class _DashboardFinancialCardState extends State<DashboardFinancialCard> {
 
     return [
       TooltipDataItem(
-        color: const Color(0xFF1379F0),
+        color: AppColors.primary,
         label: label,
         value: '\$${value.toStringAsFixed(2)}',
       ),
@@ -426,7 +397,7 @@ class _DashboardFinancialCardState extends State<DashboardFinancialCard> {
           BarChartRodData(
             toY: (point['y'] as num).toDouble(),
             width: 8,
-            borderRadius: BorderRadius.circular(4),
+            borderRadius: BorderRadius.circular(AppConstants.radiusSmall),
           ),
         ],
       );

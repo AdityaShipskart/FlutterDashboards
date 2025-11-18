@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'dart:convert';
 import 'common/custom_tooltip.dart';
+import '../const/constant.dart';
 
 /// Standalone DashboardBarChart Widget
 /// Displays revenue bar chart with multiple data series
@@ -89,31 +90,6 @@ class DashboardBarChart extends StatefulWidget {
 }
 
 class _DashboardBarChartState extends State<DashboardBarChart> {
-  // Inline constants - no external dependencies
-  static const double _spacingSm = 8.0;
-  static const double _spacingMd = 16.0;
-  static const double _spacingLg = 24.0;
-  static const double _radiusLarge = 12.0;
-  static const double _radiusMedium = 8.0;
-  static const double _legendIconSize = 8.0;
-  static const double _iconSizeMedium = 24.0;
-
-  static const Color _darkSurface = Color(0xFF1A1A1A);
-  static const Color _darkBorder = Color(0xFF363843);
-  static const Color _lightBorder = Color(0xFFE0E0E0);
-  static const Color _textPrimaryDark = Color(0xFFFFFFFF);
-  static const Color _textPrimaryLight = Color(0xFF212121);
-  static const Color _textSecondaryDark = Color(0xFFB5B7C8);
-  static const Color _textSecondaryLight = Color(0xFF757575);
-  static const Color _grey100Light = Color(0xFFF5F5F5);
-  static const Color _grey100Dark = Color(0xFF2A2A2A);
-  static const Color _grey300Light = Color(0xFFE0E0E0);
-  static const Color _grey300Dark = Color(0xFF4A4A4A);
-  static const Color _grey600Dark = Color(0xFF808290);
-  static const Color _grey600Light = Color(0xFF8E9198);
-  static const Color _primary = Color(0xFF4F46E5);
-  static const Color _error = Color(0xFFEF4444);
-
   // ============ ALL DYNAMIC DATA FROM .NET BACKEND ============
 
   // Card content - all dynamic from backend
@@ -205,7 +181,7 @@ class _DashboardBarChartState extends State<DashboardBarChart> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Error: $errorMessage'),
-          backgroundColor: _error,
+          backgroundColor: AppColors.error,
         ),
       );
     }
@@ -217,11 +193,11 @@ class _DashboardBarChartState extends State<DashboardBarChart> {
 
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(_spacingLg),
+      padding: AuroraTheme.chartPadding(),
       decoration: BoxDecoration(
-        color: isDark ? _darkSurface : Colors.white,
-        borderRadius: BorderRadius.circular(_radiusLarge),
-        border: Border.all(color: isDark ? _darkBorder : _lightBorder),
+        color: AppColors.getCard(isDark),
+        borderRadius: BorderRadius.circular(AppConstants.radiusLarge),
+        border: Border.all(color: AppColors.getBorder(isDark)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -234,23 +210,11 @@ class _DashboardBarChartState extends State<DashboardBarChart> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      cardTitle,
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                        color: isDark ? _textPrimaryDark : _textPrimaryLight,
-                      ),
-                    ),
-                    const SizedBox(height: _spacingSm),
+                    Text(cardTitle, style: AuroraTheme.cardTitleStyle(isDark)),
+                    SizedBox(height: AppSpacing.sm),
                     Text(
                       cardSubtitle,
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: isDark
-                            ? _textSecondaryDark
-                            : _textSecondaryLight,
-                      ),
+                      style: AuroraTheme.cardSubtitleStyle(isDark),
                     ),
                   ],
                 ),
@@ -258,12 +222,12 @@ class _DashboardBarChartState extends State<DashboardBarChart> {
               // Three dots menu icon
               Icon(
                 Icons.more_vert,
-                size: _iconSizeMedium,
-                color: isDark ? _grey600Dark : _grey600Light,
+                size: AppConstants.iconSizeMedium,
+                color: AppColors.getTextSecondary(isDark),
               ),
             ],
           ),
-          const SizedBox(height: _spacingMd),
+          SizedBox(height: AppSpacing.md),
 
           // Legend - Dynamic from API
           Row(
@@ -272,13 +236,13 @@ class _DashboardBarChartState extends State<DashboardBarChart> {
                     // Fallback if no legend data
                     _buildLegendItem(
                       '25th',
-                      isDark ? _grey300Dark : _grey300Light,
+                      AppColors.getGreyScale(300, isDark),
                       isDark,
                     ),
-                    const SizedBox(width: _spacingMd),
+                    SizedBox(width: AppSpacing.md),
                     _buildLegendItem('50th', const Color(0xFF4CAF50), isDark),
-                    const SizedBox(width: _spacingMd),
-                    _buildLegendItem('75th', _primary, isDark),
+                    SizedBox(width: AppSpacing.md),
+                    _buildLegendItem('75th', AppColors.primary, isDark),
                   ]
                 : legendData.map((legend) {
                     final colorValue = legend['color'];
@@ -293,167 +257,184 @@ class _DashboardBarChartState extends State<DashboardBarChart> {
                           color,
                           isDark,
                         ),
-                        const SizedBox(width: _spacingMd),
+                        SizedBox(width: AppSpacing.md),
                       ],
                     );
                   }).toList(),
           ),
-          const SizedBox(height: _spacingMd),
+          SizedBox(height: AppSpacing.md),
 
           // Bar Chart with hover overlay
-          SizedBox(
-            height: 280,
-            width: double.infinity,
-            child: isLoading
-                ? const Center(
-                    child: CircularProgressIndicator(color: _primary),
-                  )
-                : Stack(
-                    clipBehavior: Clip.none,
-                    children: [
-                      // Bar Chart
-                      BarChart(
-                        BarChartData(
-                          alignment: BarChartAlignment.spaceAround,
-                          maxY:
-                              maxY +
-                              (yAxisInterval *
-                                  0.05), // Add 5% padding to show 500k line
-                          minY: minY, // Dynamic from API
-                          barTouchData: BarTouchData(
-                            enabled: true,
-                            touchCallback:
-                                (
-                                  FlTouchEvent event,
-                                  BarTouchResponse? response,
-                                ) {
-                                  setState(() {
-                                    if (!event.isInterestedForInteractions ||
-                                        response == null ||
-                                        response.spot == null) {
-                                      touchedGroupIndex = -1;
-                                      cursorPosition = null;
-                                      return;
-                                    }
-                                    touchedGroupIndex =
-                                        response.spot!.touchedBarGroupIndex;
-                                    if (event is FlPointerHoverEvent ||
-                                        event is FlPanUpdateEvent ||
-                                        event is FlTapUpEvent) {
-                                      cursorPosition = event.localPosition;
-                                    }
-                                  });
-                                },
-                            touchTooltipData: BarTouchTooltipData(
-                              getTooltipItem:
-                                  (group, groupIndex, rod, rodIndex) {
-                                    // Hide default tooltip
-                                    return null;
-                                  },
-                            ),
-                          ),
-                          titlesData: FlTitlesData(
-                            show: true,
-                            rightTitles: AxisTitles(
-                              sideTitles: SideTitles(
-                                showTitles: true,
-                                reservedSize: 50,
-                                getTitlesWidget: (value, meta) {
-                                  final textStyle = TextStyle(
-                                    fontSize: 11,
-                                    color: isDark
-                                        ? _textSecondaryDark
-                                        : _textSecondaryLight,
-                                  );
-                                  if (value == 0) {
-                                    return Text('0k', style: textStyle);
-                                  }
-                                  if (value == 100000) {
-                                    return Text('100k', style: textStyle);
-                                  }
-                                  if (value == 200000) {
-                                    return Text('200k', style: textStyle);
-                                  }
-                                  if (value == 300000) {
-                                    return Text('300k', style: textStyle);
-                                  }
-                                  if (value == 400000) {
-                                    return Text('400k', style: textStyle);
-                                  }
-                                  if (value == 500000) {
-                                    return Text('500k', style: textStyle);
-                                  }
-                                  return const Text('');
-                                },
+          LayoutBuilder(
+            builder: (context, constraints) {
+              final chartHeight = AuroraTheme.getResponsiveChartHeight(
+                constraints.maxWidth,
+              );
+              return SizedBox(
+                height: chartHeight,
+                width: double.infinity,
+                child: isLoading
+                    ? Center(
+                        child: CircularProgressIndicator(
+                          color: AppColors.primary,
+                        ),
+                      )
+                    : Stack(
+                        clipBehavior: Clip.none,
+                        children: [
+                          // Bar Chart
+                          BarChart(
+                            BarChartData(
+                              alignment: BarChartAlignment.spaceAround,
+                              maxY:
+                                  maxY +
+                                  (yAxisInterval *
+                                      0.05), // Add 5% padding to show 500k line
+                              minY: minY, // Dynamic from API
+                              barTouchData: BarTouchData(
+                                enabled: true,
+                                touchCallback:
+                                    (
+                                      FlTouchEvent event,
+                                      BarTouchResponse? response,
+                                    ) {
+                                      setState(() {
+                                        if (!event
+                                                .isInterestedForInteractions ||
+                                            response == null ||
+                                            response.spot == null) {
+                                          touchedGroupIndex = -1;
+                                          cursorPosition = null;
+                                          return;
+                                        }
+                                        touchedGroupIndex =
+                                            response.spot!.touchedBarGroupIndex;
+                                        if (event is FlPointerHoverEvent ||
+                                            event is FlPanUpdateEvent ||
+                                            event is FlTapUpEvent) {
+                                          cursorPosition = event.localPosition;
+                                        }
+                                      });
+                                    },
+                                touchTooltipData: BarTouchTooltipData(
+                                  getTooltipItem:
+                                      (group, groupIndex, rod, rodIndex) {
+                                        // Hide default tooltip
+                                        return null;
+                                      },
+                                ),
                               ),
-                            ),
-                            topTitles: const AxisTitles(
-                              sideTitles: SideTitles(showTitles: false),
-                            ),
-                            leftTitles: const AxisTitles(
-                              sideTitles: SideTitles(showTitles: false),
-                            ),
-                            bottomTitles: AxisTitles(
-                              sideTitles: SideTitles(
-                                showTitles: true,
-                                reservedSize: 40,
-                                getTitlesWidget:
-                                    (double value, TitleMeta meta) {
-                                      if (value.toInt() >= 0 &&
-                                          value.toInt() < chartData.length) {
-                                        return Padding(
-                                          padding: const EdgeInsets.only(
-                                            top: _spacingSm,
-                                          ),
-                                          child: Text(
-                                            chartData[value.toInt()]['label'],
-                                            style: TextStyle(
-                                              fontSize: 11,
-                                              color: isDark
-                                                  ? _textSecondaryDark
-                                                  : _textSecondaryLight,
+                              titlesData: FlTitlesData(
+                                show: true,
+                                rightTitles: AxisTitles(
+                                  sideTitles: SideTitles(
+                                    showTitles: true,
+                                    reservedSize: 50,
+                                    getTitlesWidget: (value, meta) {
+                                      final textStyle =
+                                          AppTextStyles.b11(
+                                            isDark: isDark,
+                                          ).copyWith(
+                                            color: AppColors.getTextSecondary(
+                                              isDark,
                                             ),
-                                          ),
-                                        );
+                                          );
+                                      if (value == 0) {
+                                        return Text('0k', style: textStyle);
+                                      }
+                                      if (value == 100000) {
+                                        return Text('100k', style: textStyle);
+                                      }
+                                      if (value == 200000) {
+                                        return Text('200k', style: textStyle);
+                                      }
+                                      if (value == 300000) {
+                                        return Text('300k', style: textStyle);
+                                      }
+                                      if (value == 400000) {
+                                        return Text('400k', style: textStyle);
+                                      }
+                                      if (value == 500000) {
+                                        return Text('500k', style: textStyle);
                                       }
                                       return const Text('');
                                     },
+                                  ),
+                                ),
+                                topTitles: const AxisTitles(
+                                  sideTitles: SideTitles(showTitles: false),
+                                ),
+                                leftTitles: const AxisTitles(
+                                  sideTitles: SideTitles(showTitles: false),
+                                ),
+                                bottomTitles: AxisTitles(
+                                  sideTitles: SideTitles(
+                                    showTitles: true,
+                                    reservedSize: 40,
+                                    getTitlesWidget:
+                                        (double value, TitleMeta meta) {
+                                          if (value.toInt() >= 0 &&
+                                              value.toInt() <
+                                                  chartData.length) {
+                                            return Padding(
+                                              padding: EdgeInsets.only(
+                                                top: AppSpacing.sm,
+                                              ),
+                                              child: Text(
+                                                chartData[value
+                                                    .toInt()]['label'],
+                                                style:
+                                                    AppTextStyles.b11(
+                                                      isDark: isDark,
+                                                    ).copyWith(
+                                                      color:
+                                                          AppColors.getTextSecondary(
+                                                            isDark,
+                                                          ),
+                                                    ),
+                                              ),
+                                            );
+                                          }
+                                          return const Text('');
+                                        },
+                                  ),
+                                ),
                               ),
+                              gridData: FlGridData(
+                                show: true,
+                                drawVerticalLine: false,
+                                horizontalInterval:
+                                    yAxisInterval, // Dynamic from API
+                                getDrawingHorizontalLine: (value) {
+                                  return FlLine(
+                                    color: AppColors.getGreyScale(100, isDark),
+                                    strokeWidth: 1,
+                                  );
+                                },
+                                checkToShowHorizontalLine: (value) {
+                                  // Show lines at 0k, 100k, 200k, 300k, 400k, and 500k
+                                  return value >= 0 && value <= maxY;
+                                },
+                              ),
+                              borderData: FlBorderData(show: false),
+                              barGroups: _buildBarGroups(isDark),
                             ),
                           ),
-                          gridData: FlGridData(
-                            show: true,
-                            drawVerticalLine: false,
-                            horizontalInterval:
-                                yAxisInterval, // Dynamic from API
-                            getDrawingHorizontalLine: (value) {
-                              return FlLine(
-                                color: isDark ? _grey100Dark : _grey100Light,
-                                strokeWidth: 1,
-                              );
-                            },
-                            checkToShowHorizontalLine: (value) {
-                              // Show lines at 0k, 100k, 200k, 300k, 400k, and 500k
-                              return value >= 0 && value <= maxY;
-                            },
-                          ),
-                          borderData: FlBorderData(show: false),
-                          barGroups: _buildBarGroups(isDark),
-                        ),
+                          // Custom tooltip overlay - using reusable CustomChartTooltip
+                          if (touchedGroupIndex >= 0 &&
+                              touchedGroupIndex < chartData.length &&
+                              cursorPosition != null)
+                            CustomChartTooltip(
+                              cursorPosition: cursorPosition,
+                              items: _buildTooltipItems(isDark),
+                              availableWidth: 350,
+                              availableHeight: 250,
+                              isVisible: true,
+                            ),
+                        ],
                       ),
-                      // Custom tooltip overlay - using reusable CustomChartTooltip
-                      if (touchedGroupIndex >= 0 &&
-                          touchedGroupIndex < chartData.length &&
-                          cursorPosition != null)
-                        CustomChartTooltip(
-                          cursorPosition: cursorPosition,
-                          items: _buildTooltipItems(isDark),
-                          availableWidth: 350,
-                          availableHeight: 250,
-                          isVisible: true,
-                        ),
-                    ],
-                  ),
+              );
+            },
           ),
         ],
       ),
@@ -486,7 +467,7 @@ class _DashboardBarChartState extends State<DashboardBarChart> {
           toY: value,
           color: color.withValues(alpha: opacity),
           width: barWidth,
-          borderRadius: BorderRadius.circular(_radiusMedium),
+          borderRadius: BorderRadius.circular(AppConstants.radiusMedium),
         );
       }).toList();
 
@@ -501,19 +482,12 @@ class _DashboardBarChartState extends State<DashboardBarChart> {
   Widget _buildLegendItem(String label, Color color, bool isDark) {
     return Row(
       children: [
-        Container(
-          width: _legendIconSize,
-          height: _legendIconSize,
-          decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+        AuroraTheme.legendIndicator(
+          color: color,
+          size: AuroraTheme.legendIconSize,
         ),
-        const SizedBox(width: _spacingSm),
-        Text(
-          label,
-          style: TextStyle(
-            fontSize: 14,
-            color: isDark ? _textSecondaryDark : _textSecondaryLight,
-          ),
-        ),
+        SizedBox(width: AppSpacing.sm),
+        Text(label, style: AuroraTheme.legendTextStyle(isDark)),
       ],
     );
   }
@@ -545,10 +519,10 @@ class _DashboardBarChartState extends State<DashboardBarChart> {
         } else {
           // Fallback colors
           itemColor = index == 0
-              ? (isDark ? _grey300Dark : _grey300Light)
+              ? AppColors.getGreyScale(300, isDark)
               : index == 1
               ? const Color(0xFF4CAF50)
-              : _primary;
+              : AppColors.primary;
         }
 
         return TooltipDataItem(
@@ -567,13 +541,13 @@ class _DashboardBarChartState extends State<DashboardBarChart> {
     // Get colors from legend
     final color25 = legendData.isNotEmpty && legendData.isNotEmpty
         ? Color(int.parse(legendData[0]['color'] as String))
-        : (isDark ? _grey300Dark : _grey300Light);
+        : AppColors.getGreyScale(300, isDark);
     final color50 = legendData.isNotEmpty && legendData.length > 1
         ? Color(int.parse(legendData[1]['color'] as String))
         : const Color(0xFF4CAF50);
     final color75 = legendData.isNotEmpty && legendData.length > 2
         ? Color(int.parse(legendData[2]['color'] as String))
-        : _primary;
+        : AppColors.primary;
 
     return [
       // 25th percentile
