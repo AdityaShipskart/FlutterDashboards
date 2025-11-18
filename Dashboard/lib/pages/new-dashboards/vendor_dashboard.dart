@@ -11,7 +11,7 @@ import '../../widgets/dashboard_comparison.dart';
 import '../../widgets/dashboard_bar_chart.dart';
 import '../../widgets/dashboard_leading_port.dart';
 import '../../widgets/dashboard_quick_wins.dart';
-import '../../widgets/dashboard_table.dart';
+// import '../../widgets/dashboard_table.dart';
 
 /// Vendor Dashboard
 ///
@@ -346,8 +346,9 @@ const Map<String, dynamic> _categoryRevenueBar = {
 
 const List<Map<String, dynamic>> _vendorPerformanceMetrics = [
   {
-    'title': 'Top Buyers (SMC)',
+    'title': 'Top Buyers',
     'subtitle': 'Highest revenue SMC clients',
+    'columns': {'first': 'Company name', 'second': 'Purchasing Volume'},
     'ports': [
       {
         'portName': 'Oceanic Shipping Ltd',
@@ -364,8 +365,8 @@ const List<Map<String, dynamic>> _vendorPerformanceMetrics = [
     ],
   },
   {
-    'title': 'Top Products',
-    'subtitle': 'Best selling items',
+    'title': 'Treanding Products',
+    'subtitle': 'Best selling all time',
     'ports': [
       {
         'portName': 'Engine Parts Kit',
@@ -383,16 +384,16 @@ const List<Map<String, dynamic>> _vendorPerformanceMetrics = [
   },
   {
     'title': 'Growth Opportunities',
-    'subtitle': 'Emerging product categories',
+    'subtitle': 'top performing ports',
     'ports': [
       {
-        'portName': 'Eco-Friendly Parts',
+        'portName': 'Mumbai Port',
         'purchaseValue': '\$142K',
         'percentageChange': 34.6,
         'trend': 'up',
       },
       {
-        'portName': 'Smart Monitoring',
+        'portName': 'Kochi Port',
         'purchaseValue': '\$128K',
         'percentageChange': 28.9,
         'trend': 'up',
