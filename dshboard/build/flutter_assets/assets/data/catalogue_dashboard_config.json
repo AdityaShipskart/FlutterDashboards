@@ -1,0 +1,441 @@
+{
+  "cards": [
+    {
+      "iconPath": "assets/icons/award.svg",
+      "value": "1,247",
+      "label": "Total Products",
+      "growth": "15.2%",
+      "color": "goldIcon",
+      "iconBgColor": "transparent"
+    },
+    {
+      "iconPath": "assets/icons/setting.svg",
+      "value": "342",
+      "label": "Active Categories",
+      "growth": "8.1%",
+      "color": "freeIcon",
+      "iconBgColor": "transparent"
+    },
+    {
+      "iconPath": "assets/icons/ghost.svg",
+      "value": "89",
+      "label": "Low Stock Items",
+      "growth": null,
+      "color": "expiringIcon",
+      "iconBgColor": "transparent"
+    },
+    {
+      "iconPath": "assets/icons/information.svg",
+      "value": "156",
+      "label": "New This Month",
+      "growth": "22.4%",
+      "color": "platinumIcon",
+      "iconBgColor": "transparent"
+    },
+    {
+      "iconPath": "assets/icons/award.svg",
+      "value": "$2.8M",
+      "label": "Catalogue Value",
+      "growth": "11.5%",
+      "color": "goldIcon",
+      "iconBgColor": "transparent"
+    },
+    {
+      "iconPath": "assets/icons/setting.svg",
+      "value": "94.2%",
+      "label": "In-Stock Rate",
+      "growth": "2.1%",
+      "color": "freeIcon",
+      "iconBgColor": "transparent"
+    }
+  ],
+  "contentData": {
+    "child_dashboard": {
+      "title": "Catalogue Dashboard",
+      "description": "Product and inventory management"
+    }
+  },
+  "recentActivity": {
+    "salesHighlights": {
+      "title": "Product Performance",
+      "totalValue": 485200,
+      "currency": "USD",
+      "percentageChange": 8.5,
+      "isPositive": true,
+      "products": [
+        {
+          "name": "Electronics",
+          "percentage": 42,
+          "color": 4278239141
+        },
+        {
+          "name": "Equipment",
+          "percentage": 31,
+          "color": 4294198070
+        },
+        {
+          "name": "Supplies",
+          "percentage": 27,
+          "color": 4288586312
+        }
+      ],
+      "channels": [
+        {
+          "id": "top_selling",
+          "name": "Top Selling Items",
+          "icon": "trending_up_outlined",
+          "value": 342,
+          "percentageChange": 12.3,
+          "isPositive": true
+        },
+        {
+          "id": "new_arrivals",
+          "name": "New Arrivals",
+          "icon": "new_releases_outlined",
+          "value": 156,
+          "percentageChange": 22.4,
+          "isPositive": true
+        },
+        {
+          "id": "out_of_stock",
+          "name": "Out of Stock",
+          "icon": "inventory_outlined",
+          "value": 23,
+          "percentageChange": 5.2,
+          "isPositive": false
+        },
+        {
+          "id": "pending_approval",
+          "name": "Pending Approval",
+          "icon": "pending_actions_outlined",
+          "value": 47,
+          "percentageChange": 3.1,
+          "isPositive": false
+        },
+        {
+          "id": "discounted_items",
+          "name": "Discounted Items",
+          "icon": "local_offer_outlined",
+          "value": 89,
+          "percentageChange": 15.7,
+          "isPositive": true
+        }
+      ]
+    }
+  },
+  "lineChart": {
+    "cardTitle": "Product Growth Trend",
+    "cardSubtitle": "Monthly catalogue expansion",
+    "thisYearLabel": "2024",
+    "lastYearLabel": "2023",
+    "percentageChange": "+18.5%",
+    "isPositiveChange": true,
+    "availablePeriods": ["Jan-Jun", "Jul-Dec", "Full Year"],
+    "selectedPeriod": "Full Year",
+    "chartConfig": {
+      "minX": 0,
+      "maxX": 11,
+      "minY": 2,
+      "maxY": 7
+    },
+    "thisYearData": [
+      {"x": 0, "y": 3.5},
+      {"x": 1, "y": 3.8},
+      {"x": 2, "y": 4.2},
+      {"x": 3, "y": 4.5},
+      {"x": 4, "y": 4.8},
+      {"x": 5, "y": 5.1},
+      {"x": 6, "y": 5.4},
+      {"x": 7, "y": 5.7},
+      {"x": 8, "y": 5.9},
+      {"x": 9, "y": 6.2},
+      {"x": 10, "y": 6.4},
+      {"x": 11, "y": 6.7}
+    ],
+    "lastYearData": [
+      {"x": 0, "y": 2.8},
+      {"x": 1, "y": 3.1},
+      {"x": 2, "y": 3.3},
+      {"x": 3, "y": 3.6},
+      {"x": 4, "y": 3.9},
+      {"x": 5, "y": 4.1},
+      {"x": 6, "y": 4.4},
+      {"x": 7, "y": 4.6},
+      {"x": 8, "y": 4.8},
+      {"x": 9, "y": 5.1},
+      {"x": 10, "y": 5.3},
+      {"x": 11, "y": 5.6}
+    ],
+    "labels": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+  },
+  "pieChart": {
+    "cardTitle": "Category Distribution",
+    "cardSubtitle": "Products by category",
+    "totalLeads": "1247",
+    "pieChartData": [
+      {
+        "label": "Electronics",
+        "value": 524.0,
+        "percentage": 42.0,
+        "color": "0xFF2196F3"
+      },
+      {
+        "label": "Equipment",
+        "value": 387.0,
+        "percentage": 31.0,
+        "color": "0xFFFFA644"
+      },
+      {
+        "label": "Supplies",
+        "value": 336.0,
+        "percentage": 27.0,
+        "color": "0xFF3DD9BC"
+      }
+    ],
+    "legendData": [
+      {
+        "label": "Electronics",
+        "color": "0xFF2196F3"
+      },
+      {
+        "label": "Equipment",
+        "color": "0xFFFFA644"
+      },
+      {
+        "label": "Supplies",
+        "color": "0xFF3DD9BC"
+      }
+    ]
+  },
+  "financialCard": {
+    "cardTitle": "Average Product Value",
+    "cardSubtitle": "Mean price per item",
+    "mainValue": "$2,245",
+    "percentageChange": "+4.7%",
+    "isPositiveChange": true,
+    "changeLabel": "vs last month",
+    "barData": [
+      {"y": 2100},
+      {"y": 2150},
+      {"y": 2180},
+      {"y": 2200},
+      {"y": 2220},
+      {"y": 2235},
+      {"y": 2245}
+    ],
+    "labels": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"],
+    "chartConfig": {
+      "minX": 0,
+      "maxX": 6,
+      "minY": 2000,
+      "maxY": 2300
+    }
+  },
+  "barChart": {
+    "cardTitle": "Stock Levels by Category",
+    "cardSubtitle": "Inventory distribution across product lines",
+    "chartData": [
+      {
+        "label": "Electronics",
+        "percentile25": 180000,
+        "percentile50": 240000,
+        "percentile75": 320000,
+        "values": [
+          {"value": 180000, "color": 4290822336},
+          {"value": 240000, "color": 4283215696},
+          {"value": 320000, "color": 4280391411}
+        ]
+      },
+      {
+        "label": "Equipment",
+        "percentile25": 150000,
+        "percentile50": 210000,
+        "percentile75": 280000,
+        "values": [
+          {"value": 150000, "color": 4290822336},
+          {"value": 210000, "color": 4283215696},
+          {"value": 280000, "color": 4280391411}
+        ]
+      },
+      {
+        "label": "Supplies",
+        "percentile25": 120000,
+        "percentile50": 180000,
+        "percentile75": 240000,
+        "values": [
+          {"value": 120000, "color": 4290822336},
+          {"value": 180000, "color": 4283215696},
+          {"value": 240000, "color": 4280391411}
+        ]
+      },
+      {
+        "label": "Tools",
+        "percentile25": 100000,
+        "percentile50": 150000,
+        "percentile75": 200000,
+        "values": [
+          {"value": 100000, "color": 4290822336},
+          {"value": 150000, "color": 4283215696},
+          {"value": 200000, "color": 4280391411}
+        ]
+      },
+      {
+        "label": "Safety",
+        "percentile25": 80000,
+        "percentile50": 120000,
+        "percentile75": 160000,
+        "values": [
+          {"value": 80000, "color": 4290822336},
+          {"value": 120000, "color": 4283215696},
+          {"value": 160000, "color": 4280391411}
+        ]
+      },
+      {
+        "label": "Consumables",
+        "percentile25": 90000,
+        "percentile50": 130000,
+        "percentile75": 180000,
+        "values": [
+          {"value": 90000, "color": 4290822336},
+          {"value": 130000, "color": 4283215696},
+          {"value": 180000, "color": 4280391411}
+        ]
+      }
+    ],
+    "legendData": [
+      {"label": "Min Stock", "color": "0xFFBDBDBD"},
+      {"label": "Current", "color": "0xFF4CAF50"},
+      {"label": "Max Stock", "color": "0xFF2196F3"}
+    ],
+    "maxY": 350000,
+    "minY": 0,
+    "yAxisInterval": 50000,
+    "barWidth": 8,
+    "barsSpace": 3
+  },
+  "comboBarChart": {
+    "cardTitle": "Product Approval Rate",
+    "cardSubtitle": "Monthly approval vs rejection statistics",
+    "yAxisLabels": [
+      {"value": 0, "label": "0%"},
+      {"value": 20, "label": "20%"},
+      {"value": 40, "label": "40%"},
+      {"value": 60, "label": "60%"},
+      {"value": 80, "label": "80%"},
+      {"value": 100, "label": "100%"}
+    ],
+    "minY": 0,
+    "maxY": 100,
+    "gridInterval": 20,
+    "chartData": [
+      {"month": "Jan", "wins": 142, "losses": 18, "winRate": 88.75},
+      {"month": "Feb", "wins": 156, "losses": 14, "winRate": 91.76},
+      {"month": "Mar", "wins": 138, "losses": 22, "winRate": 86.25},
+      {"month": "Apr", "wins": 165, "losses": 15, "winRate": 91.67},
+      {"month": "May", "wins": 148, "losses": 19, "winRate": 88.62},
+      {"month": "Jun", "wins": 172, "losses": 12, "winRate": 93.48},
+      {"month": "Jul", "wins": 185, "losses": 10, "winRate": 94.87},
+      {"month": "Aug", "wins": 168, "losses": 16, "winRate": 91.30},
+      {"month": "Sep", "wins": 152, "losses": 21, "winRate": 87.86},
+      {"month": "Oct", "wins": 178, "losses": 13, "winRate": 93.19},
+      {"month": "Nov", "wins": 161, "losses": 17, "winRate": 90.45},
+      {"month": "Dec", "wins": 189, "losses": 11, "winRate": 94.50}
+    ]
+  },
+  "comparison": {
+    "tabs": [
+      {
+        "label": "Stock vs Demand Analytics",
+        "subtitle": "Inventory availability comparison",
+        "onTimeOrder": [52000, 58000, 55000, 62000, 68000, 65000, 72000, 78000, 75000, 82000, 85000, 88000],
+        "delayedOrder": [48000, 52000, 50000, 56000, 62000, 59000, 65000, 70000, 68000, 74000, 77000, 80000],
+        "maxY": 90000
+      }
+    ]
+  },
+  "table": {
+    "title": "Top Performing Products",
+    "subtitle": "Best sellers in the catalogue",
+    "columns": ["Rank", "Product Name", "Sales", "Stock", "Status"],
+    "rows": [
+      ["1", "Marine Electronics Kit", "$342,000", "245 units", "In Stock"],
+      ["2", "Navigation System Pro", "$298,500", "180 units", "In Stock"],
+      ["3", "Safety Equipment Bundle", "$256,800", "156 units", "Low Stock"],
+      ["4", "Communication Devices", "$224,100", "312 units", "In Stock"],
+      ["5", "Engine Parts Premium", "$198,700", "89 units", "Low Stock"],
+      ["6", "Deck Equipment Set", "$187,400", "198 units", "In Stock"],
+      ["7", "Electrical Components", "$165,200", "267 units", "In Stock"],
+      ["8", "Spare Parts Collection", "$142,800", "421 units", "In Stock"]
+    ]
+  },
+  "leadingPorts": [
+    {
+      "title": "Top Product Suppliers",
+      "subtitle": "Leading vendors by product count",
+      "ports": [
+        {
+          "name": "Global Marine Supplies",
+          "country": "Singapore",
+          "value": "342",
+          "percentage": 27.4,
+          "trend": "up"
+        },
+        {
+          "name": "Nordic Equipment AS",
+          "country": "Norway",
+          "value": "298",
+          "percentage": 23.9,
+          "trend": "up"
+        },
+        {
+          "name": "Pacific Tech Industries",
+          "country": "Japan",
+          "value": "256",
+          "percentage": 20.5,
+          "trend": "stable"
+        },
+        {
+          "name": "European Marine Group",
+          "country": "Netherlands",
+          "value": "189",
+          "percentage": 15.2,
+          "trend": "up"
+        },
+        {
+          "name": "Atlantic Supplies Ltd",
+          "country": "UK",
+          "value": "162",
+          "percentage": 13.0,
+          "trend": "down"
+        }
+      ]
+    },
+    {
+      "title": "Product Categories",
+      "subtitle": "Distribution by type",
+      "ports": [
+        {
+          "name": "Electronics & Navigation",
+          "country": "Category A",
+          "value": "524",
+          "percentage": 42.0,
+          "trend": "up"
+        },
+        {
+          "name": "Machinery & Equipment",
+          "country": "Category B",
+          "value": "387",
+          "percentage": 31.0,
+          "trend": "stable"
+        },
+        {
+          "name": "Safety & Supplies",
+          "country": "Category C",
+          "value": "336",
+          "percentage": 27.0,
+          "trend": "up"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,453 @@
+{
+  "cards": [
+    {
+      "iconPath": "assets/icons/award.svg",
+      "value": "42",
+      "label": "Active Vessels",
+      "growth": "3.2%",
+      "color": "freeIcon",
+      "iconBgColor": "transparent"
+    },
+    {
+      "iconPath": "assets/icons/setting.svg",
+      "value": "156",
+      "label": "Total Crew",
+      "growth": null,
+      "color": "goldIcon",
+      "iconBgColor": "transparent"
+    },
+    {
+      "iconPath": "assets/icons/ghost.svg",
+      "value": "12",
+      "label": "In Port",
+      "growth": null,
+      "color": "platinumIcon",
+      "iconBgColor": "transparent"
+    },
+    {
+      "iconPath": "assets/icons/information.svg",
+      "value": "30",
+      "label": "At Sea",
+      "growth": "5.1%",
+      "color": "freeIcon",
+      "iconBgColor": "transparent"
+    },
+    {
+      "iconPath": "assets/icons/award.svg",
+      "value": "98.5%",
+      "label": "Fleet Utilization",
+      "growth": "1.8%",
+      "color": "goldIcon",
+      "iconBgColor": "transparent"
+    },
+    {
+      "iconPath": "assets/icons/setting.svg",
+      "value": "8",
+      "label": "Maintenance Due",
+      "growth": null,
+      "color": "expiringIcon",
+      "iconBgColor": "transparent"
+    }
+  ],
+  "contentData": {
+    "child_dashboard": {
+      "title": "Ship Management Overview",
+      "description": "Fleet operations and vessel statistics"
+    }
+  },
+  "recentActivity": {
+    "salesHighlights": {
+      "title": "Fleet Operations",
+      "totalValue": 42,
+      "currency": "VESSELS",
+      "percentageChange": 3.2,
+      "isPositive": true,
+      "products": [
+        {
+          "name": "Container Ships",
+          "percentage": 45,
+          "color": 4278239141
+        },
+        {
+          "name": "Bulk Carriers",
+          "percentage": 30,
+          "color": 4294198070
+        },
+        {
+          "name": "Tankers",
+          "percentage": 25,
+          "color": 4288586312
+        }
+      ],
+      "channels": [
+        {
+          "id": "active_voyages",
+          "name": "Active Voyages",
+          "icon": "directions_boat_outlined",
+          "value": 34,
+          "percentageChange": 8.5,
+          "isPositive": true
+        },
+        {
+          "id": "scheduled_maintenance",
+          "name": "Scheduled Maintenance",
+          "icon": "build_outlined",
+          "value": 8,
+          "percentageChange": 2.3,
+          "isPositive": false
+        },
+        {
+          "id": "fuel_efficiency",
+          "name": "Avg Fuel Efficiency",
+          "icon": "local_gas_station_outlined",
+          "value": 92,
+          "percentageChange": 4.1,
+          "isPositive": true
+        },
+        {
+          "id": "safety_score",
+          "name": "Safety Score",
+          "icon": "security_outlined",
+          "value": 96,
+          "percentageChange": 1.5,
+          "isPositive": true
+        },
+        {
+          "id": "on_time_delivery",
+          "name": "On-Time Delivery",
+          "icon": "schedule_outlined",
+          "value": 94,
+          "percentageChange": 3.2,
+          "isPositive": true
+        }
+      ]
+    }
+  },
+  "lineChart": {
+    "cardTitle": "Fleet Performance Trend",
+    "cardSubtitle": "Monthly voyage completion rate",
+    "thisYearLabel": "2024",
+    "lastYearLabel": "2023",
+    "percentageChange": "+14.0%",
+    "isPositiveChange": true,
+    "availablePeriods": ["Jan-Jun", "Jul-Dec", "Full Year"],
+    "selectedPeriod": "Full Year",
+    "chartConfig": {
+      "minX": 0,
+      "maxX": 11,
+      "minY": 2,
+      "maxY": 6
+    },
+    "thisYearData": [
+      {"x": 0, "y": 3.6},
+      {"x": 1, "y": 3.8},
+      {"x": 2, "y": 3.5},
+      {"x": 3, "y": 4.0},
+      {"x": 4, "y": 4.2},
+      {"x": 5, "y": 4.1},
+      {"x": 6, "y": 4.3},
+      {"x": 7, "y": 4.5},
+      {"x": 8, "y": 4.4},
+      {"x": 9, "y": 4.6},
+      {"x": 10, "y": 4.8},
+      {"x": 11, "y": 5.0}
+    ],
+    "lastYearData": [
+      {"x": 0, "y": 3.2},
+      {"x": 1, "y": 3.4},
+      {"x": 2, "y": 3.3},
+      {"x": 3, "y": 3.6},
+      {"x": 4, "y": 3.8},
+      {"x": 5, "y": 3.7},
+      {"x": 6, "y": 3.9},
+      {"x": 7, "y": 4.0},
+      {"x": 8, "y": 3.9},
+      {"x": 9, "y": 4.1},
+      {"x": 10, "y": 4.2},
+      {"x": 11, "y": 4.3}
+    ],
+    "labels": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+  },
+  "pieChart": {
+    "cardTitle": "Vessel Types",
+    "cardSubtitle": "Distribution by vessel category",
+    "totalLeads": "42",
+    "pieChartData": [
+      {
+        "label": "Container Ships",
+        "value": 19.0,
+        "percentage": 45.0,
+        "color": "0xFF2196F3"
+      },
+      {
+        "label": "Bulk Carriers",
+        "value": 13.0,
+        "percentage": 30.0,
+        "color": "0xFFFFA644"
+      },
+      {
+        "label": "Tankers",
+        "value": 10.0,
+        "percentage": 25.0,
+        "color": "0xFF3DD9BC"
+      }
+    ],
+    "legendData": [
+      {
+        "label": "Container Ships",
+        "color": "0xFF2196F3"
+      },
+      {
+        "label": "Bulk Carriers",
+        "color": "0xFFFFA644"
+      },
+      {
+        "label": "Tankers",
+        "color": "0xFF3DD9BC"
+      }
+    ]
+  },
+  "financialCard": {
+    "cardTitle": "Average Voyage Cost",
+    "cardSubtitle": "Cost per voyage (in thousands)",
+    "mainValue": "$127.5K",
+    "percentageChange": "-3.2%",
+    "isPositiveChange": true,
+    "changeLabel": "vs last month",
+    "barData": [
+      {"y": 140},
+      {"y": 135},
+      {"y": 138},
+      {"y": 132},
+      {"y": 130},
+      {"y": 128},
+      {"y": 127}
+    ],
+    "labels": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"],
+    "chartConfig": {
+      "minX": 0,
+      "maxX": 6,
+      "minY": 0,
+      "maxY": 150
+    }
+  },
+  "barChart": {
+    "cardTitle": "Port Activities",
+    "cardSubtitle": "Vessel arrivals by port",
+    "chartData": [
+      {
+        "label": "Shanghai",
+        "percentile25": 15,
+        "percentile50": 18,
+        "percentile75": 0,
+        "values": [
+          {"value": 18, "color": 4278239141},
+          {"value": 15, "color": 4294198070}
+        ]
+      },
+      {
+        "label": "Singapore",
+        "percentile25": 14,
+        "percentile50": 16,
+        "percentile75": 0,
+        "values": [
+          {"value": 16, "color": 4278239141},
+          {"value": 14, "color": 4294198070}
+        ]
+      },
+      {
+        "label": "Rotterdam",
+        "percentile25": 12,
+        "percentile50": 14,
+        "percentile75": 0,
+        "values": [
+          {"value": 14, "color": 4278239141},
+          {"value": 12, "color": 4294198070}
+        ]
+      },
+      {
+        "label": "Hamburg",
+        "percentile25": 11,
+        "percentile50": 12,
+        "percentile75": 0,
+        "values": [
+          {"value": 12, "color": 4278239141},
+          {"value": 11, "color": 4294198070}
+        ]
+      },
+      {
+        "label": "Dubai",
+        "percentile25": 9,
+        "percentile50": 10,
+        "percentile75": 0,
+        "values": [
+          {"value": 10, "color": 4278239141},
+          {"value": 9, "color": 4294198070}
+        ]
+      },
+      {
+        "label": "Los Angeles",
+        "percentile25": 8,
+        "percentile50": 9,
+        "percentile75": 0,
+        "values": [
+          {"value": 9, "color": 4278239141},
+          {"value": 8, "color": 4294198070}
+        ]
+      }
+    ],
+    "legendData": [
+      {"label": "Current Month", "color": "0xFF2196F3"},
+      {"label": "Last Month", "color": "0xFFFFA644"}
+    ],
+    "maxY": 20,
+    "minY": 0,
+    "yAxisInterval": 5,
+    "barWidth": 8,
+    "barsSpace": 3
+  },
+  "comparison": {
+    "tabs": [
+      {
+        "label": "Fleet Performance Metrics",
+        "subtitle": "Key operational indicators",
+        "onTimeOrder": [38, 42, 40, 45, 48, 46, 50, 52, 51, 54, 56, 58],
+        "delayedOrder": [35, 38, 37, 41, 44, 42, 46, 48, 47, 50, 52, 54],
+        "maxY": 60
+      }
+    ]
+  },
+  "table": {
+    "title": "Active Vessels Status",
+    "subtitle": "Current fleet operational status",
+    "columns": ["Vessel Name", "Type", "Current Location", "Status", "ETA"],
+    "rows": [
+      ["MV Ocean Star", "Container", "Singapore", "At Sea", "2h 30m"],
+      ["MV Baltic Pride", "Bulk Carrier", "Rotterdam", "In Port", "-"],
+      ["MV Pacific Wave", "Tanker", "Dubai", "Loading", "6h"],
+      ["MV Nordic Sky", "Container", "Hamburg", "At Sea", "4h 15m"],
+      ["MV Atlantic Crown", "Bulk Carrier", "Shanghai", "Unloading", "2h"],
+      ["MV Southern Cross", "Tanker", "Los Angeles", "At Sea", "8h 45m"],
+      ["MV Eastern Sun", "Container", "Singapore", "In Port", "-"],
+      ["MV Western Dawn", "Bulk Carrier", "Rotterdam", "Maintenance", "24h"]
+    ]
+  },
+  "leadingPorts": [
+    {
+      "title": "Top Departure Ports",
+      "subtitle": "Most frequent departure locations",
+      "ports": [
+        {
+          "name": "Shanghai Port",
+          "country": "China",
+          "value": "182",
+          "percentage": 28.5,
+          "trend": "up"
+        },
+        {
+          "name": "Singapore Port",
+          "country": "Singapore",
+          "value": "165",
+          "percentage": 25.8,
+          "trend": "up"
+        },
+        {
+          "name": "Rotterdam Port",
+          "country": "Netherlands",
+          "value": "142",
+          "percentage": 22.2,
+          "trend": "stable"
+        },
+        {
+          "name": "Hamburg Port",
+          "country": "Germany",
+          "value": "98",
+          "percentage": 15.3,
+          "trend": "down"
+        },
+        {
+          "name": "Dubai Port",
+          "country": "UAE",
+          "value": "52",
+          "percentage": 8.2,
+          "trend": "up"
+        }
+      ]
+    },
+    {
+      "title": "Top Arrival Ports",
+      "subtitle": "Most frequent arrival destinations",
+      "ports": [
+        {
+          "name": "Los Angeles Port",
+          "country": "USA",
+          "value": "156",
+          "percentage": 26.1,
+          "trend": "up"
+        },
+        {
+          "name": "Rotterdam Port",
+          "country": "Netherlands",
+          "value": "148",
+          "percentage": 24.8,
+          "trend": "stable"
+        },
+        {
+          "name": "Hamburg Port",
+          "country": "Germany",
+          "value": "132",
+          "percentage": 22.1,
+          "trend": "up"
+        },
+        {
+          "name": "Singapore Port",
+          "country": "Singapore",
+          "value": "108",
+          "percentage": 18.1,
+          "trend": "up"
+        },
+        {
+          "name": "Shanghai Port",
+          "country": "China",
+          "value": "54",
+          "percentage": 9.0,
+          "trend": "down"
+        }
+      ]
+    },
+    {
+      "title": "Maintenance Facilities",
+      "subtitle": "Scheduled maintenance by location",
+      "ports": [
+        {
+          "name": "Dubai Dry Dock",
+          "country": "UAE",
+          "value": "3",
+          "percentage": 37.5,
+          "trend": "stable"
+        },
+        {
+          "name": "Singapore Shipyard",
+          "country": "Singapore",
+          "value": "2",
+          "percentage": 25.0,
+          "trend": "up"
+        },
+        {
+          "name": "Hamburg Shipyard",
+          "country": "Germany",
+          "value": "2",
+          "percentage": 25.0,
+          "trend": "stable"
+        },
+        {
+          "name": "Rotterdam Facility",
+          "country": "Netherlands",
+          "value": "1",
+          "percentage": 12.5,
+          "trend": "down"
+        }
+      ]
+    }
+  ]
+}
