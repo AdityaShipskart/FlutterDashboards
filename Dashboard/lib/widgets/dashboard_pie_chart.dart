@@ -179,7 +179,7 @@ class _DashboardPieChartState extends State<DashboardPieChart> {
                 ),
               ],
             ),
-            SizedBox(height: AppSpacing.xxxl + 16),
+            SizedBox(height: AppSpacing.xxl),
             // Donut Chart with center text (wrapped in outer Stack for external tooltip)
             Center(
               child: Stack(
@@ -289,7 +289,7 @@ class _DashboardPieChartState extends State<DashboardPieChart> {
                 ],
               ),
             ),
-            SizedBox(height: AppSpacing.xxl + 8),
+            SizedBox(height: AppSpacing.xxl),
             // Compact Legend with grid layout for maximum data display
             Padding(
               padding: EdgeInsets.all(AppSpacing.ml),

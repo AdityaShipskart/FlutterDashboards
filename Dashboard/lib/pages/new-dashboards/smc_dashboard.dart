@@ -11,7 +11,7 @@ import '../../widgets/dashboard_comparison.dart';
 import '../../widgets/dashboard_bar_chart.dart';
 import '../../widgets/dashboard_leading_port.dart';
 import '../../widgets/dashboard_quick_wins.dart';
-import '../../widgets/dashboard_table.dart';
+// import '../../widgets/dashboard_table.dart';
 
 /// SMC (Ship Management Company) Dashboard
 ///
@@ -131,33 +131,61 @@ final Map<String, dynamic> _smcSpendTrendChart = {
   'availablePeriods': ['Jan-Jun', 'Jul-Dec', 'Full Year'],
   'selectedPeriod': 'Full Year',
   'chartConfig': {'minX': 0, 'maxX': 11, 'minY': 4, 'maxY': 12},
+  // 'thisYearData': [
+  //   {'x': 0, 'y': 10.8},
+  //   {'x': 1, 'y': 4.2},
+  //   {'x': 2, 'y': 7.6},
+  //   {'x': 3, 'y': 6.4},
+  //   {'x': 4, 'y': 4.1},
+  //   {'x': 5, 'y': 9.9},
+  //   {'x': 6, 'y': 4.3},
+  //   {'x': 7, 'y': 2.7},
+  //   {'x': 8, 'y': 6.6},
+  //   {'x': 9, 'y': 8.5},
+  //   {'x': 10, 'y': 9.8},
+  //   {'x': 11, 'y': 6.6},
+  // ],
+  // 'lastYearData': [
+  //   {'x': 0, 'y': 3.8},
+  //   {'x': 1, 'y': 4.8},
+  //   {'x': 2, 'y': 4.8},
+  //   {'x': 3, 'y': 6.8},
+  //   {'x': 4, 'y': 3.8},
+  //   {'x': 5, 'y': 1.8},
+  //   {'x': 6, 'y': 4.8},
+  //   {'x': 7, 'y': 8.8},
+  //   {'x': 8, 'y': 4.8},
+  //   {'x': 9, 'y': 6.8},
+  //   {'x': 10, 'y': 3.8},
+  //   {'x': 11, 'y': 10.8},
+  // ],
   'thisYearData': [
-    {'x': 0, 'y': 7.8},
-    {'x': 1, 'y': 8.2},
-    {'x': 2, 'y': 8.6},
-    {'x': 3, 'y': 8.4},
-    {'x': 4, 'y': 9.1},
-    {'x': 5, 'y': 8.9},
-    {'x': 6, 'y': 8.3},
-    {'x': 7, 'y': 8.7},
-    {'x': 8, 'y': 8.6},
-    {'x': 9, 'y': 8.5},
-    {'x': 10, 'y': 8.8},
-    {'x': 11, 'y': 8.6},
+    {'x': 0, 'y': 4.5}, // Jan - Post-holiday, lower spend
+    {'x': 1, 'y': 5.3}, // Feb - Ramping up
+    {'x': 2, 'y': 5.8}, // Mar - Q1 close push
+    {'x': 3, 'y': 6.2}, // Apr - New quarter start
+    {'x': 4, 'y': 5.6}, // May - Moderate spending
+    {'x': 5, 'y': 6.4}, // Jun - Q2 close, higher spend
+    {'x': 6, 'y': 4.9}, // Jul - Mid-year slowdown
+    {'x': 7, 'y': 5.1}, // Aug - Summer lull
+    {'x': 8, 'y': 6.8}, // Sep - Q3 close surge
+    {'x': 9, 'y': 7.0}, // Oct - Ramping to year-end
+    {'x': 10, 'y': 7.6}, // Nov - Pre-holiday peak
+    {'x': 11, 'y': 10.2}, // Dec - Year-end rush, budget flush
   ],
   'lastYearData': [
-    {'x': 0, 'y': 8.8},
-    {'x': 1, 'y': 8.8},
-    {'x': 2, 'y': 8.8},
-    {'x': 3, 'y': 8.8},
-    {'x': 4, 'y': 8.8},
-    {'x': 5, 'y': 8.8},
-    {'x': 6, 'y': 8.8},
-    {'x': 7, 'y': 8.8},
-    {'x': 8, 'y': 8.8},
-    {'x': 9, 'y': 8.8},
-    {'x': 10, 'y': 8.8},
-    {'x': 11, 'y': 8.8},
+    {'x': 0, 'y': 5.0}, // Jan - Planned budget
+    {'x': 1, 'y': 5.0}, // Feb - Consistent planning
+    {'x': 2, 'y': 5.5}, // Mar - Q1 target increase
+    {'x': 3, 'y': 5.8}, // Apr - Q2 start
+    {'x': 4, 'y': 5.8}, // May - Maintained
+    {'x': 5, 'y': 6.0}, // Jun - Q2 close target
+    {'x': 6, 'y': 5.2}, // Jul - Reduced summer budget
+    {'x': 7, 'y': 5.2}, // Aug - Summer continuation
+    {'x': 8, 'y': 6.5}, // Sep - Q3 target
+    {'x': 9, 'y': 6.8}, // Oct - Increased allocation
+    {'x': 10, 'y': 7.2}, // Nov - Holiday season budget
+    {'x': 11, 'y': 7.8}, // Dec - Year-end target
   ],
   'labels': [
     'Jan',
@@ -289,105 +317,105 @@ const Map<String, dynamic> _purchasesByCategoryBar = {
   ],
   'chartData': [
     {
-      'label': 'MV Pacific Star',
+      'label': 'MV Coral Breeze',
       'values': [
-        {'value': 280000.0, 'color': 0xFF1379F0},
-        {'value': 320000.0, 'color': 0xFFF97316},
-        {'value': 260000.0, 'color': 0xFF10B981},
-        {'value': 140000.0, 'color': 0xFF7C3AED},
+        {'value': 315000.0, 'color': 0xFF1379F0},
+        {'value': 600000.0, 'color': 0xFFF97316},
+        {'value': 860000.0, 'color': 0xFF10B981},
+        {'value': 900000.0, 'color': 0xFF7C3AED},
       ],
-      'percentile25': 140000.0,
-      'percentile75': 1000000.0,
+      'percentile25': 175000.0,
+      'percentile75': 965000.0,
       'tooltip': [
-        {'label': 'Provisions', 'value': '\$280K'},
-        {'label': 'Deck', 'value': '\$320K'},
-        {'label': 'Engine', 'value': '\$260K'},
-        {'label': 'Bond Store', 'value': '\$140K'},
+        {'label': 'Provisions', 'value': '\$315K'},
+        {'label': 'Deck', 'value': '\$600K'},
+        {'label': 'Engine', 'value': '\$860K'},
+        {'label': 'Bond Store', 'value': '\$900K'},
       ],
     },
     {
-      'label': 'MV Atlantic Crown',
+      'label': 'MV Arctic Dawn',
       'values': [
-        {'value': 260000.0, 'color': 0xFF1379F0},
-        {'value': 300000.0, 'color': 0xFFF97316},
-        {'value': 240000.0, 'color': 0xFF10B981},
-        {'value': 130000.0, 'color': 0xFF7C3AED},
+        {'value': 315000.0, 'color': 0xFF1379F0},
+        {'value': 600000.0, 'color': 0xFFF97316},
+        {'value': 860000.0, 'color': 0xFF10B981},
+        {'value': 900000.0, 'color': 0xFF7C3AED},
       ],
-      'percentile25': 130000.0,
-      'percentile75': 930000.0,
+      'percentile25': 145000.0,
+      'percentile75': 935000.0,
       'tooltip': [
-        {'label': 'Provisions', 'value': '\$260K'},
-        {'label': 'Deck', 'value': '\$300K'},
-        {'label': 'Engine', 'value': '\$240K'},
-        {'label': 'Bond Store', 'value': '\$130K'},
+        {'label': 'Provisions', 'value': '\$315K'},
+        {'label': 'Deck', 'value': '\$600K'},
+        {'label': 'Engine', 'value': '\$860K'},
+        {'label': 'Bond Store', 'value': '\$900K'},
       ],
     },
     {
-      'label': 'MV Nordic Wave',
+      'label': 'MV Pacific Harmony',
       'values': [
-        {'value': 240000.0, 'color': 0xFF1379F0},
-        {'value': 280000.0, 'color': 0xFFF97316},
-        {'value': 220000.0, 'color': 0xFF10B981},
+        {'value': 315000.0, 'color': 0xFF1379F0},
+        {'value': 600000.0, 'color': 0xFFF97316},
+        {'value': 860000.0, 'color': 0xFF10B981},
+        {'value': 900000.0, 'color': 0xFF7C3AED},
+      ],
+      'percentile25': 195000.0,
+      'percentile75': 890000.0,
+      'tooltip': [
+        {'label': 'Provisions', 'value': '\$315K'},
+        {'label': 'Deck', 'value': '\$600K'},
+        {'label': 'Engine', 'value': '\$860K'},
+        {'label': 'Bond Store', 'value': '\$900K'},
+      ],
+    },
+    {
+      'label': 'MV Golden Horizon',
+      'values': [
+        {'value': 335000.0, 'color': 0xFF1379F0},
+        {'value': 275000.0, 'color': 0xFFF97316},
+        {'value': 255000.0, 'color': 0xFF10B981},
+        {'value': 160000.0, 'color': 0xFF7C3AED},
+      ],
+      'percentile25': 160000.0,
+      'percentile75': 880000.0,
+      'tooltip': [
+        {'label': 'Provisions', 'value': '\$335K'},
+        {'label': 'Deck', 'value': '\$275K'},
+        {'label': 'Engine', 'value': '\$255K'},
+        {'label': 'Bond Store', 'value': '\$160K'},
+      ],
+    },
+    {
+      'label': 'MV Silver Mist',
+      'values': [
+        {'value': 225000.0, 'color': 0xFF1379F0},
+        {'value': 360000.0, 'color': 0xFFF97316},
+        {'value': 280000.0, 'color': 0xFF10B981},
         {'value': 120000.0, 'color': 0xFF7C3AED},
       ],
       'percentile25': 120000.0,
-      'percentile75': 860000.0,
+      'percentile75': 865000.0,
       'tooltip': [
-        {'label': 'Provisions', 'value': '\$240K'},
-        {'label': 'Deck', 'value': '\$280K'},
-        {'label': 'Engine', 'value': '\$220K'},
+        {'label': 'Provisions', 'value': '\$225K'},
+        {'label': 'Deck', 'value': '\$360K'},
+        {'label': 'Engine', 'value': '\$280K'},
         {'label': 'Bond Store', 'value': '\$120K'},
       ],
     },
     {
-      'label': 'MV Southern Cross',
+      'label': 'MV Emerald Isle',
       'values': [
-        {'value': 220000.0, 'color': 0xFF1379F0},
-        {'value': 260000.0, 'color': 0xFFF97316},
-        {'value': 200000.0, 'color': 0xFF10B981},
-        {'value': 110000.0, 'color': 0xFF7C3AED},
+        {'value': 315000.0, 'color': 0xFF1379F0},
+        {'value': 600000.0, 'color': 0xFFF97316},
+        {'value': 860000.0, 'color': 0xFF10B981},
+        {'value': 900000.0, 'color': 0xFF7C3AED},
       ],
-      'percentile25': 110000.0,
-      'percentile75': 790000.0,
+      'percentile25': 105000.0,
+      'percentile75': 975000.0,
       'tooltip': [
-        {'label': 'Provisions', 'value': '\$220K'},
-        {'label': 'Deck', 'value': '\$260K'},
-        {'label': 'Engine', 'value': '\$200K'},
-        {'label': 'Bond Store', 'value': '\$110K'},
-      ],
-    },
-    {
-      'label': 'MV Eastern Star',
-      'values': [
-        {'value': 205000.0, 'color': 0xFF1379F0},
-        {'value': 240000.0, 'color': 0xFFF97316},
-        {'value': 185000.0, 'color': 0xFF10B981},
-        {'value': 100000.0, 'color': 0xFF7C3AED},
-      ],
-      'percentile25': 100000.0,
-      'percentile75': 730000.0,
-      'tooltip': [
-        {'label': 'Provisions', 'value': '\$205K'},
-        {'label': 'Deck', 'value': '\$240K'},
-        {'label': 'Engine', 'value': '\$185K'},
-        {'label': 'Bond Store', 'value': '\$100K'},
-      ],
-    },
-    {
-      'label': 'MV Ocean Spirit',
-      'values': [
-        {'value': 190000.0, 'color': 0xFF1379F0},
-        {'value': 220000.0, 'color': 0xFFF97316},
-        {'value': 170000.0, 'color': 0xFF10B981},
-        {'value': 90000.0, 'color': 0xFF7C3AED},
-      ],
-      'percentile25': 90000.0,
-      'percentile75': 670000.0,
-      'tooltip': [
-        {'label': 'Provisions', 'value': '\$190K'},
-        {'label': 'Deck', 'value': '\$220K'},
-        {'label': 'Engine', 'value': '\$170K'},
-        {'label': 'Bond Store', 'value': '\$90K'},
+        {'label': 'Provisions', 'value': '\$315K'},
+        {'label': 'Deck', 'value': '\$600K'},
+        {'label': 'Engine', 'value': '\$860K'},
+        {'label': 'Bond Store', 'value': '\$900K'},
       ],
     },
   ],
@@ -811,10 +839,10 @@ class SMCDashboard extends StatelessWidget {
             ),
 
             // Multi-Tab Table (Requisitions, Quotes, Orders, etc.)
-            DashboardGridCol(
-              xs: 12,
-              child: DashboardTable(data: _smcTableData),
-            ),
+            // DashboardGridCol(
+            //   xs: 12,
+            //   child: DashboardTable(data: _smcTableData),
+            // ),
           ],
         ),
       ),

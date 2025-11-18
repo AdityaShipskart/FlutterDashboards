@@ -789,10 +789,10 @@ class VendorDashboard extends StatelessWidget {
             ),
 
             // Multi-Tab Table (RFQs, Quotes, Orders, Deliveries, etc.)
-            DashboardGridCol(
-              xs: 12,
-              child: DashboardTable(data: _vendorTableData),
-            ),
+            // DashboardGridCol(
+            //   xs: 12,
+            //   child: DashboardTable(data: _vendorTableData),
+            // ),
           ],
         ),
       ),

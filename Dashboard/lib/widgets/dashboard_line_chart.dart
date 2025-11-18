@@ -428,7 +428,7 @@ class _RevenueGeneratedCardState extends State<RevenueGeneratedCard> {
                 ),
               ],
             ),
-            SizedBox(height: AppSpacing.xl),
+            SizedBox(height: AppSpacing.ml),
 
             // ============================================
             // DYNAMIC LEGEND - All items in horizontal Row with 4px gap (display: flex)
@@ -591,6 +591,7 @@ class _RevenueGeneratedCardState extends State<RevenueGeneratedCard> {
                             }).toList(),
                             lineTouchData: LineTouchData(
                               touchTooltipData: LineTouchTooltipData(
+                                tooltipBgColor: AppColors.grey400Dark,
                                 tooltipPadding: EdgeInsets.symmetric(
                                   horizontal: AppSpacing.sm + 2,
                                   vertical: AppSpacing.sm - 1,

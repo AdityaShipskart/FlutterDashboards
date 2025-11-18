@@ -4,7 +4,7 @@ import '../../widgets/dashboard_grid.dart';
 import '../../widgets/dashboard_card_container.dart';
 import '../../widgets/dashboard_line_chart.dart';
 import '../../widgets/dashboard_pie_chart.dart';
-import '../../widgets/dashboard_comparison.dart';
+// import '../../widgets/dashboard_comparison.dart';
 import '../../widgets/dashboard_bar_chart.dart';
 import '../../widgets/dashboard_leading_port.dart';
 import '../../widgets/dashboard_quick_wins.dart';
@@ -145,6 +145,60 @@ final Map<String, dynamic> _catalogueGrowthChart = {
     {'x': 9, 'y': 0.7},
     {'x': 10, 'y': 0.5},
     {'x': 11, 'y': 0.6},
+  ],
+  'labels': [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
+  ],
+};
+
+final Map<String, dynamic> _turnAroundTime = {
+  'cardTitle': 'Turn Around Time',
+  'cardSubtitle': 'requester vs approval time',
+  'thisYearLabel': 'Approved',
+  'lastYearLabel': 'Requested',
+  'percentageChange': '+4.6%',
+  'isPositiveChange': true,
+  'availablePeriods': ['Jan-Jun', 'Jul-Dec', 'Full Year'],
+  'selectedPeriod': 'Full Year',
+  'chartConfig': {'minX': 0, 'maxX': 11, 'minY': 0, 'maxY': 10},
+  'thisYearData': [
+    {'x': 0, 'y': 6.2},
+    {'x': 1, 'y': 6.8},
+    {'x': 2, 'y': 7.2},
+    {'x': 3, 'y': 7.6},
+    {'x': 4, 'y': 8.0},
+    {'x': 5, 'y': 8.4},
+    {'x': 6, 'y': 7.8},
+    {'x': 7, 'y': 8.2},
+    {'x': 8, 'y': 8.6},
+    {'x': 9, 'y': 8.8},
+    {'x': 10, 'y': 9.0},
+    {'x': 11, 'y': 9.2},
+  ],
+  'lastYearData': [
+    {'x': 0, 'y': 5.8},
+    {'x': 1, 'y': 5.6},
+    {'x': 2, 'y': 5.7},
+    {'x': 3, 'y': 5.5},
+    {'x': 4, 'y': 6.6},
+    {'x': 5, 'y': 6.4},
+    {'x': 6, 'y': 6.8},
+    {'x': 7, 'y': 7.6},
+    {'x': 8, 'y': 7.5},
+    {'x': 9, 'y': 7.7},
+    {'x': 10, 'y': 8.5},
+    {'x': 11, 'y': 8.6},
   ],
   'labels': [
     'Jan',
@@ -312,24 +366,24 @@ const Map<String, dynamic> _statusPieData = {
 //   ],
 // };
 
-const Map<String, dynamic> _customRequirementsComparison = {
-  'tabs': [
-    {
-      'label': 'Approval TAT',
-      'subtitle': 'requester vs approval time',
-      'onTimeOrder': [11200, 11800, 12400, 12800, 13200, 13600],
-      'delayedOrder': [1800, 1900, 2100, 2200, 2400, 2600],
-      'maxY': 14000,
-    },
-    {
-      'label': 'Search Analytics',
-      'subtitle': 'Successful vs failed searches',
-      'onTimeOrder': [28400, 29600, 30800, 31800, 32600, 33400],
-      'delayedOrder': [2200, 2400, 2600, 2700, 2800, 2900],
-      'maxY': 35000,
-    },
-  ],
-};
+// const Map<String, dynamic> _customRequirementsComparison = {
+//   'tabs': [
+//     {
+//       'label': 'Approval TAT',
+//       'subtitle': 'requester vs approval time',
+//       'onTimeOrder': [11200, 11800, 12400, 12800, 13200, 13600],
+//       'delayedOrder': [11100, 11000, 11400, 12100, 12400, 12600],
+//       'maxY': 14000,
+//     },
+//     {
+//       'label': 'Search Analytics',
+//       'subtitle': 'Successful vs failed searches',
+//       'onTimeOrder': [28400, 29600, 30800, 31800, 32600, 33400],
+//       'delayedOrder': [2200, 2400, 2600, 2700, 2800, 2900],
+//       'maxY': 35000,
+//     },
+//   ],
+// };
 
 const Map<String, dynamic> _ordersByCategoryBar = {
   'cardTitle': 'Quality Assurance Issues',
@@ -406,62 +460,80 @@ const Map<String, dynamic> _ordersByCategoryBar = {
 const List<Map<String, dynamic>> _catalogueInsights = [
   {
     'title': 'Top Performing Categories',
-    'subtitle': 'Highest order volume',
-    'columns': {'first': 'Category', 'second': 'Order Volume'},
+    'subtitle': 'Highest performing product categories',
+    'columns': {'first': 'Category', 'second': 'Total Products'},
     'ports': [
       {
-        'portName': 'Marine Equipment',
-        'purchaseValue': '2,847',
-        'percentageChange': 22.4,
+        'portName': 'Deck Equipment',
+        'purchaseValue': '1,089',
+        'percentageChange': 5.0,
         'trend': 'up',
       },
       {
-        'portName': 'Safety Equipment',
-        'purchaseValue': '2,268',
-        'percentageChange': 18.6,
+        'portName': 'Electronics',
+        'purchaseValue': '987',
+        'percentageChange': 18.0,
         'trend': 'up',
       },
       {
-        'portName': 'Marine Equipment',
-        'purchaseValue': '2,847',
-        'percentageChange': 22.4,
+        'portName': 'Engine Parts',
+        'purchaseValue': '856',
+        'percentageChange': 10.0,
         'trend': 'up',
       },
       {
-        'portName': 'Safety Equipment',
-        'purchaseValue': '2,268',
-        'percentageChange': 18.6,
+        'portName': 'Lubricants',
+        'purchaseValue': '734',
+        'percentageChange': 7.0,
+        'trend': 'up',
+      },
+      {
+        'portName': 'Paints & Coatings',
+        'purchaseValue': '623',
+        'percentageChange': 14.0,
         'trend': 'up',
       },
     ],
   },
   {
-    'title': 'Top Products',
-    'subtitle': 'Month-over-month growth',
-    'columns': {'first': 'Products', 'second': 'Growth Rate'},
+    'title': 'Top Performing Sub-Categories',
+    'subtitle': 'Highest growth rate',
+    'columns': {'first': 'Sub-Category', 'second': 'Total Products'},
     'ports': [
       {
-        'portName': 'Smart Sensors',
-        'purchaseValue': '842',
-        'percentageChange': 48.7,
+        'portName': 'Welfare Items',
+        'purchaseValue': '234',
+        'percentageChange': 29.0,
         'trend': 'up',
       },
       {
-        'portName': 'Eco Products',
-        'purchaseValue': '726',
-        'percentageChange': 38.2,
+        'portName': 'Cloths & Linen Products',
+        'purchaseValue': '2,352',
+        'percentageChange': 29.0,
         'trend': 'up',
       },
       {
-        'portName': 'Navigation Systems',
-        'purchaseValue': '1,247',
-        'percentageChange': 52.3,
+        'portName': 'Tableware & Galley Utensils',
+        'purchaseValue': '234',
+        'percentageChange': 29.0,
         'trend': 'up',
       },
       {
-        'portName': 'Safety Harnesses',
-        'purchaseValue': '689',
-        'percentageChange': 41.8,
+        'portName': 'Clothing',
+        'purchaseValue': '34',
+        'percentageChange': 29.0,
+        'trend': 'up',
+      },
+      {
+        'portName': 'Rope & Hawsers',
+        'purchaseValue': '389',
+        'percentageChange': 29.0,
+        'trend': 'up',
+      },
+      {
+        'portName': 'Rigging Equipment & General Deck Items',
+        'purchaseValue': '389',
+        'percentageChange': 29.0,
         'trend': 'up',
       },
     ],
@@ -492,42 +564,79 @@ const List<Map<String, dynamic>> _catalogueInsights = [
     'columns': {'first': 'Product Name', 'second': 'Order Value'},
     'Newly Added': [
       {
-        'portName': 'Smart Fuel Monitor',
-        'purchaseValue': '\$1,420',
-        'percentageChange': 32.1,
+        'portName': 'Marine Diesel Generator Set',
+        'purchaseValue': 'SK-9847',
+        'percentageChange': 10.0,
         'trend': 'up',
         'priority': 'HIGH PRIORITY',
-        'daysLeft': 1,
-        'status': 'Recently Added',
+        'daysLeft': 0,
+        'status': 'Added 3 hours ago',
       },
       {
-        'portName': 'Eco-Friendly Cleaner',
-        'purchaseValue': '\$986',
+        'portName': 'VHF Radio Communication System',
+        'purchaseValue': 'SK-9848',
         'percentageChange': 28.4,
         'trend': 'up',
         'priority': 'MEDIUM PRIORITY',
         'daysLeft': 2,
-        'status': 'Awaiting Approval',
+        'status': 'Added 2 mins ago',
+      },
+      {
+        'portName': 'Fire Extinguisher CO2 Type',
+        'purchaseValue': 'SK-9849',
+        'percentageChange': 0.0, // Empty - no percentage data
+        'trend': 'up', // Empty - no trend data
+        'priority': 'LOW PRIORITY', // Empty - no priority specified
+        'daysLeft': 1,
+        'status': 'Added 1 day ago',
+      },
+
+      {
+        'portName': 'Fire Extinguisher CO2 Type',
+        'purchaseValue': 'SK-9849',
+        'percentageChange': 0.0, // Empty - no percentage data
+        'trend': 'up', // Empty - no trend data
+        'priority': 'LOW PRIORITY', // Empty - no priority specified
+        'daysLeft': 1,
+        'status': 'Added 1 day ago',
       },
     ],
     'Pending': [
       {
-        'portName': 'Navigation System Upgrade',
-        'purchaseValue': '\$3,124',
-        'percentageChange': 15.8,
-        'trend': 'up',
+        'portName': 'Safety Harness Full Body',
+        'purchaseValue': 'SK-8461',
+        'percentageChange': 0.0, // Empty - no percentage data
+        'trend': 'up', // Empty - no trend data
         'priority': 'HIGH PRIORITY',
         'daysLeft': 3,
-        'status': 'Under Review',
+        'status': 'Needs Approval',
       },
       {
-        'portName': 'Marine Radio Kit',
-        'purchaseValue': '\$1,876',
-        'percentageChange': 8.2,
-        'trend': 'up',
+        'portName': 'Navigation Radar X-Band',
+        'purchaseValue': 'SK-8472',
+        'percentageChange': 0.0, // Empty - no percentage data
+        'trend': 'up', // Empty - no trend data
         'priority': 'MEDIUM PRIORITY',
         'daysLeft': 5,
-        'status': 'Documentation Pending',
+        'status': 'Awaiting Specs',
+      },
+      {
+        'portName': 'Hydraulic Pump Assembly',
+        'purchaseValue': 'SK-8483',
+        'percentageChange': 0.0, // Empty - no percentage data
+        'trend': 'up', // Empty - no trend data
+        'priority': 'HIGH PRIORITY',
+        'daysLeft': 1,
+        'status': 'Price Verification',
+      },
+      {
+        'portName': 'LED Deck Light Waterproof',
+        'purchaseValue': 'SK-8494',
+        'percentageChange': 0.0, // Empty - no percentage data
+        'trend': 'up', // Empty - no trend data
+        'priority': 'LOW PRIORITY',
+        'daysLeft': 4,
+        'status': 'Supplier Confirmation',
       },
     ],
     'Custom': [
@@ -547,7 +656,26 @@ const List<Map<String, dynamic>> _catalogueInsights = [
         'trend': 'up',
         'priority': 'MEDIUM PRIORITY',
         'daysLeft': 4,
-        'status': 'Design Review',
+        'status': 'Category Mapping Needed',
+      },
+      {
+        'portName': 'Bespoke Fire Suppression System',
+        'purchaseValue': '\$8,950',
+        'percentageChange': 56.7,
+        'trend': 'up',
+        'priority': 'HIGH PRIORITY',
+        'daysLeft': 6,
+        'status': 'Image required', // Empty - no status provided
+      },
+
+      {
+        'portName': 'Bespoke Fire Suppression System',
+        'purchaseValue': '\$8,950',
+        'percentageChange': 56.7,
+        'trend': 'up',
+        'priority': 'HIGH PRIORITY',
+        'daysLeft': 6,
+        'status': 'Image required', // Empty - no status provided
       },
     ],
   },
@@ -861,13 +989,20 @@ class CatalogueDashboard extends StatelessWidget {
             ),
 
             // Custom Requirements & Search Analytics
+            // DashboardGridCol(
+            //   xs: 12,
+            //   md: 6,
+            //   child: MultiAnalyticsOveriview(
+            //     data: _customRequirementsComparison,
+            //   ),
+            // ),
+            // Catalogue Growth Line Chart
             DashboardGridCol(
               xs: 12,
               md: 6,
-              child: MultiAnalyticsOveriview(
-                data: _customRequirementsComparison,
-              ),
+              child: RevenueGeneratedCard(chartData: _turnAroundTime),
             ),
+
             // Catalogue Insights Cards
             DashboardGridCol(
               xs: 12,

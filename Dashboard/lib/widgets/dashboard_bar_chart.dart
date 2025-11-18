@@ -239,7 +239,7 @@ class _DashboardBarChartState extends State<DashboardBarChart> {
               ),
             ],
           ),
-          SizedBox(height: AppSpacing.md),
+          SizedBox(height: AppSpacing.xl),
 
           // Legend - Dynamic from API
           Row(
@@ -274,7 +274,7 @@ class _DashboardBarChartState extends State<DashboardBarChart> {
                     );
                   }).toList(),
           ),
-          SizedBox(height: AppSpacing.md),
+          SizedBox(height: AppSpacing.xl),
 
           // Bar Chart with hover overlay
           LayoutBuilder(
