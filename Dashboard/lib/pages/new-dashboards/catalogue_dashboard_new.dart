@@ -10,6 +10,8 @@ import '../../widgets/dashboard_leading_port.dart';
 import '../../widgets/dashboard_quick_wins.dart';
 import '../../widgets/dashboard_table.dart';
 
+import '../../widgets/dashboard_comparison.dart';
+
 const List<Map<String, dynamic>> _catalogueCards = [
   {
     'iconKey': 'orders',
@@ -386,76 +388,100 @@ const Map<String, dynamic> _statusPieData = {
 // };
 
 const Map<String, dynamic> _ordersByCategoryBar = {
-  'cardTitle': 'Quality Assurance Issues',
-  'cardSubtitle': 'Outstanding catalogue blockers by severity',
-  'maxY': 180.0,
-  'minY': 0.0,
-  'yAxisInterval': 30.0,
-  'barWidth': 12.0,
-  'barsSpace': 6.0,
-  'chartData': [
+  'tabs': [
     {
-      'label': 'Missing Images',
+      'label': 'Quality Assurance Issues',
+      'subtitle': 'Outstanding catalogue Issues by Severity',
       'values': [
-        {'value': 36.0, 'color': 0xFFFCD34D},
-        {'value': 92.0, 'color': 0xFFF97316},
-        {'value': 148.0, 'color': 0xFFEF4444},
+        [282, 321, 248, 225, 248, 300, 120, 190, 80, 140, 150, 143], // Minor
+        [198, 215, 188, 176, 190, 208, 282, 321, 248, 225, 248, 300], // Major
+        [120, 190, 80, 140, 150, 143, 198, 215, 188, 176, 190, 208], // Critical
       ],
-      'percentile25': 36.0,
-      'percentile50': 92.0,
-      'percentile75': 148.0,
-    },
-    {
-      'label': 'Missing Port Mapping',
-      'values': [
-        {'value': 28.0, 'color': 0xFFFCD34D},
-        {'value': 84.0, 'color': 0xFFF97316},
-        {'value': 136.0, 'color': 0xFFEF4444},
+      'maxY': 360,
+      'legend': [
+        {
+          'label': 'Missing Port Mapping',
+          'color': '0xFFF97316',
+          'isDashed': false,
+        },
+        {'label': 'Missing Images', 'color': '0xFFFCD34D', 'isDashed': true},
+        {'label': 'Incomplete Specs', 'color': '0xFFEF4444', 'isDashed': true},
       ],
-      'percentile25': 28.0,
-      'percentile50': 84.0,
-      'percentile75': 136.0,
     },
-    {
-      'label': 'Incomplete Specs',
-      'values': [
-        {'value': 24.0, 'color': 0xFFFCD34D},
-        {'value': 72.0, 'color': 0xFFF97316},
-        {'value': 118.0, 'color': 0xFFEF4444},
-      ],
-      'percentile25': 24.0,
-      'percentile50': 72.0,
-      'percentile75': 118.0,
-    },
-    {
-      'label': 'Expired Certifications',
-      'values': [
-        {'value': 20.0, 'color': 0xFFFCD34D},
-        {'value': 58.0, 'color': 0xFFF97316},
-        {'value': 102.0, 'color': 0xFFEF4444},
-      ],
-      'percentile25': 20.0,
-      'percentile50': 58.0,
-      'percentile75': 102.0,
-    },
-    {
-      'label': 'Missing Safety Sheets',
-      'values': [
-        {'value': 14.0, 'color': 0xFFFCD34D},
-        {'value': 42.0, 'color': 0xFFF97316},
-        {'value': 78.0, 'color': 0xFFEF4444},
-      ],
-      'percentile25': 14.0,
-      'percentile50': 42.0,
-      'percentile75': 78.0,
-    },
-  ],
-  'legendData': [
-    {'label': 'Minor', 'color': '0xFFFCD34D'},
-    {'label': 'Major', 'color': '0xFFF97316'},
-    {'label': 'Critical', 'color': '0xFFEF4444'},
   ],
 };
+
+// const Map<String, dynamic> _ordersByCategoryBar = {
+//   'cardTitle': 'Quality Assurance Issues',
+//   'cardSubtitle': 'Outstanding catalogue blockers by severity',
+//   'maxY': 180.0,
+//   'minY': 0.0,
+//   'yAxisInterval': 30.0,
+//   'barWidth': 12.0,
+//   'barsSpace': 6.0,
+//   'chartData': [
+//     {
+//       'label': 'Missing Images',
+//       'values': [
+//         {'value': 36.0, 'color': 0xFFFCD34D},
+//         {'value': 92.0, 'color': 0xFFF97316},
+//         {'value': 148.0, 'color': 0xFFEF4444},
+//       ],
+//       'percentile25': 36.0,
+//       'percentile50': 92.0,
+//       'percentile75': 148.0,
+//     },
+//     {
+//       'label': 'Missing Port Mapping',
+//       'values': [
+//         {'value': 28.0, 'color': 0xFFFCD34D},
+//         {'value': 84.0, 'color': 0xFFF97316},
+//         {'value': 136.0, 'color': 0xFFEF4444},
+//       ],
+//       'percentile25': 28.0,
+//       'percentile50': 84.0,
+//       'percentile75': 136.0,
+//     },
+//     {
+//       'label': 'Incomplete Specs',
+//       'values': [
+//         {'value': 24.0, 'color': 0xFFFCD34D},
+//         {'value': 72.0, 'color': 0xFFF97316},
+//         {'value': 118.0, 'color': 0xFFEF4444},
+//       ],
+//       'percentile25': 24.0,
+//       'percentile50': 72.0,
+//       'percentile75': 118.0,
+//     },
+//     {
+//       'label': 'Expired Certifications',
+//       'values': [
+//         {'value': 20.0, 'color': 0xFFFCD34D},
+//         {'value': 58.0, 'color': 0xFFF97316},
+//         {'value': 102.0, 'color': 0xFFEF4444},
+//       ],
+//       'percentile25': 20.0,
+//       'percentile50': 58.0,
+//       'percentile75': 102.0,
+//     },
+//     {
+//       'label': 'Missing Safety Sheets',
+//       'values': [
+//         {'value': 14.0, 'color': 0xFFFCD34D},
+//         {'value': 42.0, 'color': 0xFFF97316},
+//         {'value': 78.0, 'color': 0xFFEF4444},
+//       ],
+//       'percentile25': 14.0,
+//       'percentile50': 42.0,
+//       'percentile75': 78.0,
+//     },
+//   ],
+//   'legendData': [
+//     {'label': 'Minor', 'color': '0xFFFCD34D'},
+//     {'label': 'Major', 'color': '0xFFF97316'},
+//     {'label': 'Critical', 'color': '0xFFEF4444'},
+//   ],
+// };
 
 const List<Map<String, dynamic>> _catalogueInsights = [
   {
@@ -975,11 +1001,12 @@ class CatalogueDashboard extends StatelessWidget {
               md: 4,
               child: DashboardPieChart(data: _statusPieData),
             ),
+
             // Orders by Category Bar Chart
             DashboardGridCol(
               xs: 12,
               md: 8,
-              child: DashboardBarChart(data: _ordersByCategoryBar),
+              child: MultiAnalyticsOveriview(data: _ordersByCategoryBar),
             ),
 
             // Multi-Tab Table (Products, New Items, Stock, Discontinued, etc.)

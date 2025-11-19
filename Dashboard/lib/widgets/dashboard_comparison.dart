@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -14,29 +15,31 @@ class MultiAnalyticsOveriview extends StatefulWidget {
       {
         'label': 'Orders Overview',
         'subtitle': 'On-time vs Delayed comparison',
-        'onTimeOrder': [
-          20000,
-          35000,
-          45000,
-          60000,
-          50000,
-          70000,
-          65000,
-          80000,
-          75000,
-          65000,
-        ],
-        'delayedOrder': [
-          25000,
-          30000,
-          40000,
-          55000,
-          45000,
-          65000,
-          60000,
-          75000,
-          70000,
-          60000,
+        'values': [
+          [
+            20000,
+            35000,
+            45000,
+            60000,
+            50000,
+            70000,
+            65000,
+            80000,
+            75000,
+            65000,
+          ],
+          [
+            25000,
+            30000,
+            40000,
+            55000,
+            45000,
+            65000,
+            60000,
+            75000,
+            70000,
+            60000,
+          ],
         ],
         'maxY': 80000,
         'legend': [
@@ -55,6 +58,14 @@ class MultiAnalyticsOveriview extends StatefulWidget {
 }
 
 class _MultiAnalyticsOveriviewState extends State<MultiAnalyticsOveriview> {
+  static const List<Color> _fallbackSeriesColors = [
+    Color(0xFF5B8FF7),
+    Color(0xFF10B981),
+    Color(0xFFF97316),
+    Color(0xFF7C3AED),
+    Color(0xFFEC4899),
+  ];
+
   // Loading state
   bool isLoading = true;
   String? errorMessage;
@@ -161,7 +172,7 @@ class _MultiAnalyticsOveriviewState extends State<MultiAnalyticsOveriview> {
   Widget _buildHeader(bool isDark) {
     if (tabsData.isEmpty) return const SizedBox.shrink();
 
-    final tab = tabsData[0];
+    final tab = tabsData[selectedTabIndex];
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -208,8 +219,8 @@ class _MultiAnalyticsOveriviewState extends State<MultiAnalyticsOveriview> {
         for (int i = 0; i < legendData.length; i++) ...[
           _buildLegendItem(
             legendData[i]['label'] as String,
-            Color(int.parse(legendData[i]['color'] as String)),
-            legendData[i]['isDashed'] as bool,
+            _parseColorValue(legendData[i]['color'], i),
+            (legendData[i]['isDashed'] as bool?) ?? false,
           ),
           if (i < legendData.length - 1) SizedBox(width: AppSpacing.lg),
         ],
@@ -249,23 +260,43 @@ class _MultiAnalyticsOveriviewState extends State<MultiAnalyticsOveriview> {
       return const SizedBox.shrink();
     }
 
-    final currentTab = tabsData[0];
-    final actualData = List<double>.from(
-      (currentTab['onTimeOrder'] as List).map((e) => (e as num).toDouble()),
-    );
-    final projectedData = List<double>.from(
-      (currentTab['delayedOrder'] as List).map((e) => (e as num).toDouble()),
-    );
-    final maxY = (currentTab['maxY'] as num).toDouble();
+    final currentTab = tabsData[selectedTabIndex];
+    final valuesData = currentTab['values'] as List<dynamic>?;
 
-    // Get colors from legend data
+    if (valuesData == null || valuesData.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
+    final seriesData = valuesData
+        .map(
+          (series) => List<double>.from(
+            (series as List).map((e) => (e as num).toDouble()),
+          ),
+        )
+        .toList();
+
     final legendData = currentTab['legend'] as List<dynamic>?;
-    final approvalColor = legendData != null && legendData.isNotEmpty
-        ? Color(int.parse(legendData[0]['color'] as String))
-        : const Color(0xFF5B8FF7);
-    final delayedColor = legendData != null && legendData.length > 1
-        ? Color(int.parse(legendData[1]['color'] as String))
-        : const Color(0xFF10B981);
+    final seriesMeta = _buildSeriesMeta(
+      legendData,
+      seriesData.length,
+      _fallbackSeriesColors,
+    );
+    final seriesLabels = seriesMeta.labels;
+    final seriesColors = seriesMeta.colors;
+    final seriesDashed = seriesMeta.isDashed;
+
+    final maxSeriesLength = seriesData.fold<int>(
+      0,
+      (previousValue, series) =>
+          series.length > previousValue ? series.length : previousValue,
+    );
+
+    if (maxSeriesLength == 0) {
+      return const SizedBox.shrink();
+    }
+
+    final maxY = _resolveMaxY(currentTab, seriesData);
+    final double horizontalInterval = maxY > 0 ? maxY / 4 : 1.0;
 
     return AnimatedSwitcher(
       duration: AppAnimations.normal,
@@ -290,7 +321,7 @@ class _MultiAnalyticsOveriviewState extends State<MultiAnalyticsOveriview> {
               gridData: FlGridData(
                 show: true,
                 drawVerticalLine: false,
-                horizontalInterval: maxY / 4,
+                horizontalInterval: horizontalInterval,
                 getDrawingHorizontalLine: (value) {
                   return FlLine(color: AppColors.grey200Light, strokeWidth: 1);
                 },
@@ -309,7 +340,7 @@ class _MultiAnalyticsOveriviewState extends State<MultiAnalyticsOveriview> {
                 leftTitles: AxisTitles(
                   sideTitles: SideTitles(
                     showTitles: true,
-                    interval: maxY / 4,
+                    interval: horizontalInterval,
                     getTitlesWidget: (value, meta) {
                       // Only show labels for 0, 20K, 40K, 60K, 80K (every other line)
                       if (value % (maxY / 4) == 0) {
@@ -344,55 +375,47 @@ class _MultiAnalyticsOveriviewState extends State<MultiAnalyticsOveriview> {
                 ),
               ),
               minX: 0,
-              maxX: (actualData.length - 1).toDouble(),
+              maxX: math.max(0, maxSeriesLength - 1).toDouble(),
               minY: 0,
               maxY: maxY,
-              lineBarsData: [
-                // Actual Value Line
-                LineChartBarData(
-                  spots: actualData.asMap().entries.map((entry) {
-                    return FlSpot(entry.key.toDouble(), entry.value);
-                  }).toList(),
+              lineBarsData: seriesData.asMap().entries.map((entry) {
+                final seriesIndex = entry.key;
+                final color = seriesColors[seriesIndex];
+                final isDashed = seriesDashed[seriesIndex];
+
+                return LineChartBarData(
+                  spots: entry.value
+                      .asMap()
+                      .entries
+                      .map((point) => FlSpot(point.key.toDouble(), point.value))
+                      .toList(),
                   isCurved: true,
                   curveSmoothness: 0.3,
                   preventCurveOverShooting: true,
                   preventCurveOvershootingThreshold: 10,
-                  color: approvalColor,
+                  color: color,
                   barWidth: 2.5,
                   isStrokeCapRound: true,
+                  dashArray: isDashed ? const [6, 4] : null,
                   dotData: const FlDotData(show: false),
-                  belowBarData: BarAreaData(
-                    show: true,
-                    gradient: LinearGradient(
-                      colors: [
-                        approvalColor.withValues(alpha: 0.25),
-                        approvalColor.withValues(alpha: 0.12),
-                        approvalColor.withValues(alpha: 0.05),
-                        approvalColor.withValues(alpha: 0.01),
-                      ],
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      stops: const [0.0, 0.3, 0.7, 1.0],
-                    ),
-                  ),
-                ),
-                // Projected Value Line
-                LineChartBarData(
-                  spots: projectedData.asMap().entries.map((entry) {
-                    return FlSpot(entry.key.toDouble(), entry.value);
-                  }).toList(),
-                  isCurved: true,
-                  curveSmoothness: 0.3,
-                  preventCurveOverShooting: true,
-                  preventCurveOvershootingThreshold: 10,
-                  color: delayedColor,
-                  barWidth: 2.5,
-                  isStrokeCapRound: true,
-                  dashArray: [6, 4],
-                  dotData: const FlDotData(show: false),
-                  belowBarData: BarAreaData(show: false),
-                ),
-              ],
+                  belowBarData: seriesIndex == 0
+                      ? BarAreaData(
+                          show: true,
+                          gradient: LinearGradient(
+                            colors: [
+                              color.withValues(alpha: 0.25),
+                              color.withValues(alpha: 0.12),
+                              color.withValues(alpha: 0.05),
+                              color.withValues(alpha: 0.01),
+                            ],
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            stops: const [0.0, 0.3, 0.7, 1.0],
+                          ),
+                        )
+                      : BarAreaData(show: false),
+                );
+              }).toList(),
               lineTouchData: LineTouchData(
                 enabled: true,
                 touchTooltipData: LineTouchTooltipData(
@@ -405,78 +428,76 @@ class _MultiAnalyticsOveriviewState extends State<MultiAnalyticsOveriview> {
                   fitInsideVertically: true,
                   maxContentWidth: 200,
                   getTooltipItems: (List<LineBarSpot> touchedBarSpots) {
-                    // Get the date/label based on x position
+                    if (touchedBarSpots.isEmpty) {
+                      return const <LineTooltipItem>[];
+                    }
+
                     final xIndex = touchedBarSpots.first.x.toInt();
                     final dateLabel = _getDateLabel(xIndex);
 
-                    // Find actual and projected spots
-                    LineBarSpot? actualSpot;
-                    LineBarSpot? projectedSpot;
+                    final Map<int, LineBarSpot> spotsByBarIndex = {};
+                    for (final spot in touchedBarSpots) {
+                      spotsByBarIndex[spot.barIndex] = spot;
+                    }
 
-                    for (var spot in touchedBarSpots) {
-                      if (spot.barIndex == 0) {
-                        actualSpot = spot;
-                      } else if (spot.barIndex == 1) {
-                        projectedSpot = spot;
+                    final List<TextSpan> spans = [
+                      TextSpan(
+                        text: '$dateLabel\n',
+                        style: AppTextStyles.b11Medium(
+                          isDark: true,
+                        ).copyWith(color: Colors.white, height: 1.6),
+                      ),
+                    ];
+
+                    for (int i = 0; i < seriesLabels.length; i++) {
+                      final seriesSpot = spotsByBarIndex[i];
+                      if (seriesSpot == null) continue;
+
+                      spans.add(
+                        TextSpan(
+                          text: '● ',
+                          style: AppTextStyles.b10(
+                            isDark: true,
+                          ).copyWith(color: seriesColors[i], height: 1.8),
+                        ),
+                      );
+                      spans.add(
+                        TextSpan(
+                          text:
+                              '${seriesLabels[i]}  ${_formatTooltipValue(seriesSpot.y)}\n',
+                          style: AppTextStyles.b11(
+                            isDark: true,
+                          ).copyWith(color: Colors.white, height: 1.8),
+                        ),
+                      );
+                    }
+
+                    if (spans.length > 1) {
+                      final lastSpan = spans.last;
+                      if (lastSpan.text != null &&
+                          lastSpan.text!.endsWith('\n')) {
+                        spans[spans.length - 1] = TextSpan(
+                          text: lastSpan.text!.substring(
+                            0,
+                            lastSpan.text!.length - 1,
+                          ),
+                          style: lastSpan.style,
+                        );
                       }
                     }
 
-                    // Create a list with the exact same length as touchedBarSpots
-                    final List<LineTooltipItem?> tooltipItems = [];
-
+                    final tooltipItems = <LineTooltipItem?>[];
                     for (int i = 0; i < touchedBarSpots.length; i++) {
                       if (i == 0) {
-                        // First item shows the full tooltip content
                         tooltipItems.add(
                           LineTooltipItem(
                             '',
                             const TextStyle(color: Colors.transparent),
                             textAlign: TextAlign.left,
-                            children: [
-                              // Date header on the left
-                              TextSpan(
-                                text: '$dateLabel\n',
-                                style: AppTextStyles.b11Medium(
-                                  isDark: true,
-                                ).copyWith(color: Colors.white, height: 1.6),
-                              ),
-                              // On-time line (label and value on same line)
-                              if (actualSpot != null) ...[
-                                TextSpan(
-                                  text: '● ',
-                                  style: AppTextStyles.b10(
-                                    isDark: true,
-                                  ).copyWith(color: approvalColor, height: 1.8),
-                                ),
-                                TextSpan(
-                                  text:
-                                      'Approved  ${_formatTooltipValue(actualSpot.y)}\n',
-                                  style: AppTextStyles.b11(
-                                    isDark: true,
-                                  ).copyWith(color: Colors.white, height: 1.8),
-                                ),
-                              ],
-                              // Delayed line (label and value on same line)
-                              if (projectedSpot != null) ...[
-                                TextSpan(
-                                  text: '● ',
-                                  style: AppTextStyles.b10(
-                                    isDark: true,
-                                  ).copyWith(color: delayedColor, height: 1.8),
-                                ),
-                                TextSpan(
-                                  text:
-                                      'Delayed  ${_formatTooltipValue(projectedSpot.y)}',
-                                  style: AppTextStyles.b11(
-                                    isDark: true,
-                                  ).copyWith(color: Colors.white, height: 1.8),
-                                ),
-                              ],
-                            ],
+                            children: spans,
                           ),
                         );
                       } else {
-                        // Remaining items are transparent placeholders
                         tooltipItems.add(
                           const LineTooltipItem(
                             '',
@@ -523,6 +544,84 @@ class _MultiAnalyticsOveriviewState extends State<MultiAnalyticsOveriview> {
     final day = (index % 31) + 1;
     return 'Oct ${day.toString().padLeft(2, '0')}';
   }
+
+  Color _parseColorValue(dynamic value, int fallbackIndex) {
+    if (value is int) {
+      return Color(value);
+    }
+    if (value is String) {
+      try {
+        return Color(int.parse(value));
+      } catch (_) {
+        final sanitized = value.toUpperCase().replaceFirst('0X', '');
+        try {
+          return Color(int.parse('0x$sanitized'));
+        } catch (_) {
+          // Ignore and fall back
+        }
+      }
+    }
+    return _fallbackSeriesColors[fallbackIndex % _fallbackSeriesColors.length];
+  }
+
+  _SeriesMeta _buildSeriesMeta(
+    List<dynamic>? legendData,
+    int seriesCount,
+    List<Color> fallbackColors,
+  ) {
+    final labels = <String>[];
+    final colors = <Color>[];
+    final dashed = <bool>[];
+
+    for (int i = 0; i < seriesCount; i++) {
+      if (legendData != null && i < legendData.length) {
+        final entry = legendData[i] as Map<String, dynamic>;
+        labels.add(entry['label'] as String? ?? 'Series ${i + 1}');
+        colors.add(_parseColorValue(entry['color'], i));
+        dashed.add((entry['isDashed'] as bool?) ?? false);
+      } else {
+        labels.add('Series ${i + 1}');
+        colors.add(fallbackColors[i % fallbackColors.length]);
+        dashed.add(false);
+      }
+    }
+
+    return _SeriesMeta(labels: labels, colors: colors, isDashed: dashed);
+  }
+
+  double _resolveMaxY(Map<String, dynamic> tab, List<List<double>> seriesData) {
+    final providedMaxY = tab['maxY'];
+    if (providedMaxY != null) {
+      return (providedMaxY as num).toDouble();
+    }
+
+    double maxValue = 0;
+    for (final series in seriesData) {
+      for (final value in series) {
+        if (value > maxValue) {
+          maxValue = value;
+        }
+      }
+    }
+
+    if (maxValue == 0) {
+      return 10;
+    }
+
+    return maxValue * 1.1;
+  }
+}
+
+class _SeriesMeta {
+  const _SeriesMeta({
+    required this.labels,
+    required this.colors,
+    required this.isDashed,
+  });
+
+  final List<String> labels;
+  final List<Color> colors;
+  final List<bool> isDashed;
 }
 
 // Custom painter for dashed line in legend

@@ -347,8 +347,14 @@
       {
         "label": "Stock vs Demand Analytics",
         "subtitle": "Inventory availability comparison",
-        "onTimeOrder": [52000, 58000, 55000, 62000, 68000, 65000, 72000, 78000, 75000, 82000, 85000, 88000],
-        "delayedOrder": [48000, 52000, 50000, 56000, 62000, 59000, 65000, 70000, 68000, 74000, 77000, 80000],
+        "values": [
+          [52000, 58000, 55000, 62000, 68000, 65000, 72000, 78000, 75000, 82000, 85000, 88000],
+          [48000, 52000, 50000, 56000, 62000, 59000, 65000, 70000, 68000, 74000, 77000, 80000]
+        ],
+        "legend": [
+          {"label": "Stock Available", "color": "0xFF5B8FF7", "isDashed": false},
+          {"label": "Demand", "color": "0xFF10B981", "isDashed": true}
+        ],
         "maxY": 90000
       }
     ]

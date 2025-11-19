@@ -264,8 +264,10 @@ const Map<String, dynamic> _deliveryPerformanceComparison = {
     {
       'label': 'Win Rate',
       'subtitle': 'RFQs submitted vs purchase orders',
-      'onTimeOrder': [282, 321, 248, 225, 248, 300],
-      'delayedOrder': [120, 190, 80, 140, 150, 143],
+      'values': [
+        [282, 321, 248, 225, 248, 300],
+        [120, 190, 80, 140, 150, 143],
+      ],
       'maxY': 360,
       'legend': [
         {'label': 'Purchase Orders', 'color': '0xFF5B8FF7', 'isDashed': false},
@@ -495,6 +497,7 @@ const List<Map<String, dynamic>> _vendorPerformanceMetrics = [
   },
 ];
 
+// ignore: unused_element
 const Map<String, dynamic> _vendorTableData = {
   'header': {
     'title': 'Pending RFQs',
@@ -776,12 +779,14 @@ class VendorDashboard extends StatelessWidget {
               lg: 4,
               child: DashboardLeadingPort(data: _vendorPerformanceMetrics[0]),
             ),
+
             DashboardGridCol(
               xs: 12,
               md: 6,
               lg: 4,
               child: DashboardLeadingPort(data: _vendorPerformanceMetrics[1]),
             ),
+
             DashboardGridCol(
               xs: 12,
               md: 6,

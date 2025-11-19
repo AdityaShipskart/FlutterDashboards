@@ -238,16 +238,28 @@ const Map<String, dynamic> _tenantActivityComparison = {
     {
       'label': 'Active vs Inactive',
       'subtitle': 'Tenant engagement status',
-      'onTimeOrder': [720, 736, 748, 760, 772, 798],
-      'delayedOrder': [68, 72, 76, 78, 81, 49],
+      'values': [
+        [720, 736, 748, 760, 772, 798],
+        [68, 72, 76, 78, 81, 49],
+      ],
       'maxY': 850,
+      'legend': [
+        {'label': 'Active Tenants', 'color': '0xFF2563EB', 'isDashed': false},
+        {'label': 'Inactive Tenants', 'color': '0xFFF97316', 'isDashed': true},
+      ],
     },
     {
       'label': 'Retention Cohort',
       'subtitle': 'Monthly cohort retention',
-      'onTimeOrder': [650, 672, 684, 696, 712, 728],
-      'delayedOrder': [138, 136, 140, 142, 143, 119],
+      'values': [
+        [650, 672, 684, 696, 712, 728],
+        [138, 136, 140, 142, 143, 119],
+      ],
       'maxY': 850,
+      'legend': [
+        {'label': 'Retained', 'color': '0xFF10B981', 'isDashed': false},
+        {'label': 'Churned', 'color': '0xFFEF4444', 'isDashed': true},
+      ],
     },
   ],
 };

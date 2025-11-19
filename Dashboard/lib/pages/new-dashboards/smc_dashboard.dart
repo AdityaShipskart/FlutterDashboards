@@ -285,23 +285,35 @@ const Map<String, dynamic> _vesselPerformanceComparison = {
     {
       'label': 'Cost per Vessel',
       'subtitle': 'Monthly procurement by vessel',
-      'onTimeOrder': [180000, 195000, 210000, 225000, 235000, 248000],
-      'delayedOrder': [42000, 48000, 52000, 58000, 62000, 68000],
+      'values': [
+        [180000, 195000, 210000, 225000, 235000, 248000],
+        [42000, 48000, 52000, 58000, 62000, 68000],
+      ],
       'maxY': 260000,
+      'legend': [
+        {'label': 'Actual Spend', 'color': '0xFF1379F0', 'isDashed': false},
+        {'label': 'Target Spend', 'color': '0xFFF97316', 'isDashed': true},
+      ],
     },
     {
       'label': 'Compliance Rate',
       'subtitle': 'Safety and regulation adherence',
-      'onTimeOrder': [38, 39, 40, 40, 41, 41],
-      'delayedOrder': [4, 3, 2, 2, 1, 1],
+      'values': [
+        [38, 39, 40, 40, 41, 41],
+        [4, 3, 2, 2, 1, 1],
+      ],
       'maxY': 43,
+      'legend': [
+        {'label': 'Compliant', 'color': '0xFF10B981', 'isDashed': false},
+        {'label': 'Non-Compliant', 'color': '0xFFEF4444', 'isDashed': true},
+      ],
     },
   ],
 };
 
 const Map<String, dynamic> _purchasesByCategoryBar = {
-  'cardTitle': 'Spend by Vessel & Category',
-  'cardSubtitle': 'Stacked vessel spend profile across key categories',
+  'cardTitle': 'Spend by Category',
+  'cardSubtitle': 'Stacked spend profile across key categories',
   'maxY': 1100000.0,
   'minY': 0.0,
   'yAxisInterval': 200000.0,
@@ -317,7 +329,7 @@ const Map<String, dynamic> _purchasesByCategoryBar = {
   ],
   'chartData': [
     {
-      'label': 'MV Coral Breeze',
+      'label': 'January 2025',
       'values': [
         {'value': 315000.0, 'color': 0xFF1379F0},
         {'value': 600000.0, 'color': 0xFFF97316},
@@ -334,7 +346,7 @@ const Map<String, dynamic> _purchasesByCategoryBar = {
       ],
     },
     {
-      'label': 'MV Arctic Dawn',
+      'label': 'February 2025',
       'values': [
         {'value': 315000.0, 'color': 0xFF1379F0},
         {'value': 600000.0, 'color': 0xFFF97316},
@@ -351,7 +363,7 @@ const Map<String, dynamic> _purchasesByCategoryBar = {
       ],
     },
     {
-      'label': 'MV Pacific Harmony',
+      'label': 'March 2025',
       'values': [
         {'value': 315000.0, 'color': 0xFF1379F0},
         {'value': 600000.0, 'color': 0xFFF97316},
@@ -368,7 +380,7 @@ const Map<String, dynamic> _purchasesByCategoryBar = {
       ],
     },
     {
-      'label': 'MV Golden Horizon',
+      'label': 'April 2025',
       'values': [
         {'value': 335000.0, 'color': 0xFF1379F0},
         {'value': 275000.0, 'color': 0xFFF97316},
@@ -385,7 +397,7 @@ const Map<String, dynamic> _purchasesByCategoryBar = {
       ],
     },
     {
-      'label': 'MV Silver Mist',
+      'label': 'May 2025',
       'values': [
         {'value': 225000.0, 'color': 0xFF1379F0},
         {'value': 360000.0, 'color': 0xFFF97316},
@@ -402,7 +414,7 @@ const Map<String, dynamic> _purchasesByCategoryBar = {
       ],
     },
     {
-      'label': 'MV Emerald Isle',
+      'label': 'June 2025',
       'values': [
         {'value': 315000.0, 'color': 0xFF1379F0},
         {'value': 600000.0, 'color': 0xFFF97316},

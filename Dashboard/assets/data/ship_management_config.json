@@ -311,8 +311,14 @@
       {
         "label": "Fleet Performance Metrics",
         "subtitle": "Key operational indicators",
-        "onTimeOrder": [38, 42, 40, 45, 48, 46, 50, 52, 51, 54, 56, 58],
-        "delayedOrder": [35, 38, 37, 41, 44, 42, 46, 48, 47, 50, 52, 54],
+        "values": [
+          [38, 42, 40, 45, 48, 46, 50, 52, 51, 54, 56, 58],
+          [35, 38, 37, 41, 44, 42, 46, 48, 47, 50, 52, 54]
+        ],
+        "legend": [
+          {"label": "On-Time", "color": "0xFF5B8FF7", "isDashed": false},
+          {"label": "Delayed", "color": "0xFFF97316", "isDashed": true}
+        ],
         "maxY": 60
       }
     ]
