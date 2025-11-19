@@ -269,12 +269,12 @@ class _DashboardFinancialCardState extends State<DashboardFinancialCard> {
               ),
             ],
           ),
-          SizedBox(height: AppSpacing.lg - 4),
+          // SizedBox(height: AppSpacing.xxs),
 
           // Bar Chart with custom tooltip
           SizedBox(
             height:
-                290, // Increased from 120 to better utilize the taller container
+                280, // Increased from 120 to better utilize the taller container
             child: isLoading
                 ? Center(
                     child: CircularProgressIndicator(color: AppColors.primary),

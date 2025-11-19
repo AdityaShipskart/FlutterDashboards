@@ -1,4 +1,4 @@
-import 'package:flutte_design_application/widgets/dashboard_horizontal_bar_chart.dart';
+// import 'package:flutte_design_application/widgets/dashboard_horizontal_bar_chart.dart';
 import 'package:flutter/material.dart';
 // import 'package:get/utils.dart';
 import '../../widgets/dashboard_grid.dart';
@@ -155,18 +155,18 @@ final Map<String, dynamic> _vendorRevenueChart = {
     {'x': 11, 'y': 5.4},
   ],
   'lastYearData': [
-    {'x': 0, 'y': 4.2},
-    {'x': 1, 'y': 4.2},
+    {'x': 0, 'y': 2.2},
+    {'x': 1, 'y': 3.2},
     {'x': 2, 'y': 4.2},
-    {'x': 3, 'y': 4.2},
-    {'x': 4, 'y': 4.2},
-    {'x': 5, 'y': 4.2},
-    {'x': 6, 'y': 4.2},
-    {'x': 7, 'y': 4.2},
-    {'x': 8, 'y': 4.2},
+    {'x': 3, 'y': 5.2},
+    {'x': 4, 'y': 6.2},
+    {'x': 5, 'y': 5.7},
+    {'x': 6, 'y': 7.12},
+    {'x': 7, 'y': 5.1},
+    {'x': 8, 'y': 5.2},
     {'x': 9, 'y': 4.2},
-    {'x': 10, 'y': 4.2},
-    {'x': 11, 'y': 4.2},
+    {'x': 10, 'y': 3.2},
+    {'x': 11, 'y': 6.2},
   ],
   'labels': [
     'Jan',
@@ -248,15 +248,20 @@ const Map<String, dynamic> _orderFulfillmentCombo = {
     {'value': 160, 'label': '160'},
     {'value': 240, 'label': '240'},
     {'value': 320, 'label': '320'},
-    {'value': 400, 'label': '400'},
+    {'value': 380, 'label': '400'},
   ],
   'chartData': [
-    {'month': 'Jan', 'wins': 284.0, 'losses': 42.0, 'winRate': 87.1},
-    {'month': 'Feb', 'wins': 306.0, 'losses': 38.0, 'winRate': 89.0},
-    {'month': 'Mar', 'wins': 328.0, 'losses': 34.0, 'winRate': 90.6},
-    {'month': 'Apr', 'wins': 342.0, 'losses': 32.0, 'winRate': 91.4},
-    {'month': 'May', 'wins': 358.0, 'losses': 28.0, 'winRate': 92.7},
-    {'month': 'Jun', 'wins': 372.0, 'losses': 24.0, 'winRate': 93.9},
+    {"month": "Jan", "wins": 284.0, "losses": 238.0, "winRate": 67.1},
+    {"month": "Feb", "wins": 306.0, "losses": 325.0, "winRate": 79.0},
+    {"month": "Mar", "wins": 328.0, "losses": 312.0, "winRate": 40.6},
+    {"month": "Apr", "wins": 342.0, "losses": 368.0, "winRate": 61.4},
+    {"month": "May", "wins": 358.0, "losses": 332.0, "winRate": 72.7},
+    {"month": "Jun", "wins": 372.0, "losses": 172.0, "winRate": 83.9},
+    {"month": "Jul", "wins": 385.0, "losses": 358.0, "winRate": 94.6},
+    {"month": "Aug", "wins": 398.0, "losses": 340.0, "winRate": 65.2},
+    {"month": "Sep", "wins": 412.0, "losses": 322.0, "winRate": 55.8},
+    {"month": "Oct", "wins": 425.0, "losses": 304.0, "winRate": 76.4},
+    {"month": "Nov", "wins": 438.0, "losses": 285.0, "winRate": 96.7},
   ],
 };
 
@@ -267,7 +272,7 @@ const Map<String, dynamic> _deliveryPerformanceComparison = {
       'subtitle': 'RFQs submitted vs purchase orders',
       'values': [
         [282, 321, 248, 225, 248, 300],
-        [120, 190, 80, 140, 150, 143],
+        [220, 290, 180, 240, 250, 143],
       ],
       'maxY': 360,
       'legend': [
@@ -296,7 +301,7 @@ const Map<String, dynamic> _categoryRevenueBar = {
   ],
   'chartData': [
     {
-      'label': 'Marine Parts',
+      'label': 'IMPA',
       'values': [
         {'value': 62000.0, 'color': 0xFFE0E0E0},
         {'value': 128000.0, 'color': 0xFF10B981},
@@ -309,19 +314,19 @@ const Map<String, dynamic> _categoryRevenueBar = {
     {
       'label': 'Electronics',
       'values': [
-        {'value': 48000.0, 'color': 0xFFE0E0E0},
-        {'value': 98000.0, 'color': 0xFF10B981},
-        {'value': 156000.0, 'color': 0xFFEC4899},
+        {'value': 248000.0, 'color': 0xFFE0E0E0},
+        {'value': 23000.0, 'color': 0xFF10B981},
+        {'value': 256000.0, 'color': 0xFFEC4899},
       ],
       'percentile25': 48000.0,
       'percentile50': 98000.0,
       'percentile75': 156000.0,
     },
     {
-      'label': 'Safety Gear',
+      'label': 'Provisions',
       'values': [
-        {'value': 38000.0, 'color': 0xFFE0E0E0},
-        {'value': 78000.0, 'color': 0xFF10B981},
+        {'value': 138000.0, 'color': 0xFFE0E0E0},
+        {'value': 278000.0, 'color': 0xFF10B981},
         {'value': 126000.0, 'color': 0xFFEC4899},
       ],
       'percentile25': 38000.0,
@@ -329,11 +334,35 @@ const Map<String, dynamic> _categoryRevenueBar = {
       'percentile75': 126000.0,
     },
     {
-      'label': 'Consumables',
+      'label': 'Lubes',
       'values': [
-        {'value': 28000.0, 'color': 0xFFE0E0E0},
-        {'value': 58000.0, 'color': 0xFF10B981},
-        {'value': 92000.0, 'color': 0xFFEC4899},
+        {'value': 128000.0, 'color': 0xFFE0E0E0},
+        {'value': 258000.0, 'color': 0xFF10B981},
+        {'value': 192000.0, 'color': 0xFFEC4899},
+      ],
+      'percentile25': 28000.0,
+      'percentile50': 58000.0,
+      'percentile75': 92000.0,
+    },
+
+    {
+      'label': 'Lubes',
+      'values': [
+        {'value': 148000.0, 'color': 0xFFE0E0E0},
+        {'value': 251000.0, 'color': 0xFF10B981},
+        {'value': 192000.0, 'color': 0xFFEC4899},
+      ],
+      'percentile25': 28000.0,
+      'percentile50': 58000.0,
+      'percentile75': 92000.0,
+    },
+
+    {
+      'label': 'Lubes',
+      'values': [
+        {'value': 128000.0, 'color': 0xFFE0E0E0},
+        {'value': 248000.0, 'color': 0xFF10B981},
+        {'value': 192000.0, 'color': 0xFFEC4899},
       ],
       'percentile25': 28000.0,
       'percentile50': 58000.0,
@@ -410,8 +439,8 @@ const List<Map<String, dynamic>> _vendorPerformanceMetrics = [
     'columns': {'first': 'Recent Status', 'second': 'Order Value'},
     'Pending Rfqs': [
       {
-        'portName': 'Smart Fuel Monitor',
-        'purchaseValue': '\$1,420',
+        'portName': 'MSC Ship Management',
+        'purchaseValue': '120 Products',
         'percentageChange': 32.1,
         'trend': 'up',
         'priority': 'HIGH PRIORITY',
@@ -419,8 +448,8 @@ const List<Map<String, dynamic>> _vendorPerformanceMetrics = [
         'status': 'Urgent Response Required',
       },
       {
-        'portName': 'Engine Spare Parts',
-        'purchaseValue': '\$860',
+        'portName': 'RDX Company',
+        'purchaseValue': '860 Products',
         'percentageChange': 24.3,
         'trend': 'up',
         'priority': 'MEDIUM PRIORITY',
@@ -428,8 +457,8 @@ const List<Map<String, dynamic>> _vendorPerformanceMetrics = [
         'status': 'Awaiting Quote',
       },
       {
-        'portName': 'Engine Spare Parts',
-        'purchaseValue': '\$860',
+        'portName': 'Shipworkz Marine Services Llc',
+        'purchaseValue': '860 Products',
         'percentageChange': 24.3,
         'trend': 'up',
         'priority': 'MEDIUM PRIORITY',
@@ -437,8 +466,8 @@ const List<Map<String, dynamic>> _vendorPerformanceMetrics = [
         'status': 'Awaiting Quote',
       },
       {
-        'portName': 'Engine Spare Parts',
-        'purchaseValue': '\$860',
+        'portName': 'Demo Company',
+        'purchaseValue': '860 Products',
         'percentageChange': 24.3,
         'trend': 'up',
         'priority': 'MEDIUM PRIORITY',
@@ -448,51 +477,51 @@ const List<Map<String, dynamic>> _vendorPerformanceMetrics = [
     ],
     'Upcoming Deliveries': [
       {
-        'portName': 'Navigation Equipment',
-        'purchaseValue': '\$980',
+        'portName': 'Shipworkz Marine Services Llc',
+        'purchaseValue': 'volumn: \$1.2k',
         'percentageChange': 18.7,
-        'trend': 'up',
+        'trend': 'down',
         'priority': 'HIGH PRIORITY',
         'daysLeft': 1,
-        'status': 'Delivery Scheduled',
+        'status': 'Update Status',
       },
       {
-        'portName': 'Safety Gear Set',
-        'purchaseValue': '\$580',
+        'portName': 'Demo Company',
+        'purchaseValue': 'volumn: \$580',
         'percentageChange': 15.4,
         'trend': 'up',
         'priority': 'MEDIUM PRIORITY',
         'daysLeft': 3,
-        'status': 'In Transit',
+        'status': 'Packing',
       },
       {
-        'portName': 'Safety Gear Set',
-        'purchaseValue': '\$580',
+        'portName': 'RDX Company',
+        'purchaseValue': 'volumn: \$580',
         'percentageChange': 15.4,
         'trend': 'up',
         'priority': 'MEDIUM PRIORITY',
         'daysLeft': 3,
-        'status': 'In Transit',
+        'status': 'Shipped',
+      },
+
+      {
+        'portName': 'RDX Company',
+        'purchaseValue': 'volumn: \$580',
+        'percentageChange': 15.4,
+        'trend': 'up',
+        'priority': 'MEDIUM PRIORITY',
+        'daysLeft': 3,
+        'status': 'Out for Delivery',
       },
 
       {
         'portName': 'Safety Gear Set',
-        'purchaseValue': '\$580',
+        'purchaseValue': 'volumn: \$580',
         'percentageChange': 15.4,
         'trend': 'up',
         'priority': 'MEDIUM PRIORITY',
         'daysLeft': 3,
-        'status': 'In Transit',
-      },
-
-      {
-        'portName': 'Safety Gear Set',
-        'purchaseValue': '\$580',
-        'percentageChange': 15.4,
-        'trend': 'up',
-        'priority': 'MEDIUM PRIORITY',
-        'daysLeft': 3,
-        'status': 'In Transit',
+        'status': 'On the way',
       },
     ],
   },
@@ -799,7 +828,7 @@ class VendorDashboard extends StatelessWidget {
             //   xs: 12,
             //   child: DashboardTable(data: _vendorTableData),
             // ),
-            DashboardGridCol(xs: 12, md: 6, child: BarChartSample7()),
+            // DashboardGridCol(xs: 12, md: 6, child: BarChartSample7()),
           ],
         ),
       ),
