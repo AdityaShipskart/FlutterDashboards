@@ -1565,3 +1565,38 @@ class AuroraTheme {
   /// Standard icon size for tooltips
   static const double tooltipIconSize = 8.0;
 }
+
+/// Chart Data Constants
+class ChartConstants {
+  ChartConstants._();
+
+  /// Horizontal Bar Chart
+  static const Color horizontalBarShadowColor = AppColors.grey300Light;
+
+  /// Horizontal Bar Chart Data
+  static const List<HorizontalBarData> horizontalBarChartData = [
+    HorizontalBarData(color: AppColors.warning, value: 18, shadowValue: 18),
+    HorizontalBarData(color: AppColors.success, value: 17, shadowValue: 8),
+    HorizontalBarData(color: AppColors.orange, value: 10, shadowValue: 15),
+    HorizontalBarData(
+      color: Color(0xFFEC407A),
+      value: 2.5,
+      shadowValue: 5,
+    ), // Pink shade 400
+    HorizontalBarData(color: AppColors.primary, value: 2, shadowValue: 2.5),
+    HorizontalBarData(color: AppColors.error, value: 2, shadowValue: 2),
+  ];
+}
+
+/// Data model for Horizontal Bar Chart
+class HorizontalBarData {
+  final Color color;
+  final double value;
+  final double shadowValue;
+
+  const HorizontalBarData({
+    required this.color,
+    required this.value,
+    required this.shadowValue,
+  });
+}
