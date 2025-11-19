@@ -1,4 +1,4 @@
-// import 'package:flutte_design_application/widgets/dashboard_horizontal_bar_chart.dart';
+import 'package:flutte_design_application/widgets/dashboard_horizontal_bar_chart.dart';
 import 'package:flutter/material.dart';
 // import 'package:get/utils.dart';
 import '../../widgets/dashboard_grid.dart';
@@ -285,7 +285,7 @@ const Map<String, dynamic> _deliveryPerformanceComparison = {
 
 const Map<String, dynamic> _categoryRevenueBar = {
   'cardTitle': 'Revenue by Category',
-  'cardSubtitle': '25th/50th/75th percentile order values',
+  'cardSubtitle': 'your performance vs market percentile',
   'maxY': 280000.0,
   'minY': 0.0,
   'yAxisInterval': 50000.0,
@@ -310,69 +310,99 @@ const Map<String, dynamic> _categoryRevenueBar = {
       'percentile25': 62000.0,
       'percentile50': 128000.0,
       'percentile75': 198000.0,
+      'tooltip': [
+        {'label': 'RFQs Submitted', 'value': '150K'},
+        {'label': 'Orders', 'value': '250K'},
+        {'label': 'Global value', 'value': '350K'},
+      ],
     },
     {
       'label': 'Electronics',
       'values': [
-        {'value': 248000.0, 'color': 0xFFE0E0E0},
+        {'value': 128000.0, 'color': 0xFFE0E0E0},
         {'value': 23000.0, 'color': 0xFF10B981},
         {'value': 256000.0, 'color': 0xFFEC4899},
       ],
       'percentile25': 48000.0,
       'percentile50': 98000.0,
       'percentile75': 156000.0,
+      'tooltip': [
+        {'label': 'RFQs Submitted', 'value': '150K'},
+        {'label': 'Orders', 'value': '250K'},
+        {'label': 'Global value', 'value': '350K'},
+      ],
     },
     {
       'label': 'Provisions',
       'values': [
         {'value': 138000.0, 'color': 0xFFE0E0E0},
-        {'value': 278000.0, 'color': 0xFF10B981},
-        {'value': 126000.0, 'color': 0xFFEC4899},
+        {'value': 178000.0, 'color': 0xFF10B981},
+        {'value': 216000.0, 'color': 0xFFEC4899},
       ],
       'percentile25': 38000.0,
       'percentile50': 78000.0,
       'percentile75': 126000.0,
+      'tooltip': [
+        {'label': 'RFQs Submitted', 'value': '150K'},
+        {'label': 'Orders', 'value': '250K'},
+        {'label': 'Global value', 'value': '350K'},
+      ],
     },
     {
       'label': 'Lubes',
       'values': [
         {'value': 128000.0, 'color': 0xFFE0E0E0},
-        {'value': 258000.0, 'color': 0xFF10B981},
+        {'value': 158000.0, 'color': 0xFF10B981},
         {'value': 192000.0, 'color': 0xFFEC4899},
       ],
       'percentile25': 28000.0,
       'percentile50': 58000.0,
       'percentile75': 92000.0,
+      'tooltip': [
+        {'label': 'RFQs Submitted', 'value': '150K'},
+        {'label': 'Orders', 'value': '250K'},
+        {'label': 'Global value', 'value': '350K'},
+      ],
     },
 
     {
       'label': 'Lubes',
       'values': [
         {'value': 148000.0, 'color': 0xFFE0E0E0},
-        {'value': 251000.0, 'color': 0xFF10B981},
+        {'value': 151000.0, 'color': 0xFF10B981},
         {'value': 192000.0, 'color': 0xFFEC4899},
       ],
       'percentile25': 28000.0,
       'percentile50': 58000.0,
       'percentile75': 92000.0,
+      'tooltip': [
+        {'label': 'RFQs Submitted', 'value': '150K'},
+        {'label': 'Orders', 'value': '250K'},
+        {'label': 'Global value', 'value': '350K'},
+      ],
     },
 
     {
       'label': 'Lubes',
       'values': [
         {'value': 128000.0, 'color': 0xFFE0E0E0},
-        {'value': 248000.0, 'color': 0xFF10B981},
+        {'value': 148000.0, 'color': 0xFF10B981},
         {'value': 192000.0, 'color': 0xFFEC4899},
       ],
       'percentile25': 28000.0,
       'percentile50': 58000.0,
       'percentile75': 92000.0,
+      'tooltip': [
+        {'label': 'RFQs Submitted', 'value': '150K'},
+        {'label': 'Orders', 'value': '250K'},
+        {'label': 'Global value', 'value': '350K'},
+      ],
     },
   ],
   'legendData': [
-    {'label': '25th', 'color': '0xFFE0E0E0'},
-    {'label': '50th', 'color': '0xFF10B981'},
-    {'label': '75th', 'color': '0xFFEC4899'},
+    {'label': 'RFQs Submitted', 'color': '0xFFE0E0E0'},
+    {'label': 'Orders', 'color': '0xFF10B981'},
+    {'label': 'Global Value', 'color': '0xFFEC4899'},
   ],
 };
 
@@ -828,7 +858,7 @@ class VendorDashboard extends StatelessWidget {
             //   xs: 12,
             //   child: DashboardTable(data: _vendorTableData),
             // ),
-            // DashboardGridCol(xs: 12, md: 6, child: BarChartSample7()),
+            DashboardGridCol(xs: 12, md: 6, child: BarChartSample7()),
           ],
         ),
       ),

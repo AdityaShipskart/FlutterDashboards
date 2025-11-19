@@ -242,38 +242,22 @@ class _DashboardBarChartState extends State<DashboardBarChart> {
           SizedBox(height: AppSpacing.xl),
 
           // Legend - Dynamic from API
-          Row(
-            children: legendData.isEmpty
-                ? [
-                    // Fallback if no legend data
-                    _buildLegendItem(
-                      '25th',
-                      AppColors.getGreyScale(300, isDark),
-                      isDark,
-                    ),
+          if (legendData.isNotEmpty)
+            Row(
+              children: legendData.map((legend) {
+                final colorValue = legend['color'];
+                final color = colorValue is int
+                    ? Color(colorValue)
+                    : Color(int.parse(colorValue as String));
+                return Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    _buildLegendItem(legend['label'] as String, color, isDark),
                     SizedBox(width: AppSpacing.md),
-                    _buildLegendItem('50th', const Color(0xFF4CAF50), isDark),
-                    SizedBox(width: AppSpacing.md),
-                    _buildLegendItem('75th', AppColors.primary, isDark),
-                  ]
-                : legendData.map((legend) {
-                    final colorValue = legend['color'];
-                    final color = colorValue is int
-                        ? Color(colorValue)
-                        : Color(int.parse(colorValue as String));
-                    return Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        _buildLegendItem(
-                          legend['label'] as String,
-                          color,
-                          isDark,
-                        ),
-                        SizedBox(width: AppSpacing.md),
-                      ],
-                    );
-                  }).toList(),
-          ),
+                  ],
+                );
+              }).toList(),
+            ),
           SizedBox(height: AppSpacing.xl),
 
           // Bar Chart with hover overlay
