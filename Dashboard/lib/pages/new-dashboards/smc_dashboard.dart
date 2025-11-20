@@ -833,7 +833,10 @@ class SMCDashboard extends StatelessWidget {
             DashboardGridCol(
               xs: 12,
               md: 8,
-              child: DashboardBarChart(data: _purchasesByCategoryBar),
+              child: SizedBox(
+                height: 520,
+                child: DashboardBarChart(data: _purchasesByCategoryBar),
+              ),
             ),
 
             // Spend Trend Line Chart

@@ -1,246 +1,266 @@
-import 'dart:math' as math;
-
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import '../const/constant.dart';
 
-class BarChartSample7 extends StatefulWidget {
-  BarChartSample7({super.key});
+class DashboardHorizontalBarChart extends StatelessWidget {
+  final String title;
+  final String subtitle;
+  final List<BarData> data;
+  final List<TableRowData> tableData;
 
-  @override
-  State<BarChartSample7> createState() => _BarChartSample7State();
-}
-
-class _BarChartSample7State extends State<BarChartSample7> {
-  BarChartGroupData generateBarGroup(
-    int x,
-    Color color,
-    double value,
-    double shadowValue,
-  ) {
-    return BarChartGroupData(
-      x: x,
-      barRods: [
-        BarChartRodData(toY: value, color: color, width: 6),
-        BarChartRodData(
-          toY: shadowValue,
-          color: ChartConstants.horizontalBarShadowColor,
-          width: 6,
-        ),
-      ],
-      showingTooltipIndicators: touchedGroupIndex == x ? [0] : [],
-    );
-  }
-
-  int touchedGroupIndex = -1;
-
-  int rotationTurns = 1;
+  const DashboardHorizontalBarChart({
+    super.key,
+    required this.title,
+    required this.subtitle,
+    required this.data,
+    required this.tableData,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final dataList = ChartConstants.horizontalBarChartData;
     return Container(
-      color: AppColors.getBackground(
-        Theme.of(context).brightness == Brightness.dark,
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(AppConstants.radiusLarge),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.shadowLight,
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
       ),
-      child: Padding(
-        padding: AppSpacing.paddingLG,
-        child: Column(
+      padding: AppSpacing.paddingLG,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Header
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: AppTextStyles.h22Compact().copyWith(
+                      fontWeight: AppTextStyles.bold,
+                    ),
+                  ),
+                  const SizedBox(height: AppSpacing.xs),
+                  Text(
+                    subtitle,
+                    style: AppTextStyles.b14().copyWith(
+                      color: AppColors.grey600Light,
+                    ),
+                  ),
+                ],
+              ),
+              Icon(
+                Icons.more_horiz,
+                color: AppColors.grey700Light,
+                size: AppConstants.iconSizeMedium,
+              ),
+            ],
+          ),
+          const SizedBox(height: AppSpacing.lg),
+
+          // Horizontal Bar Chart
+          ...data.asMap().entries.map((entry) {
+            return Padding(
+              padding: EdgeInsets.only(
+                bottom: entry.key < data.length - 1 ? AppSpacing.md : 0,
+              ),
+              child: _buildBarItem(entry.value),
+            );
+          }).toList(),
+
+          const SizedBox(height: AppSpacing.lg),
+          const Divider(color: AppColors.grey200Light),
+          const SizedBox(height: AppSpacing.md),
+
+          // Table Header
+          Row(
+            children: [
+              Expanded(
+                flex: 2,
+                child: Text(
+                  'Stage',
+                  style: AppTextStyles.b14().copyWith(
+                    fontWeight: AppTextStyles.semiBold,
+                    color: AppColors.grey700Light,
+                  ),
+                ),
+              ),
+              Expanded(
+                child: Text(
+                  'Lost lead',
+                  style: AppTextStyles.b14().copyWith(
+                    fontWeight: AppTextStyles.semiBold,
+                    color: AppColors.grey700Light,
+                  ),
+                  textAlign: TextAlign.right,
+                ),
+              ),
+              const SizedBox(width: AppSpacing.xl),
+              Expanded(
+                child: Text(
+                  'This week',
+                  style: AppTextStyles.b14().copyWith(
+                    fontWeight: AppTextStyles.semiBold,
+                    color: AppColors.grey700Light,
+                  ),
+                  textAlign: TextAlign.right,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: AppSpacing.md),
+
+          // Table Rows
+          ...tableData.map((row) => _buildTableRow(row)).toList(),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildBarItem(BarData data) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
           children: [
-            Row(
-              children: [
-                Expanded(child: Container()),
-                Text(
-                  'Horizontal Bar Chart',
-                  style: AppTextStyles.b20().copyWith(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600,
-                  ),
+            SizedBox(
+              width: 100,
+              child: Text(
+                data.label,
+                style: AppTextStyles.b14().copyWith(
+                  color: AppColors.grey700Light,
                 ),
-                Expanded(
-                  child: Align(
-                    alignment: Alignment.centerRight,
-                    child: Tooltip(
-                      message: 'Rotate the chart 90 degrees (cw)',
-                      child: IconButton(
-                        onPressed: () {
-                          setState(() {
-                            rotationTurns += 1;
-                          });
-                        },
-                        icon: RotatedBox(
-                          quarterTurns: rotationTurns - 1,
-                          child: const Icon(Icons.rotate_90_degrees_cw),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+              ),
             ),
-            SizedBox(height: AppSpacing.ml + AppSpacing.sd),
-            AspectRatio(
-              aspectRatio: 1.4,
-              child: Transform.rotate(
-                angle: rotationTurns * 1.5708, // 90 degrees in radians (π/2)
-                child: BarChart(
-                  BarChartData(
-                    alignment: BarChartAlignment.spaceBetween,
-                    borderData: FlBorderData(
-                      show: true,
-                      border: Border.symmetric(
-                        horizontal: BorderSide(
-                          color: AppColors.border.withValues(alpha: 0.2),
-                        ),
-                      ),
-                    ),
-                    titlesData: FlTitlesData(
-                      show: true,
-                      leftTitles: const AxisTitles(
-                        drawBelowEverything: true,
-                        sideTitles: SideTitles(
-                          showTitles: true,
-                          reservedSize: 30,
-                        ),
-                      ),
-                      bottomTitles: AxisTitles(
-                        sideTitles: SideTitles(
-                          showTitles: true,
-                          reservedSize: 36,
-                          getTitlesWidget: (value, meta) {
-                            final index = value.toInt();
-                            return SideTitleWidget(
-                              axisSide: meta.axisSide,
-                              child: _IconWidget(
-                                color: dataList[index].color,
-                                isSelected: touchedGroupIndex == index,
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                      rightTitles: const AxisTitles(),
-                      topTitles: const AxisTitles(),
-                    ),
-                    gridData: FlGridData(
-                      show: true,
-                      drawVerticalLine: false,
-                      getDrawingHorizontalLine: (value) => FlLine(
-                        color: AppColors.border.withValues(alpha: 0.2),
-                        strokeWidth: 1,
-                      ),
-                    ),
-                    barGroups: dataList.asMap().entries.map((e) {
-                      final index = e.key;
-                      final data = e.value;
-                      return generateBarGroup(
-                        index,
-                        data.color,
-                        data.value,
-                        data.shadowValue,
-                      );
-                    }).toList(),
-                    maxY: 20,
-                    barTouchData: BarTouchData(
-                      enabled: true,
-                      handleBuiltInTouches: false,
-                      touchTooltipData: BarTouchTooltipData(
-                        tooltipBgColor: Colors.transparent,
-                        tooltipMargin: 0,
-                        getTooltipItem:
-                            (
-                              BarChartGroupData group,
-                              int groupIndex,
-                              BarChartRodData rod,
-                              int rodIndex,
-                            ) {
-                              return BarTooltipItem(
-                                rod.toY.toString(),
-                                TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: rod.color,
-                                  fontSize: 18,
-                                  shadows: const [
-                                    Shadow(
-                                      color: Colors.black26,
-                                      blurRadius: 12,
-                                    ),
-                                  ],
-                                ),
-                              );
-                            },
-                      ),
-                      touchCallback: (event, response) {
-                        if (event.isInterestedForInteractions &&
-                            response != null &&
-                            response.spot != null) {
-                          setState(() {
-                            touchedGroupIndex =
-                                response.spot!.touchedBarGroupIndex;
-                          });
-                        } else {
-                          setState(() {
-                            touchedGroupIndex = -1;
-                          });
-                        }
-                      },
+            const SizedBox(width: AppSpacing.md),
+            Expanded(
+              child: Stack(
+                children: [
+                  // Background bar
+                  Container(
+                    height: 32,
+                    decoration: BoxDecoration(
+                      color: AppColors.grey100Light,
+                      borderRadius: BorderRadius.circular(AppSpacing.xs),
                     ),
                   ),
-                ),
+                  // Progress bar
+                  FractionallySizedBox(
+                    widthFactor: data.percentage / 100,
+                    child: Container(
+                      height: 32,
+                      decoration: BoxDecoration(
+                        color: data.color,
+                        borderRadius: BorderRadius.circular(AppSpacing.xs),
+                      ),
+                      alignment: Alignment.center,
+                      child: Text(
+                        '${data.percentage.toStringAsFixed(0)}%',
+                        style: AppTextStyles.b14().copyWith(
+                          color: AppColors.white,
+                          fontWeight: AppTextStyles.semiBold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class _IconWidget extends ImplicitlyAnimatedWidget {
-  const _IconWidget({required this.color, required this.isSelected})
-    : super(duration: const Duration(milliseconds: 300));
-  final Color color;
-  final bool isSelected;
-
-  @override
-  ImplicitlyAnimatedWidgetState<ImplicitlyAnimatedWidget> createState() =>
-      _IconWidgetState();
-}
-
-class _IconWidgetState extends AnimatedWidgetBaseState<_IconWidget> {
-  Tween<double>? _rotationTween;
-
-  @override
-  Widget build(BuildContext context) {
-    final rotation = math.pi * 4 * _rotationTween!.evaluate(animation);
-    final scale = 1 + _rotationTween!.evaluate(animation) * 0.5;
-    return Transform(
-      transform: Matrix4.rotationZ(
-        rotation,
-      ).scaledByDouble(scale, scale, scale, 1.0),
-      origin: Offset(
-        AppConstants.iconSizeMedium / 2 - 2,
-        AppConstants.iconSizeMedium / 2 - 2,
-      ),
-      child: Icon(
-        widget.isSelected ? Icons.face_retouching_natural : Icons.face,
-        color: widget.color,
-        size: AppConstants.iconSizeLarge - 4,
-      ),
+      ],
     );
   }
 
-  @override
-  void forEachTween(TweenVisitor<dynamic> visitor) {
-    _rotationTween =
-        visitor(
-              _rotationTween,
-              widget.isSelected ? 1.0 : 0.0,
-              (dynamic value) => Tween<double>(
-                begin: value as double,
-                end: widget.isSelected ? 1.0 : 0.0,
+  Widget _buildTableRow(TableRowData row) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: AppSpacing.md),
+      child: Row(
+        children: [
+          Expanded(
+            flex: 2,
+            child: Row(
+              children: [
+                Container(
+                  width: 4,
+                  height: 24,
+                  decoration: BoxDecoration(
+                    color: row.color,
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+                const SizedBox(width: AppSpacing.sm),
+                Text(
+                  row.stage,
+                  style: AppTextStyles.b14().copyWith(
+                    color: AppColors.grey800Light,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: Text(
+              row.lostLead,
+              style: AppTextStyles.b14().copyWith(
+                color: AppColors.grey700Light,
               ),
-            )
-            as Tween<double>?;
+              textAlign: TextAlign.right,
+            ),
+          ),
+          const SizedBox(width: AppSpacing.xl),
+          Expanded(
+            child: Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.sm,
+                vertical: AppSpacing.xxs,
+              ),
+              decoration: BoxDecoration(
+                color: row.changeColor.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(AppSpacing.xs),
+              ),
+              child: Text(
+                row.thisMonth,
+                style: AppTextStyles.b14().copyWith(
+                  color: row.changeColor,
+                  fontWeight: AppTextStyles.semiBold,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
+}
+
+class BarData {
+  final String label;
+  final double percentage;
+  final Color color;
+
+  BarData({required this.label, required this.percentage, required this.color});
+}
+
+class TableRowData {
+  final String stage;
+  final String lostLead;
+  final String thisMonth;
+  final Color color;
+  final Color changeColor;
+
+  TableRowData({
+    required this.stage,
+    required this.lostLead,
+    required this.thisMonth,
+    required this.color,
+    required this.changeColor,
+  });
 }

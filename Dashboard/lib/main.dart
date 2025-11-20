@@ -5,6 +5,25 @@ import 'package:flutte_design_application/pages/new-dashboards/smc_dashboard.dar
 import 'package:flutter/material.dart';
 
 void main() {
+  // Handle Flutter framework errors gracefully
+  ErrorWidget.builder = (FlutterErrorDetails details) {
+    return Material(
+      child: Container(
+        color: Colors.white,
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Text(
+              'An error occurred: ${details.exception}',
+              style: const TextStyle(color: Colors.red),
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ),
+      ),
+    );
+  };
+
   runApp(const MyApp());
 }
 
@@ -27,6 +46,7 @@ class MyAppState extends State<MyApp> {
   DashboardType _currentDashboard = DashboardType.vendor;
 
   void toggleTheme() {
+    if (!mounted) return;
     setState(() {
       _themeMode = _themeMode == ThemeMode.light
           ? ThemeMode.dark
@@ -37,12 +57,14 @@ class MyAppState extends State<MyApp> {
   }
 
   void setThemeMode(ThemeMode mode) {
+    if (!mounted) return;
     setState(() {
       _themeMode = mode;
     });
   }
 
   void switchDashboard(DashboardType dashboard) {
+    if (!mounted) return;
     setState(() {
       _currentDashboard = dashboard;
     });
@@ -51,11 +73,11 @@ class MyAppState extends State<MyApp> {
   Widget _getCurrentDashboard() {
     switch (_currentDashboard) {
       case DashboardType.catalogue:
-        return const CatalogueDashboard();
+        return const CatalogueDashboard(key: ValueKey('catalogue'));
       case DashboardType.smc:
-        return const SMCDashboard();
+        return const SMCDashboard(key: ValueKey('smc'));
       case DashboardType.vendor:
-        return const VendorDashboard();
+        return const VendorDashboard(key: ValueKey('vendor'));
     }
   }
 
@@ -77,6 +99,7 @@ class MyAppState extends State<MyApp> {
       ),
       themeMode: _themeMode,
       home: DashboardSelector(
+        key: ValueKey(_currentDashboard),
         currentDashboard: _currentDashboard,
         onDashboardChanged: switchDashboard,
         child: _getCurrentDashboard(),

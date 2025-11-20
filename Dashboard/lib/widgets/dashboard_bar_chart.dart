@@ -133,7 +133,6 @@ class _DashboardBarChartState extends State<DashboardBarChart> {
   }
 
   // Method to load revenue bar chart data from JSON asset file
-  // TODO: In future, replace asset loading with actual .NET API call using http package
   Future<void> _loadRevenueBarChartData() async {
     setState(() {
       isLoading = true;
@@ -260,177 +259,182 @@ class _DashboardBarChartState extends State<DashboardBarChart> {
             ),
           SizedBox(height: AppSpacing.xl),
 
-          // Bar Chart with hover overlay
-          LayoutBuilder(
-            builder: (context, constraints) {
-              final chartHeight = AuroraTheme.getResponsiveChartHeight(
-                constraints.maxWidth,
-              );
-              return SizedBox(
-                height: chartHeight,
-                width: double.infinity,
-                child: isLoading
-                    ? Center(
-                        child: CircularProgressIndicator(
-                          color: AppColors.primary,
-                        ),
-                      )
-                    : Stack(
-                        clipBehavior: Clip.none,
-                        children: [
-                          // Bar Chart
-                          BarChart(
-                            BarChartData(
-                              alignment: BarChartAlignment.spaceAround,
-                              maxY:
-                                  maxY +
-                                  (yAxisInterval *
-                                      0.05), // Add 5% padding to show 500k line
-                              minY: minY, // Dynamic from API
-                              barTouchData: BarTouchData(
-                                enabled: true,
-                                touchCallback:
-                                    (
-                                      FlTouchEvent event,
-                                      BarTouchResponse? response,
-                                    ) {
-                                      setState(() {
-                                        if (!event
-                                                .isInterestedForInteractions ||
-                                            response == null ||
-                                            response.spot == null) {
-                                          touchedGroupIndex = -1;
-                                          cursorPosition = null;
-                                          return;
-                                        }
-                                        touchedGroupIndex =
-                                            response.spot!.touchedBarGroupIndex;
-                                        if (event is FlPointerHoverEvent ||
-                                            event is FlPanUpdateEvent ||
-                                            event is FlTapUpEvent) {
-                                          cursorPosition = event.localPosition;
-                                        }
-                                      });
-                                    },
-                                touchTooltipData: BarTouchTooltipData(
-                                  getTooltipItem:
-                                      (group, groupIndex, rod, rodIndex) {
-                                        // Hide default tooltip
-                                        return null;
-                                      },
-                                ),
-                              ),
-                              titlesData: FlTitlesData(
-                                show: true,
-                                rightTitles: AxisTitles(
-                                  sideTitles: SideTitles(
-                                    showTitles: yAxisLabels.isNotEmpty,
-                                    reservedSize: 50,
-                                    getTitlesWidget: (value, meta) {
-                                      if (yAxisLabels.isEmpty) {
-                                        return const Text('');
-                                      }
-
-                                      final textStyle =
-                                          AppTextStyles.b11(
-                                            isDark: isDark,
-                                          ).copyWith(
-                                            color: AppColors.getTextSecondary(
-                                              isDark,
-                                            ),
-                                          );
-
-                                      // Find matching label from yAxisLabels
-                                      for (final labelData in yAxisLabels) {
-                                        final labelValue =
-                                            (labelData['value'] as num?)
-                                                ?.toDouble();
-                                        if (labelValue != null &&
-                                            labelValue == value) {
-                                          return Text(
-                                            labelData['label'] as String? ?? '',
-                                            style: textStyle,
-                                          );
-                                        }
-                                      }
-                                      return const Text('');
-                                    },
-                                  ),
-                                ),
-                                topTitles: const AxisTitles(
-                                  sideTitles: SideTitles(showTitles: false),
-                                ),
-                                leftTitles: const AxisTitles(
-                                  sideTitles: SideTitles(showTitles: false),
-                                ),
-                                bottomTitles: AxisTitles(
-                                  sideTitles: SideTitles(
-                                    showTitles: true,
-                                    reservedSize: 40,
-                                    getTitlesWidget:
-                                        (double value, TitleMeta meta) {
-                                          if (value.toInt() >= 0 &&
-                                              value.toInt() <
-                                                  chartData.length) {
-                                            return Padding(
-                                              padding: EdgeInsets.only(
-                                                top: AppSpacing.sm,
-                                              ),
-                                              child: Text(
-                                                chartData[value
-                                                    .toInt()]['label'],
-                                                style:
-                                                    AppTextStyles.b11(
-                                                      isDark: isDark,
-                                                    ).copyWith(
-                                                      color:
-                                                          AppColors.getTextSecondary(
-                                                            isDark,
-                                                          ),
-                                                    ),
-                                              ),
-                                            );
+          // Bar Chart with hover overlay - takes remaining space
+          Expanded(
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                return SizedBox(
+                  height: constraints.maxHeight,
+                  width: double.infinity,
+                  child: isLoading
+                      ? Center(
+                          child: CircularProgressIndicator(
+                            color: AppColors.primary,
+                          ),
+                        )
+                      : Stack(
+                          clipBehavior: Clip.none,
+                          children: [
+                            // Bar Chart
+                            BarChart(
+                              BarChartData(
+                                alignment: BarChartAlignment.spaceAround,
+                                maxY:
+                                    maxY +
+                                    (yAxisInterval *
+                                        0.05), // Add 5% padding to show 500k line
+                                minY: minY, // Dynamic from API
+                                barTouchData: BarTouchData(
+                                  enabled: true,
+                                  touchCallback:
+                                      (
+                                        FlTouchEvent event,
+                                        BarTouchResponse? response,
+                                      ) {
+                                        setState(() {
+                                          if (!event
+                                                  .isInterestedForInteractions ||
+                                              response == null ||
+                                              response.spot == null) {
+                                            touchedGroupIndex = -1;
+                                            cursorPosition = null;
+                                            return;
                                           }
-                                          return const Text('');
+                                          touchedGroupIndex = response
+                                              .spot!
+                                              .touchedBarGroupIndex;
+                                          if (event is FlPointerHoverEvent ||
+                                              event is FlPanUpdateEvent ||
+                                              event is FlTapUpEvent) {
+                                            cursorPosition =
+                                                event.localPosition;
+                                          }
+                                        });
+                                      },
+                                  touchTooltipData: BarTouchTooltipData(
+                                    getTooltipItem:
+                                        (group, groupIndex, rod, rodIndex) {
+                                          // Hide default tooltip
+                                          return null;
                                         },
                                   ),
                                 ),
+                                titlesData: FlTitlesData(
+                                  show: true,
+                                  rightTitles: AxisTitles(
+                                    sideTitles: SideTitles(
+                                      showTitles: yAxisLabels.isNotEmpty,
+                                      reservedSize: 50,
+                                      getTitlesWidget: (value, meta) {
+                                        if (yAxisLabels.isEmpty) {
+                                          return const Text('');
+                                        }
+
+                                        final textStyle =
+                                            AppTextStyles.b11(
+                                              isDark: isDark,
+                                            ).copyWith(
+                                              color: AppColors.getTextSecondary(
+                                                isDark,
+                                              ),
+                                            );
+
+                                        // Find matching label from yAxisLabels
+                                        for (final labelData in yAxisLabels) {
+                                          final labelValue =
+                                              (labelData['value'] as num?)
+                                                  ?.toDouble();
+                                          if (labelValue != null &&
+                                              labelValue == value) {
+                                            return Text(
+                                              labelData['label'] as String? ??
+                                                  '',
+                                              style: textStyle,
+                                            );
+                                          }
+                                        }
+                                        return const Text('');
+                                      },
+                                    ),
+                                  ),
+                                  topTitles: const AxisTitles(
+                                    sideTitles: SideTitles(showTitles: false),
+                                  ),
+                                  leftTitles: const AxisTitles(
+                                    sideTitles: SideTitles(showTitles: false),
+                                  ),
+                                  bottomTitles: AxisTitles(
+                                    sideTitles: SideTitles(
+                                      showTitles: true,
+                                      reservedSize: 40,
+                                      getTitlesWidget:
+                                          (double value, TitleMeta meta) {
+                                            if (value.toInt() >= 0 &&
+                                                value.toInt() <
+                                                    chartData.length) {
+                                              return Padding(
+                                                padding: EdgeInsets.only(
+                                                  top: AppSpacing.sm,
+                                                ),
+                                                child: Text(
+                                                  chartData[value
+                                                      .toInt()]['label'],
+                                                  style:
+                                                      AppTextStyles.b11(
+                                                        isDark: isDark,
+                                                      ).copyWith(
+                                                        color:
+                                                            AppColors.getTextSecondary(
+                                                              isDark,
+                                                            ),
+                                                      ),
+                                                ),
+                                              );
+                                            }
+                                            return const Text('');
+                                          },
+                                    ),
+                                  ),
+                                ),
+                                gridData: FlGridData(
+                                  show: true,
+                                  drawVerticalLine: false,
+                                  horizontalInterval:
+                                      yAxisInterval, // Dynamic from API
+                                  getDrawingHorizontalLine: (value) {
+                                    return FlLine(
+                                      color: AppColors.getGreyScale(
+                                        100,
+                                        isDark,
+                                      ),
+                                      strokeWidth: 1,
+                                    );
+                                  },
+                                  checkToShowHorizontalLine: (value) {
+                                    // Show lines at 0k, 100k, 200k, 300k, 400k, and 500k
+                                    return value >= 0 && value <= maxY;
+                                  },
+                                ),
+                                borderData: FlBorderData(show: false),
+                                barGroups: _buildBarGroups(isDark),
                               ),
-                              gridData: FlGridData(
-                                show: true,
-                                drawVerticalLine: false,
-                                horizontalInterval:
-                                    yAxisInterval, // Dynamic from API
-                                getDrawingHorizontalLine: (value) {
-                                  return FlLine(
-                                    color: AppColors.getGreyScale(100, isDark),
-                                    strokeWidth: 1,
-                                  );
-                                },
-                                checkToShowHorizontalLine: (value) {
-                                  // Show lines at 0k, 100k, 200k, 300k, 400k, and 500k
-                                  return value >= 0 && value <= maxY;
-                                },
+                            ),
+                            // Custom tooltip overlay - using reusable CustomChartTooltip
+                            if (touchedGroupIndex >= 0 &&
+                                touchedGroupIndex < chartData.length &&
+                                cursorPosition != null)
+                              CustomChartTooltip(
+                                cursorPosition: cursorPosition,
+                                items: _buildTooltipItems(isDark),
+                                availableWidth: constraints.maxWidth,
+                                availableHeight: constraints.maxHeight,
+                                isVisible: true,
                               ),
-                              borderData: FlBorderData(show: false),
-                              barGroups: _buildBarGroups(isDark),
-                            ),
-                          ),
-                          // Custom tooltip overlay - using reusable CustomChartTooltip
-                          if (touchedGroupIndex >= 0 &&
-                              touchedGroupIndex < chartData.length &&
-                              cursorPosition != null)
-                            CustomChartTooltip(
-                              cursorPosition: cursorPosition,
-                              items: _buildTooltipItems(isDark),
-                              availableWidth: 350,
-                              availableHeight: 250,
-                              isVisible: true,
-                            ),
-                        ],
-                      ),
-              );
-            },
+                          ],
+                        ),
+                );
+              },
+            ),
           ),
         ],
       ),
