@@ -270,6 +270,11 @@ const Map<String, dynamic> _procurementEfficiencyCombo = {
     {'value': 500, 'label': '500'},
     {'value': 600, 'label': '600'},
   ],
+  'legendLabels': {
+    'firstBar': 'On-Time',
+    'secondBar': 'Delayed',
+    'line': 'Efficiency %',
+  },
   'chartData': [
     {'month': 'Jan', 'wins': 420.0, 'losses': 68.0, 'winRate': 86.1},
     {'month': 'Feb', 'wins': 445.0, 'losses': 62.0, 'winRate': 87.8},

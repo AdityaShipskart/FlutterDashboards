@@ -210,42 +210,6 @@ class _RevenueGeneratedCardState extends State<RevenueGeneratedCard> {
 
       // Get filtered data based on selected period
       final Map<String, dynamic> data = _getFilteredData(selectedPeriod);
-
-      // ============================================
-      // FUTURE: .NET API Integration (COMMENTED OUT)
-      // ============================================
-      // TODO: Replace above with this API call:
-      //
-      // final response = await http.get(
-      //   Uri.parse('https://your-api.com/api/revenue/dashboard?period=$selectedPeriod&year=${DateTime.now().year}'),
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //     'Authorization': 'Bearer YOUR_API_TOKEN',
-      //   },
-      // );
-      //
-      // if (response.statusCode == 200) {
-      //   final data = json.decode(response.body) as Map<String, dynamic>;
-      //
-      //   // Expected API Response Format: (See dummy_revenue_data.dart)
-      //   // {
-      //   //   "cardTitle": "Revenue Generated",
-      //   //   "cardSubtitle": "Comparison with Last Year",
-      //   //   "thisYearLabel": "2025",
-      //   //   "lastYearLabel": "2024",
-      //   //   "percentageChange": "+6.19%",
-      //   //   "isPositiveChange": true,
-      //   //   "availablePeriods": ["Jan-Jun", "Jul-Dec", "Full Year"],
-      //   //   "selectedPeriod": "Full Year",
-      //   //   "chartConfig": { "minX": 0, "maxX": 11, "minY": 2, "maxY": 7 },
-      //   //   "thisYearData": [ {"x": 0, "y": 3.5}, ... ],
-      //   //   "lastYearData": [ {"x": 0, "y": 3.0}, ... ],
-      //   //   "labels": ["Jan", "Feb", "Mar", ...]
-      //   // }
-      // } else {
-      //   throw Exception('Failed to load data: ${response.statusCode}');
-      // }
-
       if (!mounted) return;
 
       setState(() {

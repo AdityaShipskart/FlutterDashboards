@@ -250,6 +250,11 @@ const Map<String, dynamic> _orderFulfillmentCombo = {
     {'value': 320, 'label': '320'},
     {'value': 380, 'label': '400'},
   ],
+  'legendLabels': {
+    'firstBar': 'Completed',
+    'secondBar': 'Pending',
+    'line': 'Completion %',
+  },
   'chartData': [
     {"month": "Jan", "wins": 284.0, "losses": 238.0, "winRate": 67.1},
     {"month": "Feb", "wins": 306.0, "losses": 325.0, "winRate": 79.0},
@@ -858,7 +863,10 @@ class VendorDashboard extends StatelessWidget {
             DashboardGridCol(
               xs: 12,
               md: 8,
-              child: DashboardcombobarChart(data: _orderFulfillmentCombo),
+              child: SizedBox(
+                height: 424,
+                child: DashboardcombobarChart(data: _orderFulfillmentCombo),
+              ),
             ),
 
             // Average Order Value Card
