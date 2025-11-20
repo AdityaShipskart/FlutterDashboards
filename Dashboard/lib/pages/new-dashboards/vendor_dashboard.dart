@@ -551,7 +551,7 @@ const List<Map<String, dynamic>> _vendorPerformanceMetrics = [
     'Upcoming Deliveries': [
       {
         'portName': 'Shipworkz Marine Services Llc',
-        'purchaseValue': 'volumn: \$1.2k',
+        'purchaseValue': 'total value: \$1.2k',
         'percentageChange': 18.7,
         'trend': 'down',
         'priority': 'HIGH PRIORITY',
@@ -560,7 +560,7 @@ const List<Map<String, dynamic>> _vendorPerformanceMetrics = [
       },
       {
         'portName': 'Demo Company',
-        'purchaseValue': 'volumn: \$580',
+        'purchaseValue': 'total value: \$580',
         'percentageChange': 15.4,
         'trend': 'up',
         'priority': 'MEDIUM PRIORITY',
@@ -569,7 +569,7 @@ const List<Map<String, dynamic>> _vendorPerformanceMetrics = [
       },
       {
         'portName': 'RDX Company',
-        'purchaseValue': 'volumn: \$580',
+        'purchaseValue': 'total value: \$580',
         'percentageChange': 15.4,
         'trend': 'up',
         'priority': 'MEDIUM PRIORITY',
@@ -579,7 +579,7 @@ const List<Map<String, dynamic>> _vendorPerformanceMetrics = [
 
       {
         'portName': 'RDX Company',
-        'purchaseValue': 'volumn: \$580',
+        'purchaseValue': 'total value: \$580',
         'percentageChange': 15.4,
         'trend': 'up',
         'priority': 'MEDIUM PRIORITY',
@@ -589,7 +589,7 @@ const List<Map<String, dynamic>> _vendorPerformanceMetrics = [
 
       {
         'portName': 'Safety Gear Set',
-        'purchaseValue': 'volumn: \$580',
+        'purchaseValue': 'total value: \$580',
         'percentageChange': 15.4,
         'trend': 'up',
         'priority': 'MEDIUM PRIORITY',
