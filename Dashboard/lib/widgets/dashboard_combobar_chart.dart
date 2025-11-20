@@ -26,6 +26,7 @@ class DashboardcombobarChart extends StatefulWidget {
       {'value': 80, 'label': '80%'},
       {'value': 100, 'label': '100%'},
     ],
+    'legendLabels': {'firstBar': 'Wins', 'secondBar': 'Losses'},
     'chartData': [
       {'month': 'Jan', 'wins': 45.0, 'losses': 15.0, 'winRate': 75.0},
       {'month': 'Feb', 'wins': 52.0, 'losses': 18.0, 'winRate': 74.3},
@@ -58,6 +59,12 @@ class _DashboardcombobarChartState extends State<DashboardcombobarChart> {
   double minY = 0;
   double maxY = 100;
   double gridInterval = 20;
+
+  // Legend labels - dynamic from backend
+  String firstBarLabel = 'Wins';
+  String secondBarLabel = 'Losses';
+  String thirdBarLabel = '';
+  String lineLabel = 'Win Rate';
 
   // Loading state
   bool isLoading = true;
@@ -138,6 +145,34 @@ class _DashboardcombobarChartState extends State<DashboardcombobarChart> {
         maxY = (data['maxY'] ?? 100).toDouble();
         gridInterval = (data['gridInterval'] ?? 20).toDouble();
 
+        final legendLabelsData = data['legendLabels'];
+        if (legendLabelsData != null && legendLabelsData is Map) {
+          // Clear existing labels
+          firstBarLabel = '';
+          secondBarLabel = '';
+          thirdBarLabel = '';
+          lineLabel = '';
+
+          // Set labels based on available keys
+          if (legendLabelsData.containsKey('firstBar')) {
+            firstBarLabel = legendLabelsData['firstBar'] ?? '';
+          }
+          if (legendLabelsData.containsKey('secondBar')) {
+            secondBarLabel = legendLabelsData['secondBar'] ?? '';
+          }
+          if (legendLabelsData.containsKey('thirdBar')) {
+            thirdBarLabel = legendLabelsData['thirdBar'] ?? '';
+          }
+          if (legendLabelsData.containsKey('line')) {
+            lineLabel = legendLabelsData['line'] ?? '';
+          }
+        } else {
+          // No legend data provided
+          firstBarLabel = '';
+          secondBarLabel = '';
+          thirdBarLabel = '';
+          lineLabel = '';
+        }
         isLoading = false;
       });
     } catch (e) {
@@ -162,322 +197,410 @@ class _DashboardcombobarChartState extends State<DashboardcombobarChart> {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    return Container(
-      width: double.infinity,
-      padding: AuroraTheme.chartPadding(),
-      decoration: BoxDecoration(
-        color: AppColors.getCard(isDark),
-        borderRadius: BorderRadius.circular(AppConstants.radiusLarge),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.shadowLight,
-            blurRadius: 10,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Header with title and menu icon
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(cardTitle, style: AuroraTheme.cardTitleStyle(isDark)),
-                    SizedBox(height: AppSpacing.xs),
-                    Text(
-                      cardSubtitle,
-                      style: AuroraTheme.cardSubtitleStyle(isDark),
-                    ),
-                  ],
+    return LayoutBuilder(
+      builder: (context, constraints) => Container(
+        width: double.infinity,
+        height: constraints.maxHeight,
+        padding: AuroraTheme.chartPadding(),
+        decoration: BoxDecoration(
+          color: AppColors.getCard(isDark),
+          borderRadius: BorderRadius.circular(AppConstants.radiusLarge),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.shadowLight,
+              blurRadius: 10,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Header with title and menu icon
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        cardTitle,
+                        style: AuroraTheme.cardTitleStyle(isDark),
+                      ),
+                      SizedBox(height: AppSpacing.xs),
+                      Text(
+                        cardSubtitle,
+                        style: AuroraTheme.cardSubtitleStyle(isDark),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              // Three dots menu icon
-              Icon(
-                Icons.more_horiz,
-                color: AppColors.getTextSecondary(isDark),
-                size: AppConstants.iconSizeMedium,
-              ),
-            ],
-          ),
-          SizedBox(height: AppSpacing.lg),
+                // Three dots menu icon
+                Icon(
+                  Icons.more_horiz,
+                  color: AppColors.getTextSecondary(isDark),
+                  size: AppConstants.iconSizeMedium,
+                ),
+              ],
+            ),
+            SizedBox(height: AppSpacing.md),
 
-          // Bar Chart with Line (responsive height)
-          LayoutBuilder(
-            builder: (context, constraints) {
-              // Calculate responsive chart height based on card width
-              final chartHeight = AuroraTheme.getResponsiveChartHeight(
-                constraints.maxWidth,
-              );
+            // Bar Chart with Line (responsive height)
+            LayoutBuilder(
+              builder: (context, constraints) {
+                // Calculate responsive chart height based on card width
+                final chartHeight = AuroraTheme.getResponsiveChartHeight(
+                  constraints.maxWidth,
+                );
 
-              return SizedBox(
-                height: chartHeight,
-                child: isLoading
-                    ? Center(
-                        child: CircularProgressIndicator(
-                          color: AppColors.primary,
-                        ),
-                      )
-                    : Stack(
-                        clipBehavior: Clip.none, // Allow tooltip to overflow
-                        children: [
-                          // Bar Chart (bars only)
-                          BarChart(
-                            BarChartData(
-                              alignment: BarChartAlignment.spaceAround,
-                              // Chart range - dynamic from .NET backend
-                              // TODO: Backend provides minY, maxY values
-                              maxY: maxY,
-                              minY: minY,
-                              barTouchData: BarTouchData(enabled: false),
-                              titlesData: FlTitlesData(
-                                show: true,
-                                topTitles: AxisTitles(
-                                  sideTitles: SideTitles(showTitles: false),
-                                ),
-                                leftTitles: AxisTitles(
-                                  sideTitles: SideTitles(showTitles: false),
-                                ),
-                                rightTitles: AxisTitles(
-                                  sideTitles: SideTitles(
-                                    showTitles: true,
-                                    reservedSize: constraints.maxWidth < 300
-                                        ? 35
-                                        : 45,
-                                    getTitlesWidget: (value, meta) {
-                                      // Y-axis labels - FULLY DYNAMIC from .NET backend
-                                      // TODO: .NET backend returns array "yAxisLabels" with format:
-                                      // [{"value": 0, "label": "0k"}, {"value": 5000, "label": "5k"}, ...]
+                return SizedBox(
+                  height: chartHeight,
+                  child: isLoading
+                      ? Center(
+                          child: CircularProgressIndicator(
+                            color: AppColors.primary,
+                          ),
+                        )
+                      : Stack(
+                          clipBehavior: Clip.none, // Allow tooltip to overflow
+                          children: [
+                            // Bar Chart (bars only)
+                            BarChart(
+                              BarChartData(
+                                alignment: BarChartAlignment.spaceAround,
+                                // Chart range - dynamic from .NET backend
+                                maxY: maxY,
+                                minY: minY,
+                                barTouchData: BarTouchData(enabled: false),
+                                titlesData: FlTitlesData(
+                                  show: true,
+                                  topTitles: AxisTitles(
+                                    sideTitles: SideTitles(showTitles: false),
+                                  ),
+                                  leftTitles: AxisTitles(
+                                    sideTitles: SideTitles(showTitles: false),
+                                  ),
+                                  rightTitles: AxisTitles(
+                                    sideTitles: SideTitles(
+                                      showTitles: true,
+                                      interval: gridInterval,
+                                      reservedSize: constraints.maxWidth < 300
+                                          ? 35
+                                          : 45,
+                                      getTitlesWidget: (value, meta) {
+                                        // Y-axis labels - FULLY DYNAMIC from .NET backend
+                                        // [{"value": 0, "label": "0k"}, {"value": 5000, "label": "5k"}, ...]
 
-                                      // Find matching label for this value from backend data
-                                      for (var labelConfig in yAxisLabels) {
-                                        if (labelConfig['value'] == value) {
-                                          return Text(
-                                            labelConfig['label'],
-                                            style:
-                                                AppTextStyles.b11(
-                                                  isDark: isDark,
-                                                ).copyWith(
-                                                  color:
-                                                      AppColors.getTextSecondary(
-                                                        isDark,
-                                                      ),
-                                                  fontSize:
-                                                      constraints.maxWidth < 300
-                                                      ? 10
-                                                      : 11,
-                                                ),
+                                        // Find matching label for this value from backend data
+                                        // Use tolerance for floating point comparison
+                                        for (var labelConfig in yAxisLabels) {
+                                          final labelValue =
+                                              (labelConfig['value'] as num)
+                                                  .toDouble();
+                                          if ((labelValue - value).abs() <
+                                              0.1) {
+                                            return Text(
+                                              labelConfig['label'],
+                                              style:
+                                                  AppTextStyles.b11(
+                                                    isDark: isDark,
+                                                  ).copyWith(
+                                                    color:
+                                                        AppColors.getTextSecondary(
+                                                          isDark,
+                                                        ),
+                                                    fontSize:
+                                                        constraints.maxWidth <
+                                                            300
+                                                        ? 10
+                                                        : 11,
+                                                  ),
+                                            );
+                                          }
+                                        }
+
+                                        // No label for this value
+                                        return const Text('');
+                                      },
+                                    ),
+                                  ),
+                                  bottomTitles: AxisTitles(
+                                    sideTitles: SideTitles(
+                                      showTitles: true,
+                                      reservedSize: 30,
+                                      getTitlesWidget: (value, meta) {
+                                        // Show month labels from chartData
+                                        final index = value.toInt();
+                                        if (index >= 0 &&
+                                            index < chartData.length) {
+                                          final month =
+                                              chartData[index]['month']
+                                                  as String? ??
+                                              '';
+                                          return Padding(
+                                            padding: const EdgeInsets.only(
+                                              top: 8.0,
+                                            ),
+                                            child: Text(
+                                              month,
+                                              style:
+                                                  AppTextStyles.b11(
+                                                    isDark: isDark,
+                                                  ).copyWith(
+                                                    color:
+                                                        AppColors.getTextSecondary(
+                                                          isDark,
+                                                        ),
+                                                    fontSize:
+                                                        constraints.maxWidth <
+                                                            300
+                                                        ? 10
+                                                        : 11,
+                                                  ),
+                                            ),
                                           );
                                         }
-                                      }
-
-                                      // No label for this value
-                                      return const Text('');
-                                    },
-                                  ),
-                                ),
-                                bottomTitles: AxisTitles(
-                                  sideTitles: SideTitles(showTitles: false),
-                                ),
-                              ),
-                              gridData: FlGridData(
-                                show: true,
-                                drawVerticalLine: false,
-                                // Grid interval - dynamic from .NET backend
-                                // TODO: Backend provides gridInterval value
-                                horizontalInterval: gridInterval,
-                                getDrawingHorizontalLine: (value) {
-                                  return FlLine(
-                                    color: AppColors.getGreyScale(200, isDark),
-                                    strokeWidth: 1,
-                                  );
-                                },
-                              ),
-                              borderData: FlBorderData(show: false),
-                              barGroups: _buildBarGroups(),
-                            ),
-                          ),
-                          // Line Chart overlay (75th percentile smooth curve)
-                          Padding(
-                            padding: EdgeInsets.only(
-                              left: 0,
-                              right: constraints.maxWidth < 300 ? 35 : 45,
-                            ),
-                            child: LineChart(
-                              LineChartData(
-                                // Chart range - dynamic from .NET backend
-                                minY: minY,
-                                maxY: maxY,
-                                minX: 0,
-                                maxX: (chartData.length - 1).toDouble(),
-                                clipData: FlClipData.all(),
-                                lineTouchData: LineTouchData(
-                                  enabled: true,
-                                  touchCallback:
-                                      (
-                                        FlTouchEvent event,
-                                        LineTouchResponse? lineTouchResponse,
-                                      ) {
-                                        setState(() {
-                                          if (!event
-                                                  .isInterestedForInteractions ||
-                                              lineTouchResponse == null ||
-                                              lineTouchResponse.lineBarSpots ==
-                                                  null ||
-                                              lineTouchResponse
-                                                  .lineBarSpots!
-                                                  .isEmpty) {
-                                            touchedIndex = -1;
-                                            cursorPosition = null;
-                                            return;
-                                          }
-
-                                          // Get the touched spot index
-                                          final spot = lineTouchResponse
-                                              .lineBarSpots!
-                                              .first;
-                                          touchedIndex = spot.spotIndex;
-
-                                          // Capture cursor position for tooltip placement
-                                          if (event is FlPointerHoverEvent ||
-                                              event is FlPanUpdateEvent ||
-                                              event is FlTapUpEvent) {
-                                            cursorPosition =
-                                                event.localPosition;
-                                          }
-                                        });
+                                        return const Text('');
                                       },
-                                  touchTooltipData: LineTouchTooltipData(
-                                    getTooltipItems:
-                                        (List<LineBarSpot> touchedSpots) {
-                                          // Return list of nulls to hide default fl_chart tooltip
-                                          return touchedSpots
-                                              .map((spot) => null)
-                                              .toList();
-                                        },
+                                    ),
                                   ),
                                 ),
-                                titlesData: FlTitlesData(show: false),
-                                gridData: FlGridData(show: false),
+                                gridData: FlGridData(
+                                  show: true,
+                                  drawVerticalLine: false,
+                                  // Grid interval - dynamic from .NET backend
+                                  // TODO: Backend provides gridInterval value
+                                  horizontalInterval: gridInterval,
+                                  getDrawingHorizontalLine: (value) {
+                                    return FlLine(
+                                      color: AppColors.getGreyScale(
+                                        200,
+                                        isDark,
+                                      ),
+                                      strokeWidth: 1,
+                                    );
+                                  },
+                                ),
                                 borderData: FlBorderData(show: false),
-                                lineBarsData: [
-                                  LineChartBarData(
-                                    spots: _buildLineSpots(),
-                                    isCurved: true,
-                                    curveSmoothness: 0.35,
-                                    color: const Color(0xFF4F9EF8),
-                                    barWidth: 2.5,
-                                    isStrokeCapRound: true,
-                                    dotData: FlDotData(
-                                      show: touchedIndex >= 0,
-                                      checkToShowDot: (spot, barData) {
-                                        // Only show dot at the touched index
-                                        return spot.x.toInt() == touchedIndex;
-                                      },
-                                      getDotPainter:
-                                          (spot, percent, barData, index) {
-                                            // Show small dot only on hovered point
-                                            if (index == touchedIndex) {
-                                              return FlDotCirclePainter(
-                                                radius: 3,
-                                                color: Colors.white,
-                                                strokeWidth: 1.5,
-                                                strokeColor: const Color(
-                                                  0xFF4F9EF8,
-                                                ),
-                                              );
+                                barGroups: _buildBarGroups(),
+                              ),
+                            ),
+                            // Line Chart overlay (75th percentile smooth curve)
+                            Padding(
+                              padding: EdgeInsets.only(
+                                left: 0,
+                                right: constraints.maxWidth < 300 ? 35 : 45,
+                              ),
+                              child: LineChart(
+                                LineChartData(
+                                  // Chart range - dynamic from .NET backend
+                                  minY: minY,
+                                  maxY: maxY,
+                                  minX: 0,
+                                  maxX: (chartData.length - 1).toDouble(),
+                                  clipData: FlClipData.all(),
+                                  lineTouchData: LineTouchData(
+                                    enabled: true,
+                                    touchCallback:
+                                        (
+                                          FlTouchEvent event,
+                                          LineTouchResponse? lineTouchResponse,
+                                        ) {
+                                          setState(() {
+                                            if (!event
+                                                    .isInterestedForInteractions ||
+                                                lineTouchResponse == null ||
+                                                lineTouchResponse
+                                                        .lineBarSpots ==
+                                                    null ||
+                                                lineTouchResponse
+                                                    .lineBarSpots!
+                                                    .isEmpty) {
+                                              touchedIndex = -1;
+                                              cursorPosition = null;
+                                              return;
                                             }
-                                            return FlDotCirclePainter(
-                                              radius: 0,
-                                              color: Colors.transparent,
-                                            );
+
+                                            // Get the touched spot index
+                                            final spot = lineTouchResponse
+                                                .lineBarSpots!
+                                                .first;
+                                            touchedIndex = spot.spotIndex;
+
+                                            // Capture cursor position for tooltip placement
+                                            if (event is FlPointerHoverEvent ||
+                                                event is FlPanUpdateEvent ||
+                                                event is FlTapUpEvent) {
+                                              cursorPosition =
+                                                  event.localPosition;
+                                            }
+                                          });
+                                        },
+                                    touchTooltipData: LineTouchTooltipData(
+                                      getTooltipItems:
+                                          (List<LineBarSpot> touchedSpots) {
+                                            // Return list of nulls to hide default fl_chart tooltip
+                                            return touchedSpots
+                                                .map((spot) => null)
+                                                .toList();
                                           },
                                     ),
-                                    belowBarData: BarAreaData(show: false),
-                                    preventCurveOverShooting: true,
                                   ),
-                                ],
+                                  titlesData: FlTitlesData(show: false),
+                                  gridData: FlGridData(show: false),
+                                  borderData: FlBorderData(show: false),
+                                  lineBarsData: [
+                                    LineChartBarData(
+                                      spots: _buildLineSpots(),
+                                      isCurved: true,
+                                      curveSmoothness: 0.35,
+                                      color: const Color(0xFF4F9EF8),
+                                      barWidth: 2.5,
+                                      isStrokeCapRound: true,
+                                      dotData: FlDotData(
+                                        show: touchedIndex >= 0,
+                                        checkToShowDot: (spot, barData) {
+                                          // Only show dot at the touched index
+                                          return spot.x.toInt() == touchedIndex;
+                                        },
+                                        getDotPainter:
+                                            (spot, percent, barData, index) {
+                                              // Show small dot only on hovered point
+                                              if (index == touchedIndex) {
+                                                return FlDotCirclePainter(
+                                                  radius: 3,
+                                                  color: Colors.white,
+                                                  strokeWidth: 1.5,
+                                                  strokeColor: const Color(
+                                                    0xFF4F9EF8,
+                                                  ),
+                                                );
+                                              }
+                                              return FlDotCirclePainter(
+                                                radius: 0,
+                                                color: Colors.transparent,
+                                              );
+                                            },
+                                      ),
+                                      belowBarData: BarAreaData(show: false),
+                                      preventCurveOverShooting: true,
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                          // Tooltip overlay - using reusable CustomChartTooltip
-                          if (touchedIndex >= 0 &&
-                              touchedIndex < chartData.length &&
-                              cursorPosition != null)
-                            CustomChartTooltip(
-                              cursorPosition: cursorPosition,
-                              headerText:
-                                  chartData[touchedIndex]['month'] as String,
-                              items: _buildTooltipItems(
-                                chartData[touchedIndex],
-                                isDark,
+                            // Tooltip overlay - using reusable CustomChartTooltip
+                            if (touchedIndex >= 0 &&
+                                touchedIndex < chartData.length &&
+                                cursorPosition != null)
+                              CustomChartTooltip(
+                                cursorPosition: cursorPosition,
+                                headerText:
+                                    chartData[touchedIndex]['month'] as String,
+                                items: _buildTooltipItems(
+                                  chartData[touchedIndex],
+                                  isDark,
+                                ),
+                                availableWidth: constraints.maxWidth,
+                                availableHeight: 250,
+                                rightPadding: constraints.maxWidth < 300
+                                    ? 35
+                                    : 45,
+                                isVisible: true,
                               ),
-                              availableWidth: constraints.maxWidth,
-                              availableHeight: 250,
-                              rightPadding: constraints.maxWidth < 300
-                                  ? 35
-                                  : 45,
-                              isVisible: true,
-                            ),
-                        ],
+                          ],
+                        ),
+                );
+              },
+            ),
+            SizedBox(height: AppSpacing.xl),
+
+            // Legend (responsive layout)
+            LayoutBuilder(
+              builder: (context, constraints) {
+                // Use Wrap for narrow screens, Row for wider screens
+                final useWrap = constraints.maxWidth < 250;
+
+                final legendItems = <Widget>[];
+
+                // Build legend items dynamically based on available labels
+                if (firstBarLabel.isNotEmpty) {
+                  legendItems.add(
+                    _buildLegendItem(
+                      color: AppColors.primary,
+                      label: firstBarLabel,
+                      isDark: isDark,
+                      isLine: false,
+                    ),
+                  );
+                }
+
+                if (secondBarLabel.isNotEmpty) {
+                  legendItems.add(
+                    _buildLegendItem(
+                      color: AppColors.grey500Light,
+                      label: secondBarLabel,
+                      isDark: isDark,
+                      isLine: false,
+                    ),
+                  );
+                }
+
+                if (thirdBarLabel.isNotEmpty) {
+                  legendItems.add(
+                    _buildLegendItem(
+                      color: AppColors.primaryAccentLight,
+                      label: thirdBarLabel,
+                      isDark: isDark,
+                      isLine: false,
+                    ),
+                  );
+                }
+
+                if (lineLabel.isNotEmpty) {
+                  legendItems.add(
+                    _buildLegendItem(
+                      color: const Color(0xFF4F9EF8),
+                      label: lineLabel,
+                      isDark: isDark,
+                      isLine: true,
+                    ),
+                  );
+                }
+
+                // If no legend items, show "no data found"
+                if (legendItems.isEmpty) {
+                  legendItems.add(
+                    Text(
+                      'No data found',
+                      style: AuroraTheme.legendTextStyle(isDark).copyWith(
+                        color: AppColors.getTextSecondary(isDark),
+                        fontStyle: FontStyle.italic,
                       ),
-              );
-            },
-          ),
-          SizedBox(height: AppSpacing.xl),
+                    ),
+                  );
+                }
 
-          // Legend (responsive layout)
-          LayoutBuilder(
-            builder: (context, constraints) {
-              // Use Wrap for narrow screens, Row for wider screens
-              final useWrap = constraints.maxWidth < 350;
-
-              final legendItems = [
-                // Wins
-                _buildLegendItem(
-                  color: const Color(0xFF8AB4F8),
-                  label: 'Wins',
-                  isDark: isDark,
-                  isLine: false,
-                ),
-                // Losses
-                _buildLegendItem(
-                  color: const Color(0xFFDBE6EB),
-                  label: 'Losses',
-                  isDark: isDark,
-                  isLine: false,
-                ),
-                // Win Rate
-                _buildLegendItem(
-                  color: const Color(0xFF4F9EF8),
-                  label: 'Win Rate',
-                  isDark: isDark,
-                  isLine: true,
-                ),
-              ];
-
-              if (useWrap) {
-                return Wrap(
-                  spacing: AppSpacing.md,
-                  runSpacing: AppSpacing.ml,
-                  children: legendItems,
-                );
-              } else {
-                return Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: legendItems
-                      .map((item) => Expanded(child: item))
-                      .toList(),
-                );
-              }
-            },
-          ),
-        ],
+                if (useWrap) {
+                  return Wrap(
+                    spacing: AppSpacing.md,
+                    runSpacing: AppSpacing.ml,
+                    children: legendItems,
+                  );
+                } else {
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: legendItems
+                        .map((item) => Expanded(child: item))
+                        .toList(),
+                  );
+                }
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -487,8 +610,8 @@ class _DashboardcombobarChartState extends State<DashboardcombobarChart> {
       final index = entry.key;
       final data = entry.value;
 
-      // Responsive bar width (8px for narrow, 12px for normal)
-      final barWidth = MediaQuery.of(context).size.width < 600 ? 8.0 : 12.0;
+      // Responsive bar width (6px for narrow, 9px for normal)
+      final barWidth = MediaQuery.of(context).size.width < 600 ? 6.0 : 9.0;
 
       // Support both old format (wins/losses) and new format (bars array)
       List<BarChartRodData> barRods;
@@ -507,13 +630,15 @@ class _DashboardcombobarChartState extends State<DashboardcombobarChart> {
           );
         }).toList();
       } else {
-        // Old format with wins/losses
+        // Old format with wins/losses/thirdBar (optional)
         final wins = (data['wins'] as num?)?.toDouble() ?? 0;
         final losses = (data['losses'] as num?)?.toDouble() ?? 0;
+        final thirdBar = (data['thirdBar'] as num?)?.toDouble();
+
         barRods = [
           BarChartRodData(
             toY: wins,
-            color: const Color(0xFF8AB4F8),
+            color: AppColors.primary,
             width: barWidth,
             borderRadius: BorderRadius.vertical(
               top: Radius.circular(AppConstants.radiusSmall),
@@ -522,7 +647,7 @@ class _DashboardcombobarChartState extends State<DashboardcombobarChart> {
           ),
           BarChartRodData(
             toY: losses,
-            color: const Color(0xFFDBE6EB),
+            color: AppColors.grey500Light,
             width: barWidth,
             borderRadius: BorderRadius.vertical(
               top: Radius.circular(AppConstants.radiusSmall),
@@ -530,6 +655,21 @@ class _DashboardcombobarChartState extends State<DashboardcombobarChart> {
             ),
           ),
         ];
+
+        // Add third bar if data exists
+        if (thirdBar != null) {
+          barRods.add(
+            BarChartRodData(
+              toY: thirdBar,
+              color: AppColors.primaryAccentLight,
+              width: barWidth,
+              borderRadius: BorderRadius.vertical(
+                top: Radius.circular(AppConstants.radiusSmall),
+                bottom: Radius.circular(0),
+              ),
+            ),
+          );
+        }
       }
 
       return BarChartGroupData(
@@ -589,34 +729,58 @@ class _DashboardcombobarChartState extends State<DashboardcombobarChart> {
   }
 
   // Build tooltip items for CustomChartTooltip widget
-  // Prepares data items to display in the tooltip
   List<TooltipDataItem> _buildTooltipItems(
     Map<String, dynamic> data,
     bool isDark,
   ) {
-    final wins = (data['wins'] as num).toDouble();
-    final losses = (data['losses'] as num).toDouble();
-    final winRate = (data['winRate'] as num).toDouble();
+    final wins = (data['wins'] as num?)?.toDouble() ?? 0;
+    final losses = (data['losses'] as num?)?.toDouble() ?? 0;
+    final thirdBar = (data['thirdBar'] as num?)?.toDouble();
+    final winRate = (data['winRate'] as num?)?.toDouble() ?? 0;
 
-    return [
-      // Wins value
-      TooltipDataItem(
-        color: const Color(0xFF8AB4F8),
-        label: 'Wins',
-        value: wins.toStringAsFixed(0),
-      ),
-      // Losses value
-      TooltipDataItem(
-        color: const Color(0xFFDBE6EB),
-        label: 'Losses',
-        value: losses.toStringAsFixed(0),
-      ),
-      // Win Rate value
-      TooltipDataItem(
-        color: const Color(0xFF4F9EF8),
-        label: 'Win Rate',
-        value: '${winRate.toStringAsFixed(1)}%',
-      ),
-    ];
+    final tooltipItems = <TooltipDataItem>[];
+
+    // Add tooltip items only for labels that are available
+    if (firstBarLabel.isNotEmpty) {
+      tooltipItems.add(
+        TooltipDataItem(
+          color: AppColors.primary,
+          label: firstBarLabel,
+          value: wins.toStringAsFixed(0),
+        ),
+      );
+    }
+
+    if (secondBarLabel.isNotEmpty) {
+      tooltipItems.add(
+        TooltipDataItem(
+          color: AppColors.grey500Light,
+          label: secondBarLabel,
+          value: losses.toStringAsFixed(0),
+        ),
+      );
+    }
+
+    if (thirdBarLabel.isNotEmpty && thirdBar != null) {
+      tooltipItems.add(
+        TooltipDataItem(
+          color: AppColors.primaryAccentLight,
+          label: thirdBarLabel,
+          value: thirdBar.toStringAsFixed(0),
+        ),
+      );
+    }
+
+    if (lineLabel.isNotEmpty) {
+      tooltipItems.add(
+        TooltipDataItem(
+          color: const Color(0xFF4F9EF8),
+          label: lineLabel,
+          value: '${winRate.toStringAsFixed(1)}%',
+        ),
+      );
+    }
+
+    return tooltipItems;
   }
 }

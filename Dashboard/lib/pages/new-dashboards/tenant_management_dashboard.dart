@@ -225,6 +225,11 @@ const Map<String, dynamic> _subscriptionTiersCombo = {
     {'value': 400, 'label': '400'},
     {'value': 500, 'label': '500'},
   ],
+  'legendLabels': {
+    'firstBar': 'Active',
+    'secondBar': 'Churned',
+    'line': 'Retention %',
+  },
   'chartData': [
     {'month': 'Basic', 'wins': 320.0, 'losses': 28.0, 'winRate': 91.9},
     {'month': 'Standard', 'wins': 280.0, 'losses': 22.0, 'winRate': 92.7},

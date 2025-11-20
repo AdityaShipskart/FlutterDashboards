@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 // import 'package:get/utils.dart';
+import '../../widgets/dashboard_combobar_chart.dart';
 import '../../widgets/dashboard_grid.dart';
 import '../../widgets/dashboard_card_container.dart';
 import '../../widgets/dashboard_line_chart.dart';
 import '../../widgets/dashboard_pie_chart.dart';
-// import '../../widgets/dashboard_comparison.dart';
+import '../../widgets/dashboard_comparison.dart';
 // import '../../widgets/dashboard_bar_chart.dart';
 import '../../widgets/dashboard_leading_port.dart';
 import '../../widgets/dashboard_quick_wins.dart';
 import '../../widgets/dashboard_table.dart';
-
-import '../../widgets/dashboard_comparison.dart';
 
 const List<Map<String, dynamic>> _catalogueCards = [
   {
@@ -344,29 +343,85 @@ const Map<String, dynamic> _statusPieData = {
 //   'chartConfig': {'minX': 0, 'maxX': 9, 'minY': 65, 'maxY': 100},
 // };
 
-// const Map<String, dynamic> _categoryPerformanceCombo = {
-//   'cardTitle': 'Category Performance',
-//   'cardSubtitle': 'Active vs low-performing categories',
-//   'minY': 0.0,
-//   'maxY': 160.0,
-//   'gridInterval': 30.0,
-//   'yAxisLabels': [
-//     {'value': 0, 'label': '0'},
-//     {'value': 30, 'label': '30'},
-//     {'value': 60, 'label': '60'},
-//     {'value': 90, 'label': '90'},
-//     {'value': 120, 'label': '120'},
-//     {'value': 150, 'label': '150'},
-//   ],
-//   'chartData': [
-//     {'month': 'Jan', 'wins': 128.0, 'losses': 18.0, 'winRate': 87.7},
-//     {'month': 'Feb', 'wins': 132.0, 'losses': 16.0, 'winRate': 89.2},
-//     {'month': 'Mar', 'wins': 138.0, 'losses': 14.0, 'winRate': 90.8},
-//     {'month': 'Apr', 'wins': 142.0, 'losses': 12.0, 'winRate': 92.2},
-//     {'month': 'May', 'wins': 146.0, 'losses': 10.0, 'winRate': 93.6},
-//     {'month': 'Jun', 'wins': 148.0, 'losses': 8.0, 'winRate': 94.9},
-//   ],
-// };
+const Map<String, dynamic> _categoryPerformanceCombo = {
+  'cardTitle': 'Category Utilization',
+  'cardSubtitle': 'Custom vs created categories',
+  'minY': 0.0,
+  'maxY': 160.0,
+  'gridInterval': 30.0,
+  'yAxisLabels': [
+    {'value': 0, 'label': '0'},
+    {'value': 30, 'label': '30'},
+    {'value': 60, 'label': '60'},
+    {'value': 90, 'label': '90'},
+    {'value': 120, 'label': '120'},
+    {'value': 150, 'label': '150'},
+  ],
+  'legendLabels': {
+    'firstBar': 'Custom',
+    'secondBar': 'Created',
+    'thirdBar': 'Total used requests',
+    'line': 'Used Products %',
+  },
+  'chartData': [
+    {
+      'month': 'Jan',
+      'wins': 128.0,
+      'losses': 118.0,
+      'thirdBar': 95.0,
+      'winRate': 37.7,
+    },
+    {
+      'month': 'Feb',
+      'wins': 132.0,
+      'losses': 116.0,
+      'thirdBar': 102.0,
+      'winRate': 49.2,
+    },
+    {
+      'month': 'Mar',
+      'wins': 138.0,
+      'losses': 121.0,
+      'thirdBar': 108.0,
+      'winRate': 60.8,
+    },
+    {
+      'month': 'Apr',
+      'wins': 112.0,
+      'losses': 120.0,
+      'thirdBar': 89.0,
+      'winRate': 72.2,
+    },
+    {
+      'month': 'May',
+      'wins': 136.0,
+      'losses': 100.0,
+      'thirdBar': 115.0,
+      'winRate': 83.6,
+    },
+    {
+      'month': 'Jun',
+      'wins': 128.0,
+      'losses': 80.0,
+      'thirdBar': 98.0,
+      'winRate': 94.9,
+    },
+    {
+      'month': 'Jul',
+      'wins': 40.0,
+      'losses': 60.0,
+      'thirdBar': 45.0,
+      'winRate': 75.8,
+    },
+    {
+      'month': 'Aug',
+      'wins': 86.0,
+      'losses': 50.0,
+      'thirdBar': 68.0,
+      'winRate': 66.3,
+    },
+  ],
+};
 
 // const Map<String, dynamic> _customRequirementsComparison = {
 //   'tabs': [
@@ -401,11 +456,11 @@ const Map<String, dynamic> _ordersByCategoryBar = {
       'legend': [
         {
           'label': 'Missing Port Mapping',
-          'color': '0xFFF97316',
+          'color': '0xFFD1FAE5',
           'isDashed': false,
         },
-        {'label': 'Missing Images', 'color': '0xFFFCD34D', 'isDashed': true},
-        {'label': 'Incomplete Specs', 'color': '0xFFEF4444', 'isDashed': true},
+        {'label': 'Missing Images', 'color': '0xFF0EA5E9', 'isDashed': true},
+        {'label': 'Incomplete Specs', 'color': '0xFF7C3AED', 'isDashed': true},
       ],
     },
   ],
@@ -977,14 +1032,26 @@ class CatalogueDashboard extends StatelessWidget {
             // Catalogue Growth Line Chart
             DashboardGridCol(
               xs: 12,
-              md: 8,
-              child: RevenueGeneratedCard(chartData: _catalogueGrowthChart),
+              md: 6,
+              child: SizedBox(
+                child: RevenueGeneratedCard(chartData: _catalogueGrowthChart),
+              ),
+            ),
+
+            // Category Performance
+            DashboardGridCol(
+              xs: 12,
+              md: 6,
+              child: SizedBox(
+                height: 448,
+                child: DashboardcombobarChart(data: _categoryPerformanceCombo),
+              ),
             ),
 
             // Client Type Utilization Pie Chart
             DashboardGridCol(
               xs: 12,
-              md: 4,
+              md: 3,
               child: DashboardPieChart(data: _clientTypePieData),
             ),
 
@@ -998,14 +1065,14 @@ class CatalogueDashboard extends StatelessWidget {
             // Status Overview Pie Chart
             DashboardGridCol(
               xs: 12,
-              md: 4,
+              md: 3,
               child: DashboardPieChart(data: _statusPieData),
             ),
 
             // Orders by Category Bar Chart
             DashboardGridCol(
               xs: 12,
-              md: 8,
+              md: 6,
               child: MultiAnalyticsOveriview(data: _ordersByCategoryBar),
             ),
 
@@ -1043,18 +1110,12 @@ class CatalogueDashboard extends StatelessWidget {
               lg: 3,
               child: DashboardLeadingPort(data: _catalogueInsights[1]),
             ),
+
             // DashboardGridCol(
             //   xs: 12,
             //   md: 5,
             //   lg: 3,
             //   child: DashboardLeadingPort(data: _catalogueInsights[2]),
-            // ),
-
-            // Category Performance
-            // DashboardGridCol(
-            //   xs: 12,
-            //   md: 6,
-            //   child: DashboardcombobarChart(data: _categoryPerformanceCombo),
             // ),
           ],
         ),
