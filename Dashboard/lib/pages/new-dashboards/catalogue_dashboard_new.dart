@@ -5,7 +5,7 @@ import '../../widgets/dashboard_card_container.dart';
 import '../../widgets/dashboard_line_chart.dart';
 import '../../widgets/dashboard_pie_chart.dart';
 // import '../../widgets/dashboard_comparison.dart';
-import '../../widgets/dashboard_bar_chart.dart';
+// import '../../widgets/dashboard_bar_chart.dart';
 import '../../widgets/dashboard_leading_port.dart';
 import '../../widgets/dashboard_quick_wins.dart';
 import '../../widgets/dashboard_table.dart';
