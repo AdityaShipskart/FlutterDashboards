@@ -71,6 +71,7 @@ class _DashboardRecentDataState extends State<DashboardRecentData> {
   }
 
   Future<void> _loadData() async {
+    if (!mounted) return;
     setState(() => _isLoading = true);
 
     try {
@@ -92,11 +93,13 @@ class _DashboardRecentDataState extends State<DashboardRecentData> {
 
       data ??= DashboardRecentData.exampleData['salesHighlights'];
 
+      if (!mounted) return;
       setState(() {
         _data = data;
         _isLoading = false;
       });
     } catch (e) {
+      if (!mounted) return;
       setState(() {
         _data = DashboardRecentData.exampleData['salesHighlights'];
         _isLoading = false;

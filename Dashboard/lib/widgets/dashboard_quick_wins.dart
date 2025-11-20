@@ -244,6 +244,7 @@ class _DashboardQuickWinsState extends State<DashboardQuickWins> {
 
           return GestureDetector(
             onTap: () {
+              if (!mounted) return;
               setState(() {
                 selectedTab = optionStr;
               });

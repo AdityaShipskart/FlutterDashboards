@@ -133,8 +133,8 @@ const Map<String, dynamic> _vendorSalesBreakdown = {
 final Map<String, dynamic> _vendorRevenueChart = {
   'cardTitle': 'Revenue Trends',
   'cardSubtitle': 'Monthly revenue vs target',
-  'thisYearLabel': 'Actual Revenue',
-  'lastYearLabel': 'Target',
+  'thisYearLabel': 'Current Year',
+  'lastYearLabel': 'Last Year',
   'percentageChange': '+12.6%',
   'isPositiveChange': true,
   'availablePeriods': ['Jan-Jun', 'Jul-Dec', 'Full Year'],
@@ -403,6 +403,49 @@ const Map<String, dynamic> _categoryRevenueBar = {
     {'label': 'RFQs Submitted', 'color': '0xFFE0E0E0'},
     {'label': 'Orders', 'color': '0xFF10B981'},
     {'label': 'Global Value', 'color': '0xFFEC4899'},
+  ],
+};
+
+const Map<String, dynamic> _saleFunnelData = {
+  'title': 'Sale Funnel',
+  'subtitle': 'Amount of revenue in one month',
+  'barChartData': [
+    {'label': 'Provision', 'percentage': 90.0, 'color': '0xFFB3D4FF'},
+    {'label': 'Deck', 'percentage': 80.0, 'color': '0xFF80B3FF'},
+    {'label': 'IMPA', 'percentage': 65.0, 'color': '0xFF4D94FF'},
+    {'label': 'Lubes', 'percentage': 48.0, 'color': '0xFF3380FF'},
+    {'label': 'Spares', 'percentage': 37.0, 'color': '0xFF1A6BFF'},
+    {'label': 'Paints', 'percentage': 30.0, 'color': '0xFF10B981'},
+  ],
+  'tableData': [
+    {
+      'stage': 'Provision',
+      'lostLead': '32.2%',
+      'thisMonth': '6.01%',
+      'color': '0xFFB3D4FF',
+      'changeColor': '0xFF10B981',
+    },
+    {
+      'stage': 'Deck',
+      'lostLead': '30.1%',
+      'thisMonth': '4.12%',
+      'color': '0xFF80B3FF',
+      'changeColor': '0xFF10B981',
+    },
+    {
+      'stage': 'IMPA',
+      'lostLead': '22.1%',
+      'thisMonth': '3.91%',
+      'color': '0xFF4D94FF',
+      'changeColor': '0xFFEF4444',
+    },
+    {
+      'stage': 'Lubes',
+      'lostLead': '15.6%',
+      'thisMonth': '0.01%',
+      'color': '0xFF3380FF',
+      'changeColor': '0xFFFEC524',
+    },
   ],
 };
 
@@ -828,9 +871,41 @@ class VendorDashboard extends StatelessWidget {
             // Revenue by Category Bar Chart
             DashboardGridCol(
               xs: 12,
-              child: DashboardBarChart(data: _categoryRevenueBar),
+              md: 6,
+              child: SizedBox(
+                height: 654,
+                child: DashboardBarChart(data: _categoryRevenueBar),
+              ),
             ),
-
+            // Sales Funnel Horizontal Bar Chart with Table
+            DashboardGridCol(
+              xs: 12,
+              md: 6,
+              child: DashboardHorizontalBarChart(
+                title: _saleFunnelData['title'],
+                subtitle: _saleFunnelData['subtitle'],
+                data: (_saleFunnelData['barChartData'] as List)
+                    .map(
+                      (item) => BarData(
+                        label: item['label'],
+                        percentage: item['percentage'],
+                        color: Color(int.parse(item['color'])),
+                      ),
+                    )
+                    .toList(),
+                tableData: (_saleFunnelData['tableData'] as List)
+                    .map(
+                      (item) => TableRowData(
+                        stage: item['stage'],
+                        lostLead: item['lostLead'],
+                        thisMonth: item['thisMonth'],
+                        color: Color(int.parse(item['color'])),
+                        changeColor: Color(int.parse(item['changeColor'])),
+                      ),
+                    )
+                    .toList(),
+              ),
+            ),
             // Performance Metrics Cards
             DashboardGridCol(
               xs: 12,
@@ -858,7 +933,6 @@ class VendorDashboard extends StatelessWidget {
             //   xs: 12,
             //   child: DashboardTable(data: _vendorTableData),
             // ),
-            DashboardGridCol(xs: 12, md: 6, child: BarChartSample7()),
           ],
         ),
       ),
