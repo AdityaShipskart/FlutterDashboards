@@ -17,13 +17,15 @@ class DashboardHorizontalBarChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: AppColors.getCard(isDark),
         borderRadius: BorderRadius.circular(AppConstants.radiusLarge),
         boxShadow: [
           BoxShadow(
-            color: AppColors.shadowLight,
+            color: isDark ? AppColors.shadowDark : AppColors.shadowLight,
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -42,22 +44,22 @@ class DashboardHorizontalBarChart extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: AppTextStyles.h22Compact().copyWith(
-                      fontWeight: AppTextStyles.bold,
-                    ),
+                    style: AppTextStyles.h22Compact(
+                      isDark: isDark,
+                    ).copyWith(fontWeight: AppTextStyles.bold),
                   ),
                   const SizedBox(height: AppSpacing.xs),
                   Text(
                     subtitle,
-                    style: AppTextStyles.b14().copyWith(
-                      color: AppColors.grey600Light,
-                    ),
+                    style: AppTextStyles.b14(
+                      isDark: isDark,
+                    ).copyWith(color: AppColors.getTextSecondary(isDark)),
                   ),
                 ],
               ),
               Icon(
                 Icons.more_horiz,
-                color: AppColors.grey700Light,
+                color: AppColors.getGreyScale(700, isDark),
                 size: AppConstants.iconSizeMedium,
               ),
             ],
@@ -70,12 +72,12 @@ class DashboardHorizontalBarChart extends StatelessWidget {
               padding: EdgeInsets.only(
                 bottom: entry.key < data.length - 1 ? AppSpacing.md : 0,
               ),
-              child: _buildBarItem(entry.value),
+              child: _buildBarItem(entry.value, isDark),
             );
           }).toList(),
 
-          const SizedBox(height: AppSpacing.lg),
-          const Divider(color: AppColors.grey200Light),
+          const SizedBox(height: AppSpacing.md),
+          Divider(color: AppColors.getBorder(isDark)),
           const SizedBox(height: AppSpacing.md),
 
           // Table Header
@@ -85,18 +87,18 @@ class DashboardHorizontalBarChart extends StatelessWidget {
                 flex: 2,
                 child: Text(
                   'Stage',
-                  style: AppTextStyles.b14().copyWith(
+                  style: AppTextStyles.b14(isDark: isDark).copyWith(
                     fontWeight: AppTextStyles.semiBold,
-                    color: AppColors.grey700Light,
+                    color: AppColors.getGreyScale(700, isDark),
                   ),
                 ),
               ),
               Expanded(
                 child: Text(
                   'Lost lead',
-                  style: AppTextStyles.b14().copyWith(
+                  style: AppTextStyles.b14(isDark: isDark).copyWith(
                     fontWeight: AppTextStyles.semiBold,
-                    color: AppColors.grey700Light,
+                    color: AppColors.getGreyScale(700, isDark),
                   ),
                   textAlign: TextAlign.right,
                 ),
@@ -105,9 +107,9 @@ class DashboardHorizontalBarChart extends StatelessWidget {
               Expanded(
                 child: Text(
                   'This week',
-                  style: AppTextStyles.b14().copyWith(
+                  style: AppTextStyles.b14(isDark: isDark).copyWith(
                     fontWeight: AppTextStyles.semiBold,
-                    color: AppColors.grey700Light,
+                    color: AppColors.getGreyScale(700, isDark),
                   ),
                   textAlign: TextAlign.right,
                 ),
@@ -117,13 +119,13 @@ class DashboardHorizontalBarChart extends StatelessWidget {
           const SizedBox(height: AppSpacing.md),
 
           // Table Rows
-          ...tableData.map((row) => _buildTableRow(row)).toList(),
+          ...tableData.map((row) => _buildTableRow(row, isDark)).toList(),
         ],
       ),
     );
   }
 
-  Widget _buildBarItem(BarData data) {
+  Widget _buildBarItem(BarData data, bool isDark) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -133,9 +135,9 @@ class DashboardHorizontalBarChart extends StatelessWidget {
               width: 100,
               child: Text(
                 data.label,
-                style: AppTextStyles.b14().copyWith(
-                  color: AppColors.grey700Light,
-                ),
+                style: AppTextStyles.b14(
+                  isDark: isDark,
+                ).copyWith(color: AppColors.getGreyScale(700, isDark)),
               ),
             ),
             const SizedBox(width: AppSpacing.md),
@@ -146,7 +148,7 @@ class DashboardHorizontalBarChart extends StatelessWidget {
                   Container(
                     height: 32,
                     decoration: BoxDecoration(
-                      color: AppColors.grey100Light,
+                      color: AppColors.getGreyScale(100, isDark),
                       borderRadius: BorderRadius.circular(AppSpacing.xs),
                     ),
                   ),
@@ -162,7 +164,7 @@ class DashboardHorizontalBarChart extends StatelessWidget {
                       alignment: Alignment.center,
                       child: Text(
                         '${data.percentage.toStringAsFixed(0)}%',
-                        style: AppTextStyles.b14().copyWith(
+                        style: AppTextStyles.b14(isDark: isDark).copyWith(
                           color: AppColors.white,
                           fontWeight: AppTextStyles.semiBold,
                         ),
@@ -178,7 +180,7 @@ class DashboardHorizontalBarChart extends StatelessWidget {
     );
   }
 
-  Widget _buildTableRow(TableRowData row) {
+  Widget _buildTableRow(TableRowData row, bool isDark) {
     return Padding(
       padding: const EdgeInsets.only(bottom: AppSpacing.md),
       child: Row(
@@ -198,9 +200,9 @@ class DashboardHorizontalBarChart extends StatelessWidget {
                 const SizedBox(width: AppSpacing.sm),
                 Text(
                   row.stage,
-                  style: AppTextStyles.b14().copyWith(
-                    color: AppColors.grey800Light,
-                  ),
+                  style: AppTextStyles.b14(
+                    isDark: isDark,
+                  ).copyWith(color: AppColors.getGreyScale(800, isDark)),
                 ),
               ],
             ),
@@ -208,9 +210,9 @@ class DashboardHorizontalBarChart extends StatelessWidget {
           Expanded(
             child: Text(
               row.lostLead,
-              style: AppTextStyles.b14().copyWith(
-                color: AppColors.grey700Light,
-              ),
+              style: AppTextStyles.b14(
+                isDark: isDark,
+              ).copyWith(color: AppColors.getGreyScale(600, isDark)),
               textAlign: TextAlign.right,
             ),
           ),
@@ -227,7 +229,7 @@ class DashboardHorizontalBarChart extends StatelessWidget {
               ),
               child: Text(
                 row.thisMonth,
-                style: AppTextStyles.b14().copyWith(
+                style: AppTextStyles.b14(isDark: isDark).copyWith(
                   color: row.changeColor,
                   fontWeight: AppTextStyles.semiBold,
                 ),
